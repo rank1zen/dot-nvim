@@ -1,12 +1,15 @@
 return {
-    require('core.plugins.lualine'),
     require('core.plugins.cmp'),
+    require('core.plugins.treesitter'),
+    require('core.plugins.lualine'),
+
     require('core.plugins.lspconfig'),
     require('core.plugins.telescope'),
-    require('core.plugins.treesitter'),
     require('core.plugins.colorscheme'),
+
     'SmiteshP/nvim-navic',
     'folke/neodev.nvim',
+
     {
         'FluxxField/bionic-reading.nvim',
         config = function()

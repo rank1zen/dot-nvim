@@ -9,13 +9,15 @@ return {
                     n = { ['q'] = actions.close }
                 },
                 layout_config = {
+                    height = 0.5,
+                    anchor = 'S',
                     prompt_position = 'top'
                 },
                 initial_mode = 'normal',
                 sorting_strategy = 'ascending',
                 scroll_strategy = 'limit',
-                prompt_prefix = '>  '
-            }
+                prompt_prefix = '   '
+            },
         }
     end
 }

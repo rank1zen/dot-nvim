@@ -15,7 +15,6 @@ return {
 
                 TelescopePreviewNormal = { bg = 'base' },
                 TelescopePreviewBorder = { bg = 'base', fg = 'base' },
-                TelescopePreviewTitle = { bg = 'base' },
             }
         }
 

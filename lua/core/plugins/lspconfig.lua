@@ -12,35 +12,11 @@ return {
         local cmp_capabilities = require('cmp_nvim_lsp').default_capabilities()
 
         local navic = require('nvim-navic')
+
+        local icons = require('core.icons')
+
         navic.setup {
-            icons = {
-                File          = '',
-                Module        = '',
-                Namespace     = '',
-                Package       = '',
-                Class         = '',
-                Method        = '',
-                Property      = '',
-                Field         = '',
-                Constructor   = '',
-                Enum          = '',
-                Interface     = '',
-                Function      = '',
-                Variable      = '',
-                Constant      = '',
-                String        = '',
-                Number        = '',
-                Boolean       = '',
-                Array         = '',
-                Object        = '',
-                Key           = '',
-                Null          = '',
-                EnumMember    = '',
-                Struct        = '',
-                Event         = '',
-                Operator      = '',
-                TypeParameter = '',
-            }
+            icons = icons.no_icons
         }
 
         lspconfig.lua_ls.setup {

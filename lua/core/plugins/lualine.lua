@@ -27,13 +27,14 @@ return {
                     'diagnostics',
                     {
                         'filename',
+                        file_status = false,
+                        color = { gui = 'bold,italic,standout' },
                         symbols = {
-                            modified = '',
+                            modified = '[+]',
                             readonly = '[-]',
                             unnamed = '[No Name]',
                             newfile = '[New]'
                         },
-                        color = { gui = 'bold,standout' },
                     },
                     'navic',
                 },
