@@ -7,20 +7,6 @@ return {
     require('core.plugins.telescope'),
     require('core.plugins.colorscheme'),
 
-    'SmiteshP/nvim-navic',
-    'folke/neodev.nvim',
-
-    {
-        'FluxxField/bionic-reading.nvim',
-        config = function()
-            require('bionic-reading').setup {
-                hl_group_value = {
-                    bold = true,
-                },
-                prompt_user = false
-            }
-        end,
-    },
     {
         'windwp/nvim-autopairs',
         config = true
@@ -32,4 +18,5 @@ return {
             require('competitest').setup {}
         end
     },
+    'folke/neodev.nvim',
 }

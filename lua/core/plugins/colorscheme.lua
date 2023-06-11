@@ -8,6 +8,7 @@ return {
             highlight_groups = {
                 TelescopePromptNormal = { bg = 'surface' },
                 TelescopePromptBorder = { fg = 'surface', bg = 'surface' },
+                TelescopePromptTitle = { fg = 'surface' },
 
                 TelescopeResultsNormal = { bg = 'surface' },
                 TelescopeResultsBorder = { fg = 'surface', bg = 'surface' },
@@ -15,6 +16,7 @@ return {
 
                 TelescopePreviewNormal = { bg = 'base' },
                 TelescopePreviewBorder = { bg = 'base', fg = 'base' },
+                TelescopePreviewTitle = { fg = 'base' },
             }
         }
 

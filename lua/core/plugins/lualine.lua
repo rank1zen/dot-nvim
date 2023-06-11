@@ -16,27 +16,16 @@ return {
                         symbols = {
                             modified = ' ●',
                             alternate_file = '',
-                            directory = '',
-                        },
+                            directory = ''
+                        }
                     }
                 },
                 lualine_b = {},
                 lualine_c = {
                     'location',
                     'branch',
+                    'filename',
                     'diagnostics',
-                    {
-                        'filename',
-                        file_status = false,
-                        color = { gui = 'bold,italic,standout' },
-                        symbols = {
-                            modified = '[+]',
-                            readonly = '[-]',
-                            unnamed = '[No Name]',
-                            newfile = '[New]'
-                        },
-                    },
-                    'navic',
                 },
                 lualine_x = {},
                 lualine_y = {},
