@@ -1,15 +1,16 @@
 vim.keymap.set('n', 'L', '<cmd>bnext<CR>')
 vim.keymap.set('n', 'H', '<cmd>bprevious<CR>')
 
-vim.keymap.set('n', 'J', vim.diagnostic.open_float)
-vim.keymap.set('n', 'K', vim.lsp.buf.hover)
+vim.keymap.set('n', 'J', function() vim.diagnostic.open_float() end)
+vim.keymap.set('n', 'K', function() vim.lsp.buf.hover() end)
 
-local builtin = require('telescope.builtin')
-vim.keymap.set('n', 'gd', builtin.lsp_definitions)
-vim.keymap.set('n', 'gr', builtin.lsp_references)
-vim.keymap.set('n', 'gq', function() builtin.diagnostics { bufnr = 0 } end)
-vim.keymap.set('n', 'gs', builtin.lsp_document_symbols)
+vim.keymap.set('n', 'gd', function() require('telescope.builtin').lsp_definitions() end)
+vim.keymap.set('n', 'gr', function() require('telescope.builtin').lsp_references() end)
+vim.keymap.set('n', 'gq', function() require('telescope.builtin').diagnostics { bufnr = 0 } end)
+vim.keymap.set('n', 'gs', function() require('telescope.builtin').lsp_document_symbols() end)
 
-vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename)
+vim.keymap.set('n', '<leader>rn', function() vim.lsp.buf.rename() end)
 vim.keymap.set('n', '<leader>fr', function() vim.lsp.buf.format { async = true } end)
-vim.keymap.set('n', '<leader>ff', builtin.find_files)
+vim.keymap.set('n', '<leader>ff', function() require('telescope.builtin').find_files() end)
+
+vim.keymap.set({ "n", "x", "o" }, "<CR>", function() require("flash").jump() end)
