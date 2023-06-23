@@ -8,6 +8,7 @@ return {
   require('core.plugins.colorscheme'),
   require('core.plugins.flash'),
   require('core.plugins.autopairs'),
+  require('core.plugins.latex'),
 
   {
     'xeluxee/competitest.nvim',
