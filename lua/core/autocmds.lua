@@ -13,3 +13,5 @@ vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
     vim.o.conceallevel = 2
   end
 })
+
+vim.cmd 'colorscheme kanagawa'

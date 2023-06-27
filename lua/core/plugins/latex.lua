@@ -18,6 +18,6 @@ return {
       enabled = false,
       command = "c",
       environment = "e",
-    },
+    }
   }
 }
