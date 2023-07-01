@@ -13,10 +13,12 @@ return {
       },
       lualine_b = {},
       lualine_c = {
+        function() return '   <' end,
         'location',
         'branch',
         'filename',
         'diagnostics',
+        function() return '>' end
       },
       lualine_x = {},
       lualine_y = {},

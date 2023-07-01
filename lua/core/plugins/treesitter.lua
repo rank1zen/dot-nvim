@@ -15,7 +15,10 @@ return {
       },
       autotag = {
         enable = true
-      }
+      },
+			indent = {
+				enable = true
+			}
     }
   end
 }

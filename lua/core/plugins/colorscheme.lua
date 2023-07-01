@@ -25,20 +25,6 @@ return {
     'rebelot/kanagawa.nvim',
     priority = 1000,
     opts = {
-      compile = false,
-      undercurl = true,
-      commentStyle = { italic = true },
-      functionStyle = {},
-      keywordStyle = {},
-      statementStyle = {},
-      typeStyle = {},
-      transparent = false,
-      dimInactive = false,
-      terminalColors = true,
-      colors = {
-        palette = {},
-        theme = { wave = {}, lotus = {}, dragon = {}, all = {} },
-      },
       overrides = function(colors)
         local theme = colors.theme
         return {
