@@ -1,5 +1,5 @@
 vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
-  pattern = { "*.tsx", "*.lua" },
+  pattern = { "*.tsx", "*.ts", "*.jsx", "*.js", "*.lua" },
   callback = function(ev)
     vim.opt.tabstop = 2
     vim.opt.shiftwidth = 2

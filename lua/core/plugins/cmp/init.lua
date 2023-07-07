@@ -24,7 +24,6 @@ return {
         ['<CR>'] = { i = cmp.mapping.confirm { select = false }  },
         ['<Tab>'] = { i = utils.tab_next },
         ['<S-Tab>'] = { i = utils.tab_prev },
-        ['<C-Space>'] = { i = cmp.mapping.complete() }
       },
       sources = {
         { name = 'nvim_lsp' },
