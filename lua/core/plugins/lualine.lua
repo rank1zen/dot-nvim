@@ -11,14 +11,13 @@ return {
       lualine_a = {
         { 'buffers', hide_filename_extension = true }
       },
-      lualine_b = {},
-      lualine_c = {
-        function() return '   <' end,
+      lualine_b = {
         'location',
         'branch',
         'filename',
-        'diagnostics',
-        function() return '>' end
+        'diagnostics'
+      },
+      lualine_c = {
       },
       lualine_x = {},
       lualine_y = {},

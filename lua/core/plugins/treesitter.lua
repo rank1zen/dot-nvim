@@ -2,9 +2,7 @@ return {
   'nvim-treesitter/nvim-treesitter',
   config = function()
     require('nvim-treesitter.configs').setup {
-      highlight = {
-        enable = true
-      },
+      highlight = { enable = true },
       incremental_selection = {
         enable = true,
         keymaps = {
@@ -13,12 +11,7 @@ return {
           node_decremental = 'S'
         }
       },
-      autotag = {
-        enable = true
-      },
-			indent = {
-				enable = true
-			}
+      autotag = { enable = true }
     }
   end
 }
