@@ -16,6 +16,9 @@ return {
           hide_filename_extension = true,
           symbols = { alternate_file = '' },
         },
+        function()
+          return '┇'
+        end,
         'location',
         'branch',
         'filename',
