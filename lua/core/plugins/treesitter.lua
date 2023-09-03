@@ -10,8 +10,7 @@ return {
           node_incremental = 's',
           node_decremental = 'S'
         }
-      },
-      autotag = { enable = true }
+      }
     }
   end
 }

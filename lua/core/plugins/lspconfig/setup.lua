@@ -39,9 +39,11 @@ return function()
   lspconfig.clangd.setup {
     capabilities = cmp_capabilities,
   }
+
   lspconfig.tailwindcss.setup {
     capabilities = cmp_capabilities,
   }
+
   lspconfig.tsserver.setup {
     capabilities = cmp_capabilities
   }
