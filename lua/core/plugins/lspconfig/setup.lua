@@ -32,6 +32,10 @@ return function()
     }
   }
 
+  lspconfig.jdtls.setup {
+    capabilities = cmp_capabilities
+  }
+
   lspconfig.pyright.setup {
     capabilities = cmp_capabilities,
   }

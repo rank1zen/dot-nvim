@@ -7,11 +7,6 @@ return {
   require('core.plugins.colorscheme'),
   require('core.plugins.latex'),
   {
-    "folke/flash.nvim",
-    event = "VeryLazy",
-    opts = {}
-  },
-  {
     'xeluxee/competitest.nvim',
     dependencies = { 'MunifTanjim/nui.nvim' },
     opts = {}

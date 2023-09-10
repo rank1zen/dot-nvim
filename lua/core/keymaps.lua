@@ -13,5 +13,3 @@ vim.keymap.set('n', 'gs', function() require('telescope.builtin').lsp_document_s
 vim.keymap.set('n', '<leader>rn', function() vim.lsp.buf.rename() end)
 vim.keymap.set('n', '<leader>fr', function() vim.lsp.buf.format { async = true } end)
 vim.keymap.set('n', '<leader>ff', function() require('telescope.builtin').find_files() end)
-
-vim.keymap.set({ "n", "x", "o" }, "<CR>", function() require("flash").jump() end)
