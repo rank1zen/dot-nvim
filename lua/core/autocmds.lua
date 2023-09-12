@@ -7,11 +7,4 @@ vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
   end
 })
 
-vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
-  pattern = { "*.tex" },
-  callback = function(ev)
-    vim.o.conceallevel = 2
-  end
-})
-
 vim.cmd 'colorscheme rose-pine'

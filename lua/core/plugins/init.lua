@@ -4,7 +4,6 @@ return {
   require('core.plugins.lspzero'),
   require('core.plugins.telescope'),
   require('core.plugins.colorscheme'),
-  require('core.plugins.latex'),
   {
     'xeluxee/competitest.nvim',
     dependencies = { 'MunifTanjim/nui.nvim' },

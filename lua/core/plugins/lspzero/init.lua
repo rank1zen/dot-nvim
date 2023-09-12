@@ -25,21 +25,17 @@ return {
         lspzero.default_keymaps({ buffer = bufnr })
         vim.keymap.set('n', 'gd', function() require('telescope.builtin').lsp_definitions() end, { buffer = bufnr })
         vim.keymap.set('n', 'gr', function() require('telescope.builtin').lsp_references() end, { buffer = bufnr })
-        vim.keymap.set('n', 'J', function() vim.diagnostic.open_float() end)
       end)
-
-      lspzero.set_server_config {
-        capabilities = require('cmp_nvim_lsp').default_capabilities()
-      }
 
       local lspconfig = require('lspconfig')
 
       lspconfig.lua_ls.setup(lspzero.nvim_lua_ls())
-      lspconfig.jdtls.setup({})
       lspconfig.clangd.setup({})
+
+      lspconfig.jdtls.setup({})
+
       lspconfig.tailwindcss.setup({})
       lspconfig.tsserver.setup({})
-      lspconfig.texlab.setup({})
 
       lspzero.setup()
 
@@ -55,6 +51,9 @@ return {
         experimental = {
           ghost_text = true
         },
+        formatting = {
+          fields = { 'abbr', 'kind' }
+        },
         window = {
           completion = cmp.config.window.bordered(),
           documentation = cmp.config.window.bordered()
@@ -66,18 +65,21 @@ return {
         },
         sources = {
           { name = 'nvim_lsp' },
-          { name = 'luasnip' },
+          { name = 'luasnip' }
         }
       }
 
       cmp.setup.cmdline({ ':' }, {
+        formatting = {
+          fields = { 'abbr' }
+        },
         mapping = cmp.mapping.preset.cmdline {
           ['<CR>'] = { c = cmp.mapping.confirm { select = false } },
           ['<Tab>'] = { c = utils.tab_next },
           ['<S-Tab>'] = { c = utils.tab_prev }
         },
         sources = {
-          { name = 'cmdline' },
+          { name = 'cmdline' }
         }
       })
     end
