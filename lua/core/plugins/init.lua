@@ -1,8 +1,7 @@
 return {
-  require('core.plugins.cmp'),
   require('core.plugins.treesitter'),
   require('core.plugins.lualine'),
-  require('core.plugins.lspconfig'),
+  require('core.plugins.lspzero'),
   require('core.plugins.telescope'),
   require('core.plugins.colorscheme'),
   require('core.plugins.latex'),

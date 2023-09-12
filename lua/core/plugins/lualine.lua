@@ -22,9 +22,13 @@ return {
         'location',
         'branch',
         'filename',
-        'diagnostics'
+        'diagnostics',
+        'diff'
       },
-      lualine_x = {},
+      lualine_x = {
+        'encoding',
+        'fileformat'
+      },
       lualine_y = {},
       lualine_z = {}
     }
