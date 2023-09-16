@@ -17,5 +17,4 @@ return {
     'windwp/nvim-ts-autotag',
     opts = {}
   },
-  'rafamadriz/friendly-snippets'
 }
