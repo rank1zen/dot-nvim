@@ -41,6 +41,10 @@ return {
 
       local cmp = require('cmp')
       local utils = require('core.plugins.lspzero.utils')
+      local a = lspzero.cmp_action()
+
+      local ts_utils = require('nvim-treesitter.utils')
+      lspzero.cmp_action()
 
       cmp.setup {
         snippet = {
@@ -52,7 +56,18 @@ return {
           ghost_text = true
         },
         formatting = {
-          fields = { 'abbr', 'kind' }
+          fields = { 'abbr', 'kind', 'menu' },
+          format = function (entry, vim_item)
+            local function trim(text)
+              local max = 40
+              if text and text:len() > max then
+                text = text:sub(1, max) .. "..."
+              end
+              return text
+            end
+            vim_item.abbr = trim(vim_item.abbr)
+            return vim_item
+          end
         },
         window = {
           completion = cmp.config.window.bordered(),
@@ -60,11 +75,17 @@ return {
         },
         mapping = cmp.mapping.preset.insert {
           ['<CR>'] = cmp.mapping.confirm({ select = true }),
-          ['<Tab>'] = utils.tab_next,
-          ['<S-Tab>'] = utils.tab_prev
+          ['<Tab>'] = a.luasnip_supertab({ behavior = cmp.SelectBehavior.Select }),
+          ['<S-Tab>'] = a.luasnip_shift_supertab({ behavior = cmp.SelectBehavior.Select }),
+          ['<C-Space>'] = cmp.mapping.complete()
         },
         sources = {
-          { name = 'nvim_lsp' },
+          {
+            name = 'nvim_lsp',
+            entry_filter = function(entry, context)
+              return require('cmp.types').lsp.CompletionItemKind[entry:get_kind()] ~= 'Text'
+            end
+          },
           { name = 'luasnip' }
         }
       }
@@ -82,6 +103,7 @@ return {
           { name = 'cmdline' }
         }
       })
+    require('luasnip.loaders.from_vscode').lazy_load()
     end
   }
 }
