@@ -22,7 +22,7 @@ cmp.setup({
     documentation = cmp.config.window.bordered()
   },
   mapping = cmp.mapping.preset.insert {
-    ['<CR>'] = cmp.mapping.confirm({ select = true }),
+    ['<CR>'] = cmp.mapping.confirm({ select = false }),
     ['<Tab>'] = cmp_actions.luasnip_supertab({ behavior = 'select' }),
     ['<S-Tab>'] = cmp_actions.luasnip_shift_supertab({ behavior = 'select' }),
     ['<C-e>'] = cmp_actions.toggle_completion({ modes = { 'i' }})
