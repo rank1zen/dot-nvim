@@ -15,19 +15,18 @@ return {
     config = function()
       require('neodev').setup()
 
-      vim.diagnostic.config {
+      vim.diagnostic.config({
         signs = false
-      }
+      })
 
-      local lspzero = require('lsp-zero').preset {
-        float_border = 'single',
-        manage_nvim_cmp = false
-      }
+      local lspzero = require('lsp-zero').preset({ manage_nvim_cmp = false })
 
       lspzero.on_attach(function(client, bufnr)
         lspzero.default_keymaps({ buffer = bufnr })
         vim.keymap.set('n', 'gd', function() require('telescope.builtin').lsp_definitions() end, { buffer = bufnr })
         vim.keymap.set('n', 'gr', function() require('telescope.builtin').lsp_references() end, { buffer = bufnr })
+        vim.keymap.set('n', 'go', function() require('telescope.builtin').lsp_type_definitions() end, { buffer = bufnr })
+        vim.keymap.set('n', 'gi', function() require('telescope.builtin').lsp_implementations() end, { buffer = bufnr })
       end)
 
       local lspconfig = require('lspconfig')
