@@ -7,12 +7,18 @@ cmp.setup {
       require('luasnip').lsp_expand(args.body)
     end
   },
+  formatting = {
+    format = function(entry, vim_item)
+      vim_item.kind = vim_item.kind:lower()
+      return vim_item
+    end
+  },
   experimental = {
     ghost_text = true
   },
   window = {
-    completion = cmp.config.window.bordered(),
-    documentation = cmp.config.window.bordered()
+    completion = cmp.config.window.bordered({ border = 'single' }),
+    documentation = cmp.config.window.bordered({ border = 'single' })
   },
   mapping = cmp.mapping.preset.insert {
     ['<CR>'] = cmp.mapping.confirm({ select = true }),
@@ -31,7 +37,10 @@ cmp.setup {
 
 cmp.setup.cmdline({ ':' }, {
   formatting = {
-    fields = { 'abbr' }
+    format = function(entry, vim_item)
+      vim_item.kind = ''
+      return vim_item
+    end
   },
   mapping = cmp.mapping.preset.cmdline {
     ['<CR>'] = { c = cmp.mapping.confirm { select = false } },

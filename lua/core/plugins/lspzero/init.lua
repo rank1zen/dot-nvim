@@ -19,7 +19,10 @@ return {
         signs = false
       }
 
-      local lspzero = require('lsp-zero').preset { manage_nvim_cmp = false }
+      local lspzero = require('lsp-zero').preset {
+        float_border = 'single',
+        manage_nvim_cmp = false
+      }
 
       lspzero.on_attach(function(client, bufnr)
         lspzero.default_keymaps({ buffer = bufnr })
