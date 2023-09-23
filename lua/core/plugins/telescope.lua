@@ -8,24 +8,32 @@ return {
       defaults = {
         layout_strategy = 'vertical',
         layout_config = {
-          height = 0.5,
-          width = 0.5,
-          anchor = 'SW',
+          anchor = 'S',
         },
-        prompt_prefix = '>  '
+        width_padding = 0.2
       },
     },
     keys = {
       {
-        '<Leader>ff',
+        '<leader>ff',
         function() require('telescope.builtin').find_files() end,
         desc = 'Telescope find files',
       },
       {
-        '<Leader>gf',
+        '<leader>gf',
         function() require('telescope.builtin').git_files() end,
         desc = 'Telescope find Git files',
-      }
+      },
+      {
+        '<Leader>fh',
+        function() require('telescope.builtin').help_tags() end,
+        desc = 'Telescope find help tags',
+      },
+      {
+        '<Leader>fd',
+        function() require('telescope.builtin').diagnostics() end,
+        desc = 'Telescope diagnostics',
+      },
     }
   },
   {
