@@ -1,5 +1,4 @@
 local cmp = require('cmp')
-local utils = require('core.plugins.lspzero.utils')
 local cmp_actions = require('lsp-zero').cmp_action()
 
 cmp.setup({
@@ -49,8 +48,8 @@ cmp.setup.cmdline({ ':' }, {
   },
   mapping = cmp.mapping.preset.cmdline {
     ['<CR>'] = { c = cmp.mapping.confirm({ select = false }) },
-    ['<Tab>'] = { c = utils.tab_next },
-    ['<S-Tab>'] = { c = utils.tab_prev },
+    ['<Tab>'] = { c = cmp.mapping.select_next_item({ behavior = 'select' }) },
+    ['<S-Tab>'] = { c = cmp.mapping.select_prev_item({ behavior = 'select' }) },
     ['<C-e>'] = cmp_actions.toggle_completion({ modes = { 'c' }})
   },
   sources = {
