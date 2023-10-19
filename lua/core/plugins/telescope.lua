@@ -20,11 +20,6 @@ return {
         desc = 'Telescope find files',
       },
       {
-        '<leader>gf',
-        function() require('telescope.builtin').git_files() end,
-        desc = 'Telescope find Git files',
-      },
-      {
         '<Leader>fh',
         function() require('telescope.builtin').help_tags() end,
         desc = 'Telescope find help tags',
