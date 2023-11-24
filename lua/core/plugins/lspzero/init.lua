@@ -38,6 +38,7 @@ return {
 
       lspconfig.tailwindcss.setup({})
       lspconfig.tsserver.setup({})
+      lspconfig.gopls.setup({})
 
       lspzero.setup()
       require('core.plugins.lspzero.cmp')

@@ -7,4 +7,14 @@ vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
   end
 })
 
+vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
+  pattern = { "*.go", "go.mod", "*go.sum" },
+  callback = function(ev)
+    vim.opt.expandtab = false
+    vim.opt.tabstop = 8
+    vim.opt.shiftwidth = 8
+    vim.opt.softtabstop = 8
+  end
+})
+
 vim.cmd 'colorscheme rose-pine'
