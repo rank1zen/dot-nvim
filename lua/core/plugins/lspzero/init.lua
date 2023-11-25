@@ -33,11 +33,6 @@ return {
 
       lspconfig.lua_ls.setup(lspzero.nvim_lua_ls())
       lspconfig.clangd.setup({})
-
-      lspconfig.jdtls.setup({})
-
-      lspconfig.tailwindcss.setup({})
-      lspconfig.tsserver.setup({})
       lspconfig.gopls.setup({})
 
       lspzero.setup()
