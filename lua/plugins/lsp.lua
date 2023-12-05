@@ -1,24 +1,36 @@
 return {
-  'folke/neodev.nvim',
-  'hrsh7th/cmp-cmdline',
+  {
+    'folke/neodev.nvim',
+    priority = 100,
+    opts = {
+      debug = true,
+    },
+  },
+  {
+    'williamboman/mason.nvim',
+    opts = {},
+  },
+  {
+    'williamboman/mason-lspconfig.nvim',
+    dependencies = {
+      'VonHeikemen/lsp-zero.nvim',
+    },
+    opts = {
+      ensure_installed = { 'lua_ls' },
+    }
+  },
+  {
+    'neovim/nvim-lspconfig',
+    config = function()
+      local lspconfig = require('lspconfig')
+      lspconfig.lua_ls.setup(lspzero.nvim_lua_ls())
+      lspconfig.clangd.setup({})
+      lspconfig.gopls.setup({})
+    end
+  },
   {
     'VonHeikemen/lsp-zero.nvim',
-    dependencies = {
-      { 'neovim/nvim-lspconfig' },
-
-      { 'hrsh7th/nvim-cmp' },
-      { 'hrsh7th/cmp-nvim-lsp' },
-
-      { 'L3MON4D3/LuaSnip' },
-      { 'saadparwaiz1/cmp_luasnip' }
-    },
     config = function()
-      require('neodev').setup()
-
-      vim.diagnostic.config({
-        signs = false
-      })
-
       local lspzero = require('lsp-zero').preset({ manage_nvim_cmp = false })
 
       lspzero.on_attach(function(client, bufnr)
@@ -28,15 +40,7 @@ return {
         vim.keymap.set('n', 'go', function() require('telescope.builtin').lsp_type_definitions() end, { buffer = bufnr })
         vim.keymap.set('n', 'gi', function() require('telescope.builtin').lsp_implementations() end, { buffer = bufnr })
       end)
-
-      local lspconfig = require('lspconfig')
-
-      lspconfig.lua_ls.setup(lspzero.nvim_lua_ls())
-      lspconfig.clangd.setup({})
-      lspconfig.gopls.setup({})
-
       lspzero.setup()
-      require('core.plugins.lspzero.cmp')
     end
-  }
+  },
 }
