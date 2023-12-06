@@ -27,3 +27,7 @@ vim.opt.swapfile = false
 
 vim.opt.path:remove("/usr/include")
 vim.opt.path:append("**")
+
+vim.diagnostic.config({
+  signs = false,
+})
