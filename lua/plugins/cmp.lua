@@ -1,7 +1,7 @@
 return {
   {
     'hrsh7th/nvim-cmp',
-    config = function ()
+    config = function()
       local cmp = require('cmp')
       local cmp_actions = require('lsp-zero').cmp_action()
       cmp.setup({
@@ -20,14 +20,14 @@ return {
           ghost_text = true
         },
         window = {
-          completion = cmp.config.window.bordered(),
-          documentation = cmp.config.window.bordered()
+          completion = require('cmp').config.window.bordered(),
+          documentation = require('cmp').config.window.bordered()
         },
         mapping = cmp.mapping.preset.insert {
           ['<CR>'] = cmp.mapping.confirm({ select = false }),
           ['<Tab>'] = cmp_actions.luasnip_supertab({ behavior = 'select' }),
           ['<S-Tab>'] = cmp_actions.luasnip_shift_supertab({ behavior = 'select' }),
-          ['<C-e>'] = cmp_actions.toggle_completion({ modes = { 'i' }})
+          ['<C-e>'] = cmp_actions.toggle_completion({ modes = { 'i' } })
         },
         sources = {
           {
@@ -43,7 +43,6 @@ return {
       })
     end
   },
-
   {
     'hrsh7th/cmp-cmdline',
     config = function()
@@ -58,7 +57,7 @@ return {
           ['<CR>'] = { c = require('cmp').mapping.confirm({ select = false }) },
           ['<Tab>'] = { c = require('cmp').mapping.select_next_item({ behavior = 'select' }) },
           ['<S-Tab>'] = { c = require('cmp').mapping.select_prev_item({ behavior = 'select' }) },
-          ['<C-e>'] = require('lsp-zero').cmp_action().toggle_completion({ modes = { 'c' }})
+          ['<C-e>'] = require('lsp-zero').cmp_action().toggle_completion({ modes = { 'c' } })
         },
         sources = {
           { name = 'cmdline' }
