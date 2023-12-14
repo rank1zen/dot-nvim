@@ -9,10 +9,6 @@ return {
     opts = {}
   },
   {
-    'windwp/nvim-ts-autotag',
-    opts = {}
-  },
-  {
     'rose-pine/neovim',
     name = 'rose-pine',
     priority = 1000,
@@ -23,6 +19,28 @@ return {
     }
   },
   {
+    'nvim-treesitter/nvim-treesitter',
+    build = ':TSUpdate',
+    main = 'nvim-treesitter.configs',
+    opts = {
+      ensure_installed = { "c", "lua", "vim", "vimdoc", "query" },
+      highlight = {
+        enable = true,
+      },
+      indent = {
+        enable = true,
+      },
+      incremental_selection = {
+        enable = true,
+        keymaps = {
+          init_selection = 's',
+          node_incremental = 's',
+          node_decremental = 'S',
+        },
+      },
+    },
+  },
+  {
     'ThePrimeagen/harpoon',
     dependencies = {
       'nvim-lua/plenary.nvim'
@@ -30,12 +48,12 @@ return {
     keys = {
       {
         '<leader>a',
-        function () require('harpoon.mark').add_file() end,
+        function() require('harpoon.mark').add_file() end,
       },
       {
         '<C-e>',
-        function () require('harpoon.ui').toggle_quick_menu() end,
+        function() require('harpoon.ui').toggle_quick_menu() end,
       },
     },
-  }
+  },
 }
