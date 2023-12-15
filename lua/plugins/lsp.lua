@@ -1,9 +1,5 @@
 return {
   {
-    'folke/neodev.nvim',
-    opts = {},
-  },
-  {
     'williamboman/mason.nvim',
     opts = {},
   },
@@ -14,17 +10,19 @@ return {
       { 'L3MON4D3/LuaSnip' },
     },
     config = function()
-      local lsp_zero = require('lsp-zero');
+      local lsp_zero = require('lsp-zero')
       lsp_zero.extend_cmp()
 
       local cmp = require('cmp')
       local cmp_actions = lsp_zero.cmp_action()
 
       cmp.setup({
-        formatting = lsp_zero.cmp_format(),
-        experimental = {
-          ghost_text = true
+        window = {
+          completion = cmp.config.window.bordered(),
+          documentation = cmp.config.window.bordered(),
         },
+        experimental = { ghost_text = true },
+        preselect = cmp.PreselectMode.None,
         mapping = cmp.mapping.preset.insert {
           ['<CR>'] = cmp.mapping.confirm({ select = false }),
           ['<Tab>'] = cmp_actions.luasnip_supertab({ behavior = 'select' }),
@@ -39,28 +37,10 @@ return {
     branch = 'v3.x',
     lazy = true,
     config = false,
-  },
-  {
-    'hrsh7th/cmp-cmdline',
-    config = function()
-      require('cmp').setup.cmdline({ ':' }, {
-        formatting = {
-          format = function(entry, vim_item)
-            vim_item.kind = ''
-            return vim_item
-          end
-        },
-        mapping = require('cmp').mapping.preset.cmdline {
-          ['<CR>'] = { c = require('cmp').mapping.confirm({ select = false }) },
-          ['<Tab>'] = { c = require('cmp').mapping.select_next_item({ behavior = 'select' }) },
-          ['<S-Tab>'] = { c = require('cmp').mapping.select_prev_item({ behavior = 'select' }) },
-          ['<C-e>'] = require('lsp-zero').cmp_action().toggle_completion({ modes = { 'c' } })
-        },
-        sources = {
-          { name = 'cmdline' }
-        }
-      })
-    end
+    init = function()
+      vim.g.lsp_zero_extend_cmp = 0
+      vim.g.lsp_zero_extend_lspconfig = 0
+    end,
   },
   {
     'neovim/nvim-lspconfig',
@@ -79,11 +59,12 @@ return {
       end)
 
       require('mason-lspconfig').setup({
-        ensure_installed = { 'lua_ls', 'gopls', 'clangd', 'sqlls' },
+        ensure_installed = { 'lua_ls', 'gopls', 'clangd' },
         handlers = {
           lsp_zero.default_setup,
           lua_ls = function()
-            require('lspconfig').lua_ls.setup(lsp_zero.nvim_lua_ls())
+            local lua_opts = lsp_zero.nvim_lua_ls()
+            require('lspconfig').lua_ls.setup(lua_opts)
           end
         }
       })
