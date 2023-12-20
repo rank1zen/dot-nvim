@@ -44,19 +44,20 @@ return {
   },
   {
     'nvim-telescope/telescope.nvim',
+    lazy = false,
     tag = '0.1.5',
     dependencies = { 'nvim-lua/plenary.nvim' },
-    cmds = { 'Telescope' },
     config = function()
       local actions = require('telescope.actions')
       require('telescope').setup({
         defaults = {
           layout_strategy = 'center',
+          layout_config = {
+            prompt_position = "bottom",
+          },
           mappings = {
             i = {
               ["<Esc>"] = actions.close,
-              ["<C-s>"] = actions.cycle_previewers_next,
-              ["<C-a>"] = actions.cycle_previewers_prev,
               ["<Tab>"] = actions.move_selection_next,
               ["<S-Tab>"] = actions.move_selection_previous,
             }
@@ -68,14 +69,36 @@ return {
       {
         '<C-p>',
         function()
+          local function is_git_repo()
+            vim.fn.system("git rev-parse --is-inside-work-tree")
+            return vim.v.shell_error == 0
+          end
+
+          local function get_git_root()
+            local dot_git_path = vim.fn.finddir(".git", ".;")
+            return vim.fn.fnamemodify(dot_git_path, ":h")
+          end
+
+          local opts = {}
+          if is_git_repo() then
+            opts = {
+              cwd = get_git_root(),
+            }
+          end
+
+          require("telescope.builtin").find_files(opts)
+        end,
+      },
+      {
+        '<C-n>',
+        function()
           local theme = require('telescope.themes').get_dropdown({
-            width = 0.8,
             previewer = false,
             prompt_title = false,
           })
-          require('telescope.builtin').git_files(theme)
+          vim.cmd("Telescope")
         end,
-      }
+      },
     }
   },
 }
