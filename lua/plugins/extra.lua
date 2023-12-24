@@ -58,8 +58,8 @@ return {
           mappings = {
             i = {
               ["<Esc>"] = actions.close,
-              ["<Tab>"] = actions.move_selection_next,
-              ["<S-Tab>"] = actions.move_selection_previous,
+              ["<Tab>"] = actions.move_selection_previous,
+              ["<S-Tab>"] = actions.move_selection_next,
             }
           }
         }
@@ -92,10 +92,6 @@ return {
       {
         '<C-n>',
         function()
-          local theme = require('telescope.themes').get_dropdown({
-            previewer = false,
-            prompt_title = false,
-          })
           vim.cmd("Telescope")
         end,
       },
