@@ -47,7 +47,9 @@ local plugins = {
     priority = 1000,
     lazy = false,
     opts = {
+      extend_background_behind_borders = true,
       styles = {
+        bold = true,
         italic = false,
         transparency = true,
       },
