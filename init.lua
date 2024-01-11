@@ -24,7 +24,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
   end,
 })
 
-local float_opts = { border = 'single' }
+local float_opts = { border = 'rounded' }
 
 vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, float_opts)
 vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, float_opts)
@@ -78,11 +78,10 @@ local plugins = {
   { 'hrsh7th/cmp-nvim-lsp' },
 }
 
-require('lazy').setup(plugins)
+vim.g.ctrlp_map = '<C-e>'
+vim.g.ctrlp_cmd = 'CtrlPMRU'
 
-vim.keymap.set('n', '<C-e>', '<Cmd>CtrlPMRU<CR>')
-vim.g.ctrlp_mruf_relative = 1
-vim.g.ctrlp_show_hidden = 1
+require('lazy').setup(plugins)
 
 local cmp = require('cmp')
 local luasnip = require('luasnip')
