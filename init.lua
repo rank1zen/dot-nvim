@@ -36,7 +36,8 @@ vim.diagnostic.config({
 
 local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
 if not vim.loop.fs_stat(lazypath) then
-  vim.fn.system({ 'git', 'clone', '--filter=blob:none', 'https://github.com/folke/lazy.nvim.git', '--branch=stable', lazypath })
+  vim.fn.system({ 'git', 'clone', '--filter=blob:none', 'https://github.com/folke/lazy.nvim.git', '--branch=stable',
+    lazypath })
 end
 vim.opt.rtp:prepend(lazypath)
 
@@ -47,7 +48,6 @@ local plugins = {
     priority = 1000,
     lazy = false,
     opts = {
-      extend_background_behind_borders = true,
       styles = {
         bold = true,
         italic = false,
@@ -68,6 +68,11 @@ local plugins = {
   {
     'williamboman/mason.nvim',
     opts = {},
+  },
+  {
+    'windwp/nvim-autopairs',
+    event = "InsertEnter",
+    opts = {}
   },
   { 'hrsh7th/nvim-cmp' },
   { 'L3MON4D3/LuaSnip' },
