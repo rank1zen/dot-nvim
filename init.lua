@@ -55,7 +55,6 @@ local plugins = {
       },
     }
   },
-  { 'ctrlpvim/ctrlp.vim' },
   {
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
@@ -63,12 +62,19 @@ local plugins = {
     opts = {
       highlight = { enable = true },
       indent = { enable = true },
+      textobjects = {
+        select = {
+          enable = true,
+          keymaps = {
+            ['ia'] = '@parameter.inner',
+            ['aa'] = '@parameter.outer',
+          },
+        },
+      },
     },
   },
-  {
-    'williamboman/mason.nvim',
-    opts = {},
-  },
+  { 'nvim-treesitter/nvim-treesitter-textobjects' },
+  { 'ctrlpvim/ctrlp.vim' },
   {
     'windwp/nvim-autopairs',
     event = "InsertEnter",
@@ -81,6 +87,7 @@ local plugins = {
 
 vim.g.ctrlp_map = '<C-e>'
 vim.g.ctrlp_cmd = 'CtrlPMRU'
+vim.g.ctrlp_mruf_relative = 1
 
 require('lazy').setup(plugins)
 
