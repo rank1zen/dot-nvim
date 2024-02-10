@@ -16,6 +16,7 @@ local function start_clangd()
     name = 'clangd',
     cmd = {
       "clangd",
+      "--clang-tidy",
       "--background-index",
       "--completion-style=bundled",
       "--fallback-style=llvm",
@@ -28,8 +29,8 @@ vim.api.nvim_create_autocmd('FileType', {
   pattern = { "c", "cpp", "objc", "objcpp", "cuda", "proto" },
   callback = function()
     vim.opt.expandtab = true
-    vim.opt.tabstop = 2
-    vim.opt.shiftwidth = 2
+    vim.opt.tabstop = 4
+    vim.opt.shiftwidth = 4
     vim.opt.softtabstop = -1
     start_clangd()
   end
