@@ -60,8 +60,12 @@ local plugins = {
     build = ':TSUpdate',
     main = 'nvim-treesitter.configs',
     opts = {
-      highlight = { enable = true },
-      indent = { enable = true },
+      highlight = {
+        enable = true
+      },
+      indent = {
+        enable = true
+      },
       textobjects = {
         select = {
           enable = true,
@@ -132,7 +136,6 @@ cmp.setup({
     completion = cmp.config.window.bordered(float_opts),
     documentation = cmp.config.window.bordered(float_opts),
   },
-  experimental = { ghost_text = true },
   preselect = cmp.PreselectMode.None,
   mapping = cmp.mapping.preset.insert {
     ['<CR>'] = cmp.mapping.confirm({ select = false }),
