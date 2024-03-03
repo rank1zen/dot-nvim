@@ -1,6 +1,12 @@
+local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system({ 'git', 'clone', '--filter=blob:none', 'https://github.com/folke/lazy.nvim.git', '--branch=stable',
+    lazypath })
+end
+vim.opt.rtp:prepend(lazypath)
+
 vim.opt.autoindent = true
 vim.opt.smartindent = true
-
 vim.opt.number = true
 vim.opt.relativenumber = true
 
@@ -34,13 +40,6 @@ vim.diagnostic.config({
   float = float_opts,
 })
 
-local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
-if not vim.loop.fs_stat(lazypath) then
-  vim.fn.system({ 'git', 'clone', '--filter=blob:none', 'https://github.com/folke/lazy.nvim.git', '--branch=stable',
-    lazypath })
-end
-vim.opt.rtp:prepend(lazypath)
-
 local plugins = {
   {
     'rose-pine/neovim',
@@ -49,23 +48,34 @@ local plugins = {
     lazy = false,
     opts = {
       styles = {
-        bold = true,
         italic = false,
         transparency = true,
       },
     }
   },
   {
+    'nvim-telescope/telescope.nvim',
+    tag = '0.1.5',
+    dependencies = { 'nvim-lua/plenary.nvim' },
+    keys = {
+      { "<C-e>", "<Cmd>Telescope frecency workspace=CWD previewer=false<CR>" },
+      { "<C-y>", "<Cmd>Telescope find_files previewer=false<CR>" },
+    },
+  },
+  {
+    "nvim-telescope/telescope-frecency.nvim",
+    config = function()
+      require("telescope").load_extension("frecency")
+    end,
+  },
+  {
     'nvim-treesitter/nvim-treesitter',
+    dependencies = { 'nvim-treesitter/nvim-treesitter-textobjects' },
     build = ':TSUpdate',
     main = 'nvim-treesitter.configs',
     opts = {
-      highlight = {
-        enable = true
-      },
-      indent = {
-        enable = true
-      },
+      highlight = { enable = true },
+      indent = { enable = true },
       textobjects = {
         select = {
           enable = true,
@@ -77,8 +87,6 @@ local plugins = {
       },
     },
   },
-  { 'nvim-treesitter/nvim-treesitter-textobjects' },
-  { 'ctrlpvim/ctrlp.vim' },
   {
     'windwp/nvim-autopairs',
     event = "InsertEnter",
@@ -88,10 +96,6 @@ local plugins = {
   { 'L3MON4D3/LuaSnip' },
   { 'hrsh7th/cmp-nvim-lsp' },
 }
-
-vim.g.ctrlp_map = '<C-e>'
-vim.g.ctrlp_cmd = 'CtrlPMRU'
-vim.g.ctrlp_mruf_relative = 1
 
 require('lazy').setup(plugins)
 
