@@ -30,14 +30,15 @@ vim.api.nvim_create_autocmd('LspAttach', {
   end,
 })
 
-local float_opts = { border = 'rounded' }
-
-vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, float_opts)
-vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, float_opts)
+local orig_util_open_floating_preview = vim.lsp.util.open_floating_preview
+function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
+  opts = opts or {}
+  opts.border = opts.border or 'rounded'
+  return orig_util_open_floating_preview(contents, syntax, opts, ...)
+end
 
 vim.diagnostic.config({
   signs = false,
-  float = float_opts,
 })
 
 local plugins = {
@@ -55,27 +56,26 @@ local plugins = {
   },
   {
     'nvim-telescope/telescope.nvim',
-    tag = '0.1.5',
     dependencies = { 'nvim-lua/plenary.nvim' },
+    tag = '0.1.5',
     keys = {
-      { "<C-e>", "<Cmd>Telescope frecency workspace=CWD previewer=false<CR>" },
-      { "<C-y>", "<Cmd>Telescope find_files previewer=false<CR>" },
+      { "<C-e>", "<Cmd>Telescope frecency theme=ivy workspace=CWD previewer=false<CR>" },
+      { "<C-y>", "<Cmd>Telescope find_files theme=ivy<CR>" },
     },
   },
   {
     "nvim-telescope/telescope-frecency.nvim",
+    dependencies = { 'nvim-telescope/telescope.nvim' },
     config = function()
       require("telescope").load_extension("frecency")
     end,
   },
   {
     'nvim-treesitter/nvim-treesitter',
-    dependencies = { 'nvim-treesitter/nvim-treesitter-textobjects' },
     build = ':TSUpdate',
     main = 'nvim-treesitter.configs',
     opts = {
       highlight = { enable = true },
-      indent = { enable = true },
       textobjects = {
         select = {
           enable = true,
@@ -88,47 +88,31 @@ local plugins = {
     },
   },
   {
+    'nvim-treesitter/nvim-treesitter-context',
+    dependencies = { 'nvim-treesitter/nvim-treesitter' }
+  },
+  {
+    'nvim-treesitter/nvim-treesitter-textobjects',
+    dependencies = { 'nvim-treesitter/nvim-treesitter' }
+  },
+  {
     'windwp/nvim-autopairs',
     event = "InsertEnter",
     opts = {}
   },
-  { 'hrsh7th/nvim-cmp' },
-  { 'L3MON4D3/LuaSnip' },
+  {
+    'hrsh7th/nvim-cmp',
+    dependencies = { 'L3MON4D3/LuaSnip' },
+    event = { "InsertEnter", "CmdlineEnter" },
+  },
   { 'hrsh7th/cmp-nvim-lsp' },
+  { 'hrsh7th/cmp-nvim-lsp-signature-help' },
 }
 
 require('lazy').setup(plugins)
 
 local cmp = require('cmp')
 local luasnip = require('luasnip')
-
-local has_words_before = function()
-  unpack = unpack or table.unpack
-  local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-  return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
-end
-
-local supertab = function(fallback)
-  if cmp.visible() then
-    cmp.select_next_item({ behavior = 'select' })
-  elseif luasnip.expand_or_locally_jumpable() then
-    luasnip.expand_or_jump()
-  elseif has_words_before() then
-    cmp.complete()
-  else
-    fallback()
-  end
-end
-
-local supertab_prev = function(fallback)
-  if cmp.visible() then
-    cmp.select_prev_item({ behavior = 'select' })
-  elseif luasnip.jumpable(-1) then
-    luasnip.jump(-1)
-  else
-    fallback()
-  end
-end
 
 cmp.setup({
   snippet = {
@@ -137,17 +121,41 @@ cmp.setup({
     end,
   },
   window = {
-    completion = cmp.config.window.bordered(float_opts),
-    documentation = cmp.config.window.bordered(float_opts),
-  },
-  preselect = cmp.PreselectMode.None,
-  mapping = cmp.mapping.preset.insert {
-    ['<CR>'] = cmp.mapping.confirm({ select = false }),
-    ['<Tab>'] = cmp.mapping(supertab, { 'i', 's' }),
-    ['<S-Tab>'] = cmp.mapping(supertab_prev, { 'i', 's' }),
+    completion = cmp.config.window.bordered({ border = 'rounded' }),
+    documentation = cmp.config.window.bordered({ border = 'rounded' }),
   },
   sources = cmp.config.sources({
     { name = 'nvim_lsp' },
+    { name = 'nvim_lsp_signature_help' },
+  }),
+  mapping = cmp.mapping.preset.insert({
+    ['<CR>'] = cmp.mapping.confirm({ select = false }),
+
+    ['<Tab>'] = cmp.mapping(function(fallback)
+      if cmp.visible() then
+        cmp.select_next_item({ behavior = 'select' })
+      elseif luasnip.expand_or_locally_jumpable() then
+        luasnip.expand_or_jump()
+      elseif function()
+            unpack = unpack or table.unpack
+            local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+            return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
+          end then
+        cmp.complete()
+      else
+        fallback()
+      end
+    end, { 'i', 's' }),
+
+    ['<S-Tab>'] = cmp.mapping(function(fallback)
+      if cmp.visible() then
+        cmp.select_prev_item({ behavior = 'select' })
+      elseif luasnip.jumpable(-1) then
+        luasnip.jump(-1)
+      else
+        fallback()
+      end
+    end, { 'i', 's' }),
   })
 })
 
