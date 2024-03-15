@@ -10,38 +10,55 @@ vim.opt.smartindent = true
 vim.opt.number = true
 vim.opt.relativenumber = true
 
+vim.opt.expandtab = true
+vim.opt.tabstop = 4
+vim.opt.shiftwidth = 4
+vim.opt.softtabstop = -1
+
 vim.keymap.set('n', 'gl', vim.diagnostic.open_float)
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev)
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next)
 
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = { "go", "gomod", "gowork", "gotmpl" },
+  callback = function()
+    vim.opt.tabstop = 8
+    vim.opt.shiftwidth = 8
+    vim.opt.softtabstop = -1
+  end
+})
+
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = { "lua" },
+  callback = function()
+    vim.opt.expandtab = true
+    vim.opt.tabstop = 2
+    vim.opt.shiftwidth = 2
+    vim.opt.softtabstop = -1
+  end
+})
+
+
 vim.api.nvim_create_autocmd('LspAttach', {
   group = vim.api.nvim_create_augroup('UserLspConfig', {}),
   callback = function(ev)
-    local opts = { buffer = ev.buf }
-    vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
-    vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
-    vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
-    vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
-    vim.keymap.set('n', 'go', vim.lsp.buf.type_definition, opts)
-    vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
-    vim.keymap.set('n', 'gs', vim.lsp.buf.signature_help, opts)
-    vim.keymap.set('n', '<F2>', vim.lsp.buf.rename, opts)
-    vim.keymap.set('n', '<F3>', function() vim.lsp.buf.format({ async = true }) end, opts)
+    vim.keymap.set('n', 'K', vim.lsp.buf.hover, { buffer = ev.buf })
+    vim.keymap.set('n', 'gd', vim.lsp.buf.definition, { buffer = ev.buf })
+    vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, { buffer = ev.buf })
+    vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, { buffer = ev.buf })
+    vim.keymap.set('n', 'go', vim.lsp.buf.type_definition, { buffer = ev.buf })
+    vim.keymap.set('n', 'gr', vim.lsp.buf.references, { buffer = ev.buf })
+    vim.keymap.set('n', 'gs', vim.lsp.buf.signature_help, { buffer = ev.buf })
+    vim.keymap.set('n', '<F2>', vim.lsp.buf.rename, { buffer = ev.buf })
+    vim.keymap.set('n', '<F3>', function() vim.lsp.buf.format({ async = true }) end, { buffer = ev.buf })
   end,
 })
 
-local orig_util_open_floating_preview = vim.lsp.util.open_floating_preview
-function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
-  opts = opts or {}
-  opts.border = opts.border or 'rounded'
-  return orig_util_open_floating_preview(contents, syntax, opts, ...)
-end
-
-vim.diagnostic.config({
-  signs = false,
-})
+vim.diagnostic.config({ signs = false })
 
 local plugins = {
+  'neovim/nvim-lspconfig',
+  'echasnovski/mini.nvim',
   {
     'rose-pine/neovim',
     name = 'rose-pine',
@@ -50,25 +67,10 @@ local plugins = {
     opts = {
       styles = {
         italic = false,
+        bold = false,
         transparency = true,
       },
     }
-  },
-  {
-    'nvim-telescope/telescope.nvim',
-    dependencies = { 'nvim-lua/plenary.nvim' },
-    tag = '0.1.5',
-    keys = {
-      { "<C-e>", "<Cmd>Telescope frecency theme=ivy workspace=CWD previewer=false<CR>" },
-      { "<C-y>", "<Cmd>Telescope find_files theme=ivy<CR>" },
-    },
-  },
-  {
-    "nvim-telescope/telescope-frecency.nvim",
-    dependencies = { 'nvim-telescope/telescope.nvim' },
-    config = function()
-      require("telescope").load_extension("frecency")
-    end,
   },
   {
     'nvim-treesitter/nvim-treesitter',
@@ -76,87 +78,70 @@ local plugins = {
     main = 'nvim-treesitter.configs',
     opts = {
       highlight = { enable = true },
-      textobjects = {
-        select = {
-          enable = true,
-          keymaps = {
-            ['ia'] = '@parameter.inner',
-            ['aa'] = '@parameter.outer',
-          },
-        },
-      },
     },
   },
-  {
-    'nvim-treesitter/nvim-treesitter-context',
-    dependencies = { 'nvim-treesitter/nvim-treesitter' }
-  },
-  {
-    'nvim-treesitter/nvim-treesitter-textobjects',
-    dependencies = { 'nvim-treesitter/nvim-treesitter' }
-  },
-  {
-    'windwp/nvim-autopairs',
-    event = "InsertEnter",
-    opts = {}
-  },
-  {
-    'hrsh7th/nvim-cmp',
-    dependencies = { 'L3MON4D3/LuaSnip' },
-    event = { "InsertEnter", "CmdlineEnter" },
-  },
-  { 'hrsh7th/cmp-nvim-lsp' },
-  { 'hrsh7th/cmp-nvim-lsp-signature-help' },
 }
 
 require('lazy').setup(plugins)
 
-local cmp = require('cmp')
-local luasnip = require('luasnip')
-
-cmp.setup({
-  snippet = {
-    expand = function(args)
-      require('luasnip').lsp_expand(args.body)
-    end,
-  },
-  window = {
-    completion = cmp.config.window.bordered({ border = 'rounded' }),
-    documentation = cmp.config.window.bordered({ border = 'rounded' }),
-  },
-  sources = cmp.config.sources({
-    { name = 'nvim_lsp' },
-    { name = 'nvim_lsp_signature_help' },
-  }),
-  mapping = cmp.mapping.preset.insert({
-    ['<CR>'] = cmp.mapping.confirm({ select = false }),
-
-    ['<Tab>'] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        cmp.select_next_item({ behavior = 'select' })
-      elseif luasnip.expand_or_locally_jumpable() then
-        luasnip.expand_or_jump()
-      elseif function()
-            unpack = unpack or table.unpack
-            local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-            return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
-          end then
-        cmp.complete()
-      else
-        fallback()
-      end
-    end, { 'i', 's' }),
-
-    ['<S-Tab>'] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        cmp.select_prev_item({ behavior = 'select' })
-      elseif luasnip.jumpable(-1) then
-        luasnip.jump(-1)
-      else
-        fallback()
-      end
-    end, { 'i', 's' }),
-  })
+local lspconfig = require('lspconfig')
+lspconfig.tsserver.setup({})
+lspconfig.gopls.setup({})
+lspconfig.clangd.setup({})
+lspconfig.lua_ls.setup({
+  on_init = function(client)
+    local path = client.workspace_folders[1].name
+    if vim.loop.fs_stat(path .. '/.luarc.json') or vim.loop.fs_stat(path .. '/.luarc.jsonc') then
+      return
+    end
+    client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
+      runtime = {
+        version = 'LuaJIT'
+      },
+      workspace = {
+        checkThirdParty = false,
+        library = {
+          vim.env.VIMRUNTIME
+        }
+      }
+    })
+  end,
+  settings = {
+    Lua = {}
+  }
 })
+
+require('mini.ai').setup()
+require('mini.completion').setup({
+  delay = { completion = 0, info = 0, signature = 100 },
+})
+
+require('mini.extra').setup()
+require('mini.pairs').setup()
+require('mini.pick').setup()
+require('mini.visits').setup()
+
+vim.keymap.set('n', '<C-e>', '<Cmd>Pick visit_paths cwd="" recency_weight=1 <CR>')
+vim.keymap.set('n', '<C-y>', '<Cmd>Pick files<CR>')
+
+vim.keymap.set('i', '<Tab>', [[pumvisible() ? "\<C-n>" : "\<Tab>"]], { expr = true })
+vim.keymap.set('i', '<S-Tab>', [[pumvisible() ? "\<C-p>" : "\<S-Tab>"]], { expr = true })
+
+local keys = {
+  ['cr']        = vim.api.nvim_replace_termcodes('<CR>', true, true, true),
+  ['ctrl-y']    = vim.api.nvim_replace_termcodes('<C-y>', true, true, true),
+  ['ctrl-y_cr'] = vim.api.nvim_replace_termcodes('<C-y><CR>', true, true, true),
+}
+
+_G.cr_action = function()
+  if vim.fn.pumvisible() ~= 0 then
+    local item_selected = vim.fn.complete_info()['selected'] ~= -1
+    return item_selected and keys['ctrl-y'] or keys['ctrl-y_cr']
+  else
+    return require('mini.pairs').cr()
+  end
+end
+
+vim.keymap.set('i', '<CR>', 'v:lua._G.cr_action()', { expr = true })
 
 vim.cmd('colorscheme rose-pine')
