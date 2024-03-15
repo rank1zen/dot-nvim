@@ -38,7 +38,6 @@ vim.api.nvim_create_autocmd('FileType', {
   end
 })
 
-
 vim.api.nvim_create_autocmd('LspAttach', {
   group = vim.api.nvim_create_augroup('UserLspConfig', {}),
   callback = function(ev)
@@ -59,6 +58,7 @@ vim.diagnostic.config({ signs = false })
 local plugins = {
   'neovim/nvim-lspconfig',
   'echasnovski/mini.nvim',
+  'ctrlpvim/ctrlp.vim',
   {
     'rose-pine/neovim',
     name = 'rose-pine',
@@ -82,13 +82,17 @@ local plugins = {
   },
 }
 
+vim.g.ctrlp_map = '<C-e>'
+vim.g.ctrlp_cmd = 'CtrlPMRU'
+vim.g.ctrlp_mruf_relative = 1
+
 require('lazy').setup(plugins)
 
 local lspconfig = require('lspconfig')
 lspconfig.tsserver.setup({})
 lspconfig.gopls.setup({})
 lspconfig.clangd.setup({})
-lspconfig.lua_ls.setup({
+lspconfig.lua_ls.setup {
   on_init = function(client)
     local path = client.workspace_folders[1].name
     if vim.loop.fs_stat(path .. '/.luarc.json') or vim.loop.fs_stat(path .. '/.luarc.jsonc') then
@@ -109,20 +113,13 @@ lspconfig.lua_ls.setup({
   settings = {
     Lua = {}
   }
-})
+}
 
 require('mini.ai').setup()
-require('mini.completion').setup({
-  delay = { completion = 0, info = 0, signature = 100 },
-})
-
-require('mini.extra').setup()
 require('mini.pairs').setup()
-require('mini.pick').setup()
-require('mini.visits').setup()
-
-vim.keymap.set('n', '<C-e>', '<Cmd>Pick visit_paths cwd="" recency_weight=1 <CR>')
-vim.keymap.set('n', '<C-y>', '<Cmd>Pick files<CR>')
+require('mini.completion').setup {
+  delay = { completion = 20, info = 20, signature = 100 },
+}
 
 vim.keymap.set('i', '<Tab>', [[pumvisible() ? "\<C-n>" : "\<Tab>"]], { expr = true })
 vim.keymap.set('i', '<S-Tab>', [[pumvisible() ? "\<C-p>" : "\<S-Tab>"]], { expr = true })
