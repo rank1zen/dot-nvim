@@ -1,8 +1,8 @@
 {
   "ctrlp.vim": { "branch": "master", "commit": "7c972cb19c8544c681ca345c64ec39e04f4651cc" },
-  "lazy.nvim": { "branch": "main", "commit": "83493db50a434a4c5c648faf41e2ead80f96e478" },
-  "mini.nvim": { "branch": "main", "commit": "9968f6e221ae7bdac57a910c5bf2026186aa023c" },
-  "nvim-lspconfig": { "branch": "master", "commit": "4bdd3800b4148f670c6cf55ef65f490148eeb550" },
-  "nvim-treesitter": { "branch": "master", "commit": "f87882858438834d2fbb6379aa2be37de901751b" },
-  "rose-pine": { "branch": "main", "commit": "c52167563e6aa44b5fa6fe007faa2bcac71050f0" }
+  "lazy.nvim": { "branch": "main", "commit": "31ddbea7c10b6920c9077b66c97951ca8682d5c8" },
+  "mini.nvim": { "branch": "main", "commit": "f3092db48dd2dfd3d32df5a5be4d56ed0c0b1ef9" },
+  "nvim-lspconfig": { "branch": "master", "commit": "e13ef0c5c8ccdbb9c84682522d6ad5923a65c1a8" },
+  "nvim-treesitter": { "branch": "master", "commit": "e6cd337e30962cc0982d51fa03beedcc6bc70e3d" },
+  "rose-pine": { "branch": "main", "commit": "19055dfe90bfa46a1e5b0a706d13980bdffa2dee" }
 }

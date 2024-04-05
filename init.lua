@@ -67,7 +67,7 @@ local plugins = {
     opts = {
       styles = {
         italic = false,
-        bold = false,
+        bold = true,
         transparency = true,
       },
     }
@@ -89,9 +89,36 @@ vim.g.ctrlp_mruf_relative = 1
 require('lazy').setup(plugins)
 
 local lspconfig = require('lspconfig')
+
 lspconfig.tsserver.setup({})
+
 lspconfig.gopls.setup({})
-lspconfig.clangd.setup({})
+
+-- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#clangd
+lspconfig.clangd.setup {
+  cmd = {
+    "clangd",
+    "--background-index",
+    "--clang-tidy",
+    "--header-insertion=iwyu",
+    "--completion-style=detailed",
+    "--function-arg-placeholders",
+    "--fallback-style=webkit",
+  },
+}
+
+lspconfig.pyright.setup {
+  {
+    python = {
+      analysis = {
+        autoSearchPaths = true,
+        diagnosticMode = "openFilesOnly",
+        useLibraryCodeForTypes = true
+      }
+    }
+  }
+}
+
 lspconfig.lua_ls.setup {
   on_init = function(client)
     local path = client.workspace_folders[1].name
@@ -123,22 +150,5 @@ require('mini.completion').setup {
 
 vim.keymap.set('i', '<Tab>', [[pumvisible() ? "\<C-n>" : "\<Tab>"]], { expr = true })
 vim.keymap.set('i', '<S-Tab>', [[pumvisible() ? "\<C-p>" : "\<S-Tab>"]], { expr = true })
-
-local keys = {
-  ['cr']        = vim.api.nvim_replace_termcodes('<CR>', true, true, true),
-  ['ctrl-y']    = vim.api.nvim_replace_termcodes('<C-y>', true, true, true),
-  ['ctrl-y_cr'] = vim.api.nvim_replace_termcodes('<C-y><CR>', true, true, true),
-}
-
-_G.cr_action = function()
-  if vim.fn.pumvisible() ~= 0 then
-    local item_selected = vim.fn.complete_info()['selected'] ~= -1
-    return item_selected and keys['ctrl-y'] or keys['ctrl-y_cr']
-  else
-    return require('mini.pairs').cr()
-  end
-end
-
-vim.keymap.set('i', '<CR>', 'v:lua._G.cr_action()', { expr = true })
 
 vim.cmd('colorscheme rose-pine')
