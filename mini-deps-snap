@@ -1,0 +1,10 @@
+return {
+  ["conform.nvim"] = "59d0dd233a2cafacfa1235ab22054c4d80a72319",
+  ["mason.nvim"] = "49ff59aded1047a773670651cfa40e76e63c6377",
+  ["mini.nvim"] = "c333187fcc76d7e772dac32c2a440a949fe34be4",
+  neovim = "b24b48d35b4f96bbc9a717d3220e959dbf89f6b1",
+  ["nvim-lspconfig"] = "94513a5b246cf32a8f87ca714af50911df63351c",
+  ["nvim-treesitter"] = "d5a1c2b0c8ec5bb377a41c1c414b315d6b3e9432",
+  ["nvim-web-devicons"] = "e37bb1feee9e7320c76050a55443fa843b4b6f83",
+  vimtex = "8ca74380935beb4ed5d213bb55b2380cc1a83bd6"
+}
