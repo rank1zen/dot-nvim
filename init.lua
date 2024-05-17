@@ -12,7 +12,6 @@ end
 -- Set up 'mini.deps' (customize to your liking)
 require('mini.deps').setup({ path = { package = path_package } })
 
-
 MiniDeps.now(function() require('core.settings') end)
 MiniDeps.now(function() require('core.functions') end)
 MiniDeps.now(function() require('core.mappings') end)
@@ -20,13 +19,21 @@ MiniDeps.now(function() require('core.mappings-leader') end)
 
 MiniDeps.now(function()
   MiniDeps.add('rose-pine/neovim')
-  require('rose-pine').setup {
+  require('rose-pine').setup({
     styles = {
-      bold = true,
-      italic = false,
-      transparency = true,
-    }
-  }
+        bold = true,
+        italic = false,
+    },
+    groups = {
+      border = 'text',
+    },
+    before_highlight = function(group, highlight, palette)
+      if highlight.bg == palette.base then highlight.bg = '#0d0d0d' end
+      if highlight.bg == palette.surface then highlight.bg = '#181716' end
+      if highlight.bg == palette.overlay then highlight.bg = '#302a27' end
+      if highlight.fg == palette.rose then highlight.fg = '#ffd7b5' end
+    end,
+  })
   vim.cmd('colorscheme rose-pine')
 end)
 
@@ -36,13 +43,12 @@ MiniDeps.now(function()
 end)
 
 MiniDeps.later(function()
-  require('mini.completion').setup {
+  require('mini.completion').setup({
     lsp_completion = {
       -- source_func = 'omnifunc',
       -- auto_setup = false,
       process_items = function(items, base)
         -- Don't show 'Text' and 'Snippet' suggestions
-      
         -- TODO: Fuzzy search? doesn't work that well
         items = vim.tbl_filter(function(x) return x.kind ~= 1 and x.kind ~= 15 end, items)
         return MiniCompletion.default_process_items(items, base)
@@ -52,7 +58,7 @@ MiniDeps.later(function()
       info = { border = 'rounded' },
       signature = { border = 'rounded' },
     },
-  }
+  })
 end)
 
 MiniDeps.later(function()
@@ -81,16 +87,16 @@ end)
 MiniDeps.later(function()
   local hipatterns = require('mini.hipatterns')
 
-  hipatterns.setup {
+  hipatterns.setup({
     highlighters = {
-      fixme     = { pattern = '%f[%w]()FIXME()%f[%W]', group = 'MiniHipatternsFixme' },
-      hack      = { pattern = '%f[%w]()HACK()%f[%W]', group = 'MiniHipatternsHack' },
-      todo      = { pattern = '%f[%w]()TODO()%f[%W]', group = 'MiniHipatternsTodo' },
-      note      = { pattern = '%f[%w]()NOTE()%f[%W]', group = 'MiniHipatternsNote' },
+      fixme = { pattern = '%f[%w]()FIXME()%f[%W]', group = 'MiniHipatternsFixme' },
+      hack = { pattern = '%f[%w]()HACK()%f[%W]', group = 'MiniHipatternsHack' },
+      todo = { pattern = '%f[%w]()TODO()%f[%W]', group = 'MiniHipatternsTodo' },
+      note = { pattern = '%f[%w]()NOTE()%f[%W]', group = 'MiniHipatternsNote' },
 
       hex_color = hipatterns.gen_highlighter.hex_color(),
     },
-  }
+  })
 end)
 
 MiniDeps.now(function() MiniDeps.add('nvim-tree/nvim-web-devicons') end)
@@ -105,10 +111,10 @@ MiniDeps.later(function()
     hooks = { post_checkout = function() vim.cmd('TSUpdate') end },
   })
 
-  require('nvim-treesitter.configs').setup {
+  require('nvim-treesitter.configs').setup({
     ensure_installed = { 'lua', 'vimdoc' },
     highlight = { enable = true },
-  }
+  })
 end)
 
 MiniDeps.later(function()
@@ -118,11 +124,11 @@ end)
 
 MiniDeps.later(function()
   MiniDeps.add('stevearc/conform.nvim')
-  require('conform').setup {
+  require('conform').setup({
     formatters_by_ft = {
       lua = { 'stylua' },
     },
-  }
+  })
 end)
 
 MiniDeps.later(function()
@@ -130,11 +136,11 @@ MiniDeps.later(function()
   require('core.plugins.nvim-lspconfig')
 end)
 
-vim.filetype.add {
+vim.filetype.add({
   extension = {
-    templ = "templ",
+    templ = 'templ',
   },
   pattern = {
-    [".*/hypr/.*%.conf"] = "hyprlang"
+    ['.*/hypr/.*%.conf'] = 'hyprlang',
   },
-}
+})
