@@ -18,11 +18,16 @@ MiniDeps.now(function() require('core.mappings') end)
 MiniDeps.now(function() require('core.mappings-leader') end)
 
 MiniDeps.now(function()
+  MiniDeps.add('lervag/vimtex')
+  vim.g.vimtex_view_method = 'zathura'
+end)
+
+MiniDeps.now(function()
   MiniDeps.add('rose-pine/neovim')
   require('rose-pine').setup({
     styles = {
-        bold = true,
-        italic = false,
+      bold = true,
+      italic = false,
     },
     groups = {
       border = 'text',
@@ -37,19 +42,17 @@ MiniDeps.now(function()
   vim.cmd('colorscheme rose-pine')
 end)
 
-MiniDeps.now(function()
-  MiniDeps.add('lervag/vimtex')
-  vim.g.vimtex_view_method = 'zathura'
-end)
+MiniDeps.later(function() require('mini.ai').setup() end)
+MiniDeps.later(function() require('mini.surround').setup() end)
+MiniDeps.later(function() require('mini.splitjoin').setup() end)
+MiniDeps.later(function() require('mini.bracketed').setup() end)
 
 MiniDeps.later(function()
   require('mini.completion').setup({
     lsp_completion = {
-      -- source_func = 'omnifunc',
-      -- auto_setup = false,
       process_items = function(items, base)
-        -- Don't show 'Text' and 'Snippet' suggestions
         -- TODO: Fuzzy search? doesn't work that well
+        -- Don't show 'Text' and 'Snippet' suggestions
         items = vim.tbl_filter(function(x) return x.kind ~= 1 and x.kind ~= 15 end, items)
         return MiniCompletion.default_process_items(items, base)
       end,
@@ -66,23 +69,10 @@ MiniDeps.later(function()
   vim.keymap.set('i', '<CR>', 'v:lua._G.cr_action()', { expr = true })
 end)
 
--- TODO: there are a whole bunch of other mini modules
-MiniDeps.later(function() require('mini.ai').setup() end)
-MiniDeps.later(function() require('mini.bracketed').setup() end)
-MiniDeps.later(function() require('mini.visits').setup() end)
 MiniDeps.later(function() require('mini.pick').setup() end)
+MiniDeps.later(function() require('mini.visits').setup() end)
+MiniDeps.later(function() require('mini.files').setup() end)
 MiniDeps.later(function() require('mini.extra').setup() end)
-MiniDeps.later(function() require('mini.splitjoin').setup() end)
-
-MiniDeps.later(function()
-  require('mini.files').setup({ windows = { preview = true } })
-  local minifiles_augroup = vim.api.nvim_create_augroup('ec-mini-files', {})
-  vim.api.nvim_create_autocmd('User', {
-    group = minifiles_augroup,
-    pattern = 'MiniFilesWindowOpen',
-    callback = function(args) vim.api.nvim_win_set_config(args.data.win_id, { border = 'rounded' }) end,
-  })
-end)
 
 MiniDeps.later(function()
   local hipatterns = require('mini.hipatterns')
