@@ -1,3 +1,9 @@
+vim.diagnostic.config {
+  signs = false,
+  float = { border = 'rounded' },
+  virtual_text = { severity = { min = 'ERROR', max = 'ERROR' } },
+}
+
 local lspconfig = require('lspconfig')
 
 local on_attach_custom = function(client, buf_id)
@@ -5,14 +11,7 @@ local on_attach_custom = function(client, buf_id)
 
   vim.keymap.set('n', 'K', vim.lsp.buf.hover, { buffer = client.buf })
   vim.keymap.set('n', 'gd', vim.lsp.buf.definition, { buffer = client.buf })
-  vim.keymap.set('n', '<F2>', vim.lsp.buf.rename, { buffer = client.buf })
 end
-
-vim.diagnostic.config {
-  signs = false,
-  float = { border = 'rounded' },
-  virtual_text = { severity = { min = 'ERROR', max = 'ERROR' } },
-}
 
 -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#clangd
 -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#pyright
