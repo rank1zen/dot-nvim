@@ -6,5 +6,7 @@ return {
   ["nvim-lspconfig"] = "a284b14b3a9c4851f900286cd7eb68e3a8f90b1c",
   ["nvim-treesitter"] = "00a8cfd562dc805eb4d732fbca35e23640dbf7c8",
   ["nvim-web-devicons"] = "e37bb1feee9e7320c76050a55443fa843b4b6f83",
-  vimtex = "9665df7f51ee24aa81dbd81782e0a22480209753"
+  ["vim-test"] = "eb5bd18d58a859e7d55d732d37e4e2b94fa50275",
+  vimtex = "9665df7f51ee24aa81dbd81782e0a22480209753",
+  vimux = "f7c41607d9246ec4b6cc28587cce84d75d106e3e"
 }

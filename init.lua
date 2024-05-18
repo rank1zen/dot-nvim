@@ -43,8 +43,10 @@ MiniDeps.now(function()
 end)
 
 MiniDeps.later(function() require('mini.ai').setup() end)
+MiniDeps.later(function() require('mini.align').setup() end)
 MiniDeps.later(function() require('mini.surround').setup() end)
 MiniDeps.later(function() require('mini.splitjoin').setup() end)
+MiniDeps.later(function() require('mini.operators').setup() end)
 MiniDeps.later(function() require('mini.bracketed').setup() end)
 
 MiniDeps.later(function()
@@ -52,6 +54,7 @@ MiniDeps.later(function()
     lsp_completion = {
       process_items = function(items, base)
         -- TODO: Fuzzy search? doesn't work that well
+
         -- Don't show 'Text' and 'Snippet' suggestions
         items = vim.tbl_filter(function(x) return x.kind ~= 1 and x.kind ~= 15 end, items)
         return MiniCompletion.default_process_items(items, base)
@@ -124,6 +127,16 @@ end)
 MiniDeps.later(function()
   MiniDeps.add('neovim/nvim-lspconfig')
   require('core.plugins.nvim-lspconfig')
+end)
+
+MiniDeps.later(function()
+  MiniDeps.add('preservim/vimux')
+  vim.g.VimuxRunnerType = 'window'
+end)
+
+MiniDeps.later(function()
+  MiniDeps.add('vim-test/vim-test')
+  vim.cmd([[let test#strategy = "vimux"]])
 end)
 
 vim.filetype.add({
