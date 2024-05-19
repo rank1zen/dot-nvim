@@ -131,7 +131,6 @@ end)
 
 MiniDeps.later(function()
   MiniDeps.add('preservim/vimux')
-  vim.g.VimuxRunnerType = 'window'
 end)
 
 MiniDeps.later(function()
