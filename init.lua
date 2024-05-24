@@ -77,6 +77,9 @@ MiniDeps.later(function() require('mini.visits').setup() end)
 MiniDeps.later(function() require('mini.files').setup() end)
 MiniDeps.later(function() require('mini.extra').setup() end)
 
+MiniDeps.later(function() require('mini.diff').setup() end)
+MiniDeps.later(function() require('mini.git').setup() end)
+
 MiniDeps.later(function()
   local hipatterns = require('mini.hipatterns')
 
@@ -137,12 +140,3 @@ MiniDeps.later(function()
   MiniDeps.add('vim-test/vim-test')
   vim.cmd([[let test#strategy = "vimux"]])
 end)
-
-vim.filetype.add({
-  extension = {
-    templ = 'templ',
-  },
-  pattern = {
-    ['.*/hypr/.*%.conf'] = 'hyprlang',
-  },
-})
