@@ -33,9 +33,16 @@ MiniDeps.now(function()
       border = 'text',
     },
     before_highlight = function(group, highlight, palette)
-      if highlight.bg == palette.base then highlight.bg = '#0d0d0d' end
+      if highlight.bg == palette.base then highlight.bg = 'NONE' end
       if highlight.bg == palette.surface then highlight.bg = '#181716' end
       if highlight.bg == palette.overlay then highlight.bg = '#302a27' end
+
+      if highlight.bg == palette._nc then highlight.bg = '#181716' end
+
+      if highlight.bg == palette.highlight_low then highlight.bg = 'NONE' end
+      if highlight.bg == palette.highlight_med then highlight.bg = '#181716' end
+      if highlight.bg == palette.highlight_high then highlight.bg = '#302a27' end
+
       if highlight.fg == palette.rose then highlight.fg = '#ffd7b5' end
     end,
   })
@@ -52,9 +59,9 @@ MiniDeps.later(function() require('mini.bracketed').setup() end)
 MiniDeps.later(function()
   require('mini.completion').setup({
     lsp_completion = {
+      source_func = 'omnifunc',
+      auto_setup = false,
       process_items = function(items, base)
-        -- TODO: Fuzzy search? doesn't work that well
-
         -- Don't show 'Text' and 'Snippet' suggestions
         items = vim.tbl_filter(function(x) return x.kind ~= 1 and x.kind ~= 15 end, items)
         return MiniCompletion.default_process_items(items, base)
@@ -72,9 +79,18 @@ MiniDeps.later(function()
   vim.keymap.set('i', '<CR>', 'v:lua._G.cr_action()', { expr = true })
 end)
 
-MiniDeps.later(function() require('mini.pick').setup() end)
+MiniDeps.later(function()
+  require('mini.pick').setup({
+    window = {
+      config = {
+        border = 'rounded',
+      },
+      prompt_prefix = ' ',
+    },
+  })
+end)
+
 MiniDeps.later(function() require('mini.visits').setup() end)
-MiniDeps.later(function() require('mini.files').setup() end)
 MiniDeps.later(function() require('mini.extra').setup() end)
 
 MiniDeps.later(function() require('mini.diff').setup() end)
@@ -127,14 +143,17 @@ MiniDeps.later(function()
   })
 end)
 
-MiniDeps.later(function()
-  MiniDeps.add('neovim/nvim-lspconfig')
-  require('core.plugins.nvim-lspconfig')
+MiniDeps.now(function()
+  MiniDeps.add('folke/neodev.nvim')
 end)
 
 MiniDeps.later(function()
-  MiniDeps.add('preservim/vimux')
+  MiniDeps.add('neovim/nvim-lspconfig')
+  require('neodev').setup({})
+  require('core.plugins.nvim-lspconfig')
 end)
+
+MiniDeps.later(function() MiniDeps.add('preservim/vimux') end)
 
 MiniDeps.later(function()
   MiniDeps.add('vim-test/vim-test')

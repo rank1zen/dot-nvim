@@ -1,5 +1,3 @@
--- stylua: ignore start
-
 local nmap_leader = function(suffix, rhs, desc, opts)
   opts = opts or {}
   opts.desc = desc
@@ -12,7 +10,9 @@ local xmap_leader = function(suffix, rhs, desc, opts)
   vim.keymap.set('x', '<Leader>' .. suffix, rhs, opts)
 end
 
-nmap_leader('oe', '<Cmd>lua MiniFiles.open()<CR>',                             'Directory')
+-- stylua: ignore start
+
+nmap_leader('oe', '<Cmd>lua MiniFiles.open()<CR>', 'Directory')
 nmap_leader('of', '<Cmd>lua MiniFiles.open(vim.api.nvim_buf_get_name(0))<CR>', 'File directory')
 
 -- Picker
