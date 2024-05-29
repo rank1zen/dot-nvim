@@ -23,30 +23,45 @@ MiniDeps.now(function()
 end)
 
 MiniDeps.now(function()
-  MiniDeps.add('rose-pine/neovim')
-  require('rose-pine').setup({
-    styles = {
-      bold = true,
-      italic = false,
+  MiniDeps.add('rebelot/kanagawa.nvim')
+  require('kanagawa').setup({
+    undercurl = true,
+    commentStyle = { italic = true },
+    functionStyle = {},
+    keywordStyle = { italic = true },
+    statementStyle = { bold = true },
+    typeStyle = {},
+    transparent = true,
+    dimInactive = false,
+    terminalColors = true,
+    colors = {
+      palette = {},
+      theme = {
+        dragon = {
+          ui = {
+            bg_gutter = 'NONE',
+          },
+        },
+      },
     },
-    groups = {
-      border = 'text',
-    },
-    before_highlight = function(group, highlight, palette)
-      if highlight.bg == palette.base then highlight.bg = 'NONE' end
-      if highlight.bg == palette.surface then highlight.bg = '#181716' end
-      if highlight.bg == palette.overlay then highlight.bg = '#302a27' end
-
-      if highlight.bg == palette._nc then highlight.bg = '#181716' end
-
-      if highlight.bg == palette.highlight_low then highlight.bg = 'NONE' end
-      if highlight.bg == palette.highlight_med then highlight.bg = '#181716' end
-      if highlight.bg == palette.highlight_high then highlight.bg = '#302a27' end
-
-      if highlight.fg == palette.rose then highlight.fg = '#ffd7b5' end
+    overrides = function(colors)
+      local theme = colors.theme
+      return {
+        Pmenu = { fg = theme.ui.shade0, bg = theme.ui.bg_p1 },
+        PmenuSel = { fg = 'NONE', bg = theme.ui.bg_p2 },
+        PmenuSbar = { bg = theme.ui.bg_m1 },
+        PmenuThumb = { bg = theme.ui.bg_p2 },
+      }
     end,
+    theme = 'wave',
+    background = {
+      dark = 'dragon',
+      light = 'lotus',
+    },
   })
-  vim.cmd('colorscheme rose-pine')
+
+  -- setup must be called before loading
+  vim.cmd('colorscheme kanagawa')
 end)
 
 MiniDeps.later(function() require('mini.ai').setup() end)
@@ -79,13 +94,23 @@ MiniDeps.later(function()
   vim.keymap.set('i', '<CR>', 'v:lua._G.cr_action()', { expr = true })
 end)
 
-MiniDeps.later(function()
-  require('mini.pick').setup({
-    window = {
-      config = {
-        border = 'rounded',
+MiniDeps.later(
+  function()
+    require('mini.pick').setup({
+      window = {
+        config = {
+          border = 'rounded',
+        },
+        prompt_prefix = ' ',
       },
-      prompt_prefix = ' ',
+    })
+  end
+)
+
+MiniDeps.later(function()
+  require('mini.files').setup({
+    content = {
+      prefix = function() end,
     },
   })
 end)
@@ -131,7 +156,11 @@ end)
 
 MiniDeps.later(function()
   MiniDeps.add('williamboman/mason.nvim')
-  require('mason').setup()
+  require('mason').setup({
+    ui = {
+      border = 'rounded'
+    }
+  })
 end)
 
 MiniDeps.later(function()
@@ -139,13 +168,12 @@ MiniDeps.later(function()
   require('conform').setup({
     formatters_by_ft = {
       lua = { 'stylua' },
+      tex = { 'latexindent' },
     },
   })
 end)
 
-MiniDeps.now(function()
-  MiniDeps.add('folke/neodev.nvim')
-end)
+MiniDeps.now(function() MiniDeps.add('folke/neodev.nvim') end)
 
 MiniDeps.later(function()
   MiniDeps.add('neovim/nvim-lspconfig')
