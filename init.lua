@@ -28,14 +28,7 @@ MiniDeps.now(function()
   MiniDeps.add('rebelot/kanagawa.nvim')
   require('kanagawa').setup({
     undercurl = true,
-    commentStyle = { italic = true },
-    functionStyle = {},
-    keywordStyle = { italic = true },
-    statementStyle = { bold = true },
-    typeStyle = {},
     transparent = true,
-    dimInactive = false,
-    terminalColors = true,
     colors = {
       palette = {},
       theme = {
@@ -49,21 +42,17 @@ MiniDeps.now(function()
     overrides = function(colors)
       local theme = colors.theme
       return {
-        Pmenu = { fg = theme.ui.shade0, bg = theme.ui.bg_p1 },
+        Pmenu = { fg = theme.ui.shade0, bg = theme.ui.bg_m3 },
         PmenuSel = { fg = 'NONE', bg = theme.ui.bg_p2 },
         PmenuSbar = { bg = theme.ui.bg_m1 },
         PmenuThumb = { bg = theme.ui.bg_p2 },
       }
     end,
-    theme = 'wave',
-    background = {
-      dark = 'dragon',
-      light = 'lotus',
-    },
   })
 
-  -- setup must be called before loading
-  vim.cmd('colorscheme kanagawa')
+  vim.cmd('colorscheme kanagawa-dragon')
+end)
+
 MiniDeps.later(function()
   local miniclue = require('mini.clue')
   --stylua: ignore
