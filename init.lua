@@ -25,7 +25,7 @@ MiniDeps.now(function()
   vim.g.vimtex_quickfix_ignore_filters = {
     -- HACK: OMEGA hack ignores latex errors for tufte-latex
     'Package xcolor Warning',
-    'Marginpar on page'
+    'Marginpar on page',
   }
   vim.g.vimtex_syntax_conceal = {
     accents = 1,
