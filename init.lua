@@ -221,11 +221,13 @@ MiniDeps.later(function()
   })
 end)
 
-MiniDeps.now(function() MiniDeps.add('folke/neodev.nvim') end)
+MiniDeps.later(function()
+  MiniDeps.add('folke/lazydev.nvim')
+  require('lazydev').setup({})
+end)
 
 MiniDeps.later(function()
   MiniDeps.add('neovim/nvim-lspconfig')
-  require('neodev').setup({})
   require('core.plugins.nvim-lspconfig')
 end)
 
