@@ -75,7 +75,6 @@ end)
 
 MiniDeps.later(function()
   local miniclue = require('mini.clue')
-  --stylua: ignore
   miniclue.setup({
     clues = {
       _G.Config.leader_group_clues,
@@ -87,25 +86,25 @@ MiniDeps.later(function()
       miniclue.gen_clues.z(),
     },
     triggers = {
-      { mode = 'n', keys = '<Leader>' }, -- Leader triggers
+      { mode = 'n', keys = '<Leader>' },
       { mode = 'x', keys = '<Leader>' },
-      { mode = 'n', keys = '[' },        -- mini.bracketed
+      { mode = 'n', keys = '[' },
       { mode = 'n', keys = ']' },
       { mode = 'x', keys = '[' },
       { mode = 'x', keys = ']' },
-      { mode = 'i', keys = '<C-x>' },    -- Built-in completion
-      { mode = 'n', keys = 'g' },        -- `g` key
+      { mode = 'i', keys = '<C-x>' },
+      { mode = 'n', keys = 'g' },
       { mode = 'x', keys = 'g' },
-      { mode = 'n', keys = "'" },        -- Marks
+      { mode = 'n', keys = "'" },
       { mode = 'n', keys = '`' },
       { mode = 'x', keys = "'" },
       { mode = 'x', keys = '`' },
-      { mode = 'n', keys = '"' },        -- Registers
+      { mode = 'n', keys = '"' },
       { mode = 'x', keys = '"' },
       { mode = 'i', keys = '<C-r>' },
       { mode = 'c', keys = '<C-r>' },
-      { mode = 'n', keys = '<C-w>' },    -- Window commands
-      { mode = 'n', keys = 'z' },        -- `z` key
+      { mode = 'n', keys = '<C-w>' },
+      { mode = 'n', keys = 'z' },
       { mode = 'x', keys = 'z' },
     },
     window = { config = { border = 'rounded' } },
@@ -142,18 +141,20 @@ MiniDeps.later(function()
   vim.keymap.set('i', '<CR>', 'v:lua._G.cr_action()', { expr = true })
 end)
 
-MiniDeps.later(
-  function()
-    require('mini.pick').setup({
-      window = {
-        config = {
-          border = 'rounded',
-        },
-        prompt_prefix = ' ',
+MiniDeps.later(function()
+  local minipick = require('mini.pick')
+  minipick.setup({
+    source = {
+      show = minipick.default_show,
+    },
+    window = {
+      config = {
+        border = 'rounded',
       },
-    })
-  end
-)
+      prompt_prefix = ' ',
+    },
+  })
+end)
 
 MiniDeps.later(function()
   require('mini.files').setup({
@@ -163,28 +164,35 @@ MiniDeps.later(function()
   })
 end)
 
-MiniDeps.later(function() require('mini.visits').setup() end)
-MiniDeps.later(function() require('mini.extra').setup() end)
-
-MiniDeps.later(function() require('mini.diff').setup() end)
-MiniDeps.later(function() require('mini.git').setup() end)
-
 MiniDeps.later(function()
-  local hipatterns = require('mini.hipatterns')
-
-  hipatterns.setup({
-    highlighters = {
-      fixme = { pattern = '%f[%w]()FIXME()%f[%W]', group = 'MiniHipatternsFixme' },
-      hack = { pattern = '%f[%w]()HACK()%f[%W]', group = 'MiniHipatternsHack' },
-      todo = { pattern = '%f[%w]()TODO()%f[%W]', group = 'MiniHipatternsTodo' },
-      note = { pattern = '%f[%w]()NOTE()%f[%W]', group = 'MiniHipatternsNote' },
-
-      hex_color = hipatterns.gen_highlighter.hex_color(),
+  require('mini.visits').setup({
+    store = {
+      --normalize = MiniVisits.gen_normalize.default(),
+    },
+    track = {
+      event = 'BufWritePre',
+      delay = 20,
     },
   })
 end)
 
-MiniDeps.now(function() MiniDeps.add('nvim-tree/nvim-web-devicons') end)
+MiniDeps.later(function() require('mini.diff').setup() end)
+MiniDeps.later(function() require('mini.git').setup() end)
+
+MiniDeps.later(function() require('mini.extra').setup() end)
+
+MiniDeps.later(function()
+  local minihipatterns = require('mini.hipatterns')
+  minihipatterns.setup({
+    highlighters = {
+      hex_color = minihipatterns.gen_highlighter.hex_color(),
+      fixme = { pattern = '%f[%w]()FIXME()%f[%W]', group = 'MiniHipatternsFixme' },
+      hack = { pattern = '%f[%w]()HACK()%f[%W]', group = 'MiniHipatternsHack' },
+      todo = { pattern = '%f[%w]()TODO()%f[%W]', group = 'MiniHipatternsTodo' },
+      note = { pattern = '%f[%w]()NOTE()%f[%W]', group = 'MiniHipatternsNote' },
+    },
+  })
+end)
 
 MiniDeps.later(function()
   MiniDeps.add({
