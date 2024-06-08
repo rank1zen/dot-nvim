@@ -205,7 +205,7 @@ MiniDeps.later(function()
   })
 
   require('nvim-treesitter.configs').setup({
-    ensure_installed = { 'lua', 'vimdoc' },
+    ensure_installed = { 'lua', 'vimdoc', 'nix' },
     highlight = { enable = true },
   })
 end)
