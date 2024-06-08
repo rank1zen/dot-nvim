@@ -118,6 +118,8 @@ MiniDeps.later(function() require('mini.splitjoin').setup() end)
 MiniDeps.later(function() require('mini.operators').setup() end)
 MiniDeps.later(function() require('mini.bracketed').setup() end)
 
+MiniDeps.later(function() require('mini.sessions').setup() end)
+
 MiniDeps.later(function()
   require('mini.completion').setup({
     lsp_completion = {
@@ -212,11 +214,7 @@ end)
 
 MiniDeps.later(function()
   MiniDeps.add('williamboman/mason.nvim')
-  require('mason').setup({
-    ui = {
-      border = 'rounded'
-    }
-  })
+  require('mason').setup()
 end)
 
 MiniDeps.later(function()
@@ -225,6 +223,7 @@ MiniDeps.later(function()
     formatters_by_ft = {
       lua = { 'stylua' },
       tex = { 'latexindent' },
+      templ = { 'templ' },
     },
   })
 end)

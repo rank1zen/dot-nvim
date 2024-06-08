@@ -11,7 +11,7 @@ local function xmap_leader(suffix, rhs, desc, opts)
 end
 
 _G.Config.leader_group_clues = {
-  { mode = 'n', keys = '<Leader>e', desc = '+Explore' },
+  { mode = 'n', keys = '<Leader>e', desc = '+Edit' },
   { mode = 'n', keys = '<Leader>f', desc = '+Find' },
   { mode = 'n', keys = '<Leader>g', desc = '+Git' },
   { mode = 'n', keys = '<Leader>l', desc = '+LSP' },
@@ -20,12 +20,14 @@ _G.Config.leader_group_clues = {
 
 -- stylua: ignore start
 
--- (e)xplore
+-- (e)dit
 nmap_leader('ed', '<Cmd>lua MiniFiles.open()<CR>',                             'Directory')
 nmap_leader('ef', '<Cmd>lua MiniFiles.open(vim.api.nvim_buf_get_name(0))<CR>', 'File directory')
 nmap_leader('ec', '<Cmd>lua MiniFiles.open(vim.fn.stdpath("config"))<CR>',     'Config')
-nmap_leader('ei', '<Cmd>edit $MYVIMRC<CR>',                                    'Neovim Init')
+nmap_leader('ei', '<Cmd>edit $MYVIMRC<CR>',                                    'Neovim init.lua')
 nmap_leader('eq', '<Cmd>lua Config.toggle_quickfix()<CR>',                     'Quickfix')
+nmap_leader('es', '<Cmd>lua MiniSessions.select()<CR>',                        'Session select')
+nmap_leader('er', '<Cmd>lua MiniSessions.read()<CR>',                          'Restote session')
 
 -- (f)ind
 nmap_leader('ff', '<Cmd>Pick files<CR>',       'Files')
