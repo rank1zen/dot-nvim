@@ -213,11 +213,6 @@ MiniDeps.later(function()
 end)
 
 MiniDeps.later(function()
-  MiniDeps.add('williamboman/mason.nvim')
-  require('mason').setup()
-end)
-
-MiniDeps.later(function()
   MiniDeps.add('stevearc/conform.nvim')
   require('conform').setup({
     formatters_by_ft = {
