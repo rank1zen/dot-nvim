@@ -62,7 +62,7 @@ MiniDeps.now(function()
     overrides = function(colors)
       local theme = colors.theme
       return {
-        Pmenu = { fg = theme.ui.shade0, bg = theme.ui.bg_m3 },
+        Pmenu = { fg = theme.ui.fg_dim, bg = theme.ui.bg_m3 },
         PmenuSel = { fg = 'NONE', bg = theme.ui.bg_p2 },
         PmenuSbar = { bg = theme.ui.bg_m1 },
         PmenuThumb = { bg = theme.ui.bg_p2 },
@@ -153,12 +153,18 @@ MiniDeps.later(function()
       config = {
         border = 'rounded',
       },
-      prompt_prefix = ' ',
+      prompt_prefix = ': ',
     },
   })
 end)
 
 MiniDeps.later(function()
+  vim.api.nvim_create_autocmd('User', {
+    desc = 'Add rounded corners to minifiles window',
+    pattern = 'MiniFilesWindowOpen',
+    callback = function(args) vim.api.nvim_win_set_config(args.data.win_id, { border = 'rounded' }) end,
+  })
+
   require('mini.files').setup({
     content = {
       prefix = function() end,
@@ -207,8 +213,45 @@ MiniDeps.later(function()
   })
 
   require('nvim-treesitter.configs').setup({
-    ensure_installed = { 'lua', 'vimdoc', 'nix' },
-    highlight = { enable = true },
+    ensure_installed = {
+      'bash',
+      'c',
+      'cpp',
+      'fish',
+      'gitcommit',
+      'javascript',
+      'json',
+      'json5',
+      'jsonc',
+      'lua',
+      'markdown',
+      'markdown_inline',
+      'python',
+      'query',
+      'regex',
+      'rust',
+      'scss',
+      'toml',
+      'typescript',
+      'vim',
+      'vimdoc',
+      'nix',
+    },
+    sync_install = false,
+    auto_install = true,
+    ignore_install = { 'latex' },
+    highlight = {
+      enable = true,
+      disable = function(_, buf)
+        -- Don't disable for read-only buffers.
+        if not vim.bo[buf].modifiable then return false end
+
+        local ok, stats = pcall(vim.uv.fs_stat, vim.api.nvim_buf_get_name(buf))
+        -- Disable for files larger than 250 KB.
+        return ok and stats and stats.size > (250 * 1024)
+      end,
+    },
+    indent = { enable = true },
   })
 end)
 
