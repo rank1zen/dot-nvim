@@ -2,36 +2,37 @@
     description = "A test flake";
 
     inputs = {
-        nixpkgs-darwin.url = "github:nixos/nixpkgs/nixpkgs-23.11-darwin";
-        darwin = {
-            url = "github:lnl7/nix-darwin";
-            inputs.nixpkgs.follows = "nixpkgs-darwin";
-        };
+      nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+
+      # nix-darwin.url = "github:LnL7/nix-darwin";
+      # nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
+
+      home-manager.url = "github:nix-community/home-manager";
+      home-manager.inputs.nixpkgs.follows = "nixpkgs";
     };
 
     outputs = inputs @ {
         self,
         nixpkgs,
-        darwin,
+        # nix-darwin,
+        home-manager,
         ...
-    }: let
-        username = "gordon";
-        system = "aarch64-darwin";
-
-        hostname = "${username}-macbook";
-        specialArgs =
-            inputs
-            // {
-                inherit username hostname;
-            };
-    in {
-        darwinConfigurations."${hostname}" = darwin.lib.darwinSystem {
-            inherit system specialArgs;
-            modules = [
-                ./modules/system.nix
-            ];
+    }: {
+      homeConfigurations = {
+        "gordo" = home-manager.lib.homeManagerConfiguration {
+          pkgs = nixpkgs.legacyPackages.aarch64-darwin;
+          extraSpecialArgs = {
+            inherit inputs;
+          };
+          modules = [
+            ({pkgs, ...}: {
+              nix.package = pkgs.nix;
+              home.username = "gordo";
+              home.homeDirectory = "/Users/gordo";
+              imports = [./macos/home.nix];
+             })
+          ];
         };
-
-        formatter.${system} = nixpkgs.legacyPackages.${system}.alejandra;
+      };
     };
 }

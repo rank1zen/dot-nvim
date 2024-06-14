@@ -38,7 +38,6 @@
       escapeTime = 0;
       mouse = true;
       terminal = "screen-256color";
-      # shell = "\${pkgs.fish}/bin/fish";
 
       extraConfig = ''
         set -g status-right ""

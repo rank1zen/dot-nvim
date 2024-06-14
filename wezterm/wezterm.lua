@@ -1,15 +1,15 @@
--- Pull in the wezterm API
 local wezterm = require 'wezterm'
 
 -- This will hold the configuration.
 local config = wezterm.config_builder()
 
--- This is where you actually apply your config choices
+config.color_scheme = 'Solarized (light) (terminal.sexy)'
+-- config.color_scheme = 'Solarized Light (Gogh)'
 
--- For example, changing the color scheme:
--- config.color_scheme = 'Batman'
-config.color_scheme = 'kanagawabones'
 config.font = wezterm.font('GeistMono Nerd Font', { weight = 'Bold' })
+config.font_size = 15
 
--- and finally, return the configuration to wezterm
+config.window_decorations = "RESIZE"
+config.native_macos_fullscreen_mode = true
+
 return config

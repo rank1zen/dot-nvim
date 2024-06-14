@@ -32,6 +32,11 @@ lspconfig.gopls.setup({
   handlers = handlers,
 })
 
+lspconfig.nil_ls.setup({
+  on_attach = on_attach_custom,
+  handlers = handlers,
+})
+
 lspconfig.templ.setup({
   on_attach = on_attach_custom,
 })

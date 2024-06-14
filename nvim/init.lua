@@ -262,6 +262,7 @@ MiniDeps.later(function()
       lua = { 'stylua' },
       tex = { 'latexindent' },
       templ = { 'templ' },
+      nix = { 'alejandra' }
     },
   })
 end)
