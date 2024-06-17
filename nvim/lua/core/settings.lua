@@ -1,17 +1,15 @@
 --stylua: ignore start
 vim.g.mapleader = ' '
--- vim.g.maplocalleader = ' '
 
 vim.o.autoindent     = true
-vim.o.smartindent    = true
-vim.o.number         = true
-vim.o.relativenumber = true
+vim.o.breakindent    = true
 vim.o.expandtab      = true
-vim.o.tabstop        = 4
-vim.o.shiftwidth     = 4
-vim.o.softtabstop    = -1
-vim.o.cursorline     = true
--- vim.o.termguicolors = true
+vim.o.number         = true
+vim.o.pumblend       = 10
+vim.o.pumheight      = 10
+vim.o.relativenumber = true
+vim.o.shiftwidth     = 2
+vim.o.tabstop        = 2
 
 -- stylua: ignore end
 

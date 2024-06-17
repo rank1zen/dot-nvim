@@ -1,5 +1,7 @@
 _G.Config = {}
 
+_G.Config.borders = 'double'
+
 --- Clone 'mini.nvim' manually in a way that it gets managed by 'mini.deps'
 local path_package = vim.fn.stdpath('data') .. '/site/'
 local mini_path = path_package .. 'pack/deps/start/mini.nvim'
@@ -20,57 +22,15 @@ MiniDeps.now(function() require('core.mappings') end)
 MiniDeps.now(function() require('core.mappings-leader') end)
 
 MiniDeps.now(function()
-  MiniDeps.add('lervag/vimtex')
-  vim.g.vimtex_view_method = 'zathura'
-  vim.g.vimtex_quickfix_ignore_filters = {
-    -- HACK: OMEGA hack ignores latex errors for tufte-latex
-    'Package xcolor Warning',
-    'Marginpar on page',
-  }
-  vim.g.vimtex_syntax_conceal = {
-    accents = 1,
-    ligatures = 1,
-    cites = 1,
-    fancy = 0,
-    spacing = 1,
-    greek = 1,
-    math_bounds = 1,
-    math_delimiters = 1,
-    math_fracs = 0,
-    math_super_sub = 0,
-    math_symbols = 1,
-    sections = 0,
-    styles = 1,
-  }
+  MiniDeps.add('rebelot/kanagawa.nvim')
+  require('core.plugins.kanagawa')
+  vim.cmd('colorscheme kanagawa')
 end)
 
-MiniDeps.now(function()
-  MiniDeps.add('rebelot/kanagawa.nvim')
-  require('kanagawa').setup({
-    undercurl = true,
-    transparent = true,
-    colors = {
-      palette = {},
-      theme = {
-        dragon = {
-          ui = {
-            bg_gutter = 'NONE',
-          },
-        },
-      },
-    },
-    overrides = function(colors)
-      local theme = colors.theme
-      return {
-        Pmenu = { fg = theme.ui.fg_dim, bg = theme.ui.bg_m3 },
-        PmenuSel = { fg = 'NONE', bg = theme.ui.bg_p2 },
-        PmenuSbar = { bg = theme.ui.bg_m1 },
-        PmenuThumb = { bg = theme.ui.bg_p2 },
-      }
-    end,
+MiniDeps.later(function()
+  require('mini.notify').setup({
+    window = { config = { border = _G.Config.borders } },
   })
-
-  vim.cmd('colorscheme kanagawa-dragon')
 end)
 
 MiniDeps.later(function()
@@ -107,21 +67,30 @@ MiniDeps.later(function()
       { mode = 'n', keys = 'z' },
       { mode = 'x', keys = 'z' },
     },
-    window = { config = { border = 'rounded' } },
+    window = { config = { border = _G.Config.borders } },
   })
 end)
 
-MiniDeps.later(function() require('mini.ai').setup() end)
+MiniDeps.later(function()
+  local miniai = require('mini.ai')
+  miniai.setup({
+    custom_textobjects = {
+      F = miniai.gen_spec.treesitter({ a = '@function.outer', i = '@function.inner' }),
+    },
+  })
+end)
+
+MiniDeps.later(function() require('mini.sessions').setup() end)
 MiniDeps.later(function() require('mini.align').setup() end)
+MiniDeps.later(function() require('mini.bracketed').setup() end)
+
 MiniDeps.later(function() require('mini.surround').setup() end)
 MiniDeps.later(function() require('mini.splitjoin').setup() end)
 MiniDeps.later(function() require('mini.operators').setup() end)
-MiniDeps.later(function() require('mini.bracketed').setup() end)
-
-MiniDeps.later(function() require('mini.sessions').setup() end)
 
 MiniDeps.later(function()
   require('mini.completion').setup({
+    delay = { completion = 100, info = 100, signature = 10 ^ 7 },
     lsp_completion = {
       source_func = 'omnifunc',
       auto_setup = false,
@@ -132,14 +101,34 @@ MiniDeps.later(function()
       end,
     },
     window = {
-      info = { border = 'rounded' },
+      info = { border = 'double' },
       signature = { border = 'rounded' },
     },
   })
 end)
 
 MiniDeps.later(function()
-  require('mini.pairs').setup()
+  vim.api.nvim_create_autocmd('User', {
+    pattern = 'MiniFilesWindowOpen',
+    callback = function(args)
+      local win_id = args.data.win_id
+      vim.wo[win_id].winblend = 25
+      vim.api.nvim_win_set_config(win_id, { border = 'double' })
+    end,
+  })
+
+  require('mini.files').setup({
+    content = {
+      prefix = function() end,
+    },
+    options = {
+      use_as_default_explorer = false,
+    },
+  })
+end)
+
+MiniDeps.later(function()
+  require('mini.pairs').setup({})
   vim.keymap.set('i', '<CR>', 'v:lua._G.cr_action()', { expr = true })
 end)
 
@@ -151,43 +140,31 @@ MiniDeps.later(function()
     },
     window = {
       config = {
-        border = 'rounded',
+        border = 'double',
       },
-      prompt_prefix = ': ',
     },
   })
+
+  vim.ui.select = MiniPick.ui_select
 end)
 
 MiniDeps.later(function()
-  vim.api.nvim_create_autocmd('User', {
-    desc = 'Add rounded corners to minifiles window',
-    pattern = 'MiniFilesWindowOpen',
-    callback = function(args) vim.api.nvim_win_set_config(args.data.win_id, { border = 'rounded' }) end,
-  })
-
-  require('mini.files').setup({
-    content = {
-      prefix = function() end,
+  local minivisits = require('mini.visits')
+  minivisits.setup({
+    list = {
+      sort = minivisits.gen_sort.z(),
     },
-  })
-end)
-
-MiniDeps.later(function()
-  require('mini.visits').setup({
     store = {
-      --normalize = MiniVisits.gen_normalize.default(),
-    },
-    track = {
-      event = 'BufWritePre',
-      delay = 20,
+      normalize = minivisits.gen_normalize.default(),
     },
   })
 end)
 
 MiniDeps.later(function() require('mini.diff').setup() end)
 MiniDeps.later(function() require('mini.git').setup() end)
-
 MiniDeps.later(function() require('mini.extra').setup() end)
+MiniDeps.later(function() require('mini.bufremove').setup() end)
+MiniDeps.later(function() require('mini.move').setup() end)
 
 MiniDeps.later(function()
   local minihipatterns = require('mini.hipatterns')
@@ -203,6 +180,19 @@ MiniDeps.later(function()
 end)
 
 MiniDeps.later(function()
+  local minimap = require('mini.map')
+  minimap.setup({
+    integrations = {
+      minimap.gen_integration.builtin_search(),
+      minimap.gen_integration.diagnostic(),
+      minimap.gen_integration.diff(),
+    },
+  })
+end)
+
+-- EXTRA PLUGINS
+
+MiniDeps.later(function()
   MiniDeps.add({
     source = 'nvim-treesitter/nvim-treesitter',
     -- Use 'master' while monitoring updates in 'main'
@@ -212,47 +202,7 @@ MiniDeps.later(function()
     hooks = { post_checkout = function() vim.cmd('TSUpdate') end },
   })
 
-  require('nvim-treesitter.configs').setup({
-    ensure_installed = {
-      'bash',
-      'c',
-      'cpp',
-      'fish',
-      'gitcommit',
-      'javascript',
-      'json',
-      'json5',
-      'jsonc',
-      'lua',
-      'markdown',
-      'markdown_inline',
-      'python',
-      'query',
-      'regex',
-      'rust',
-      'scss',
-      'toml',
-      'typescript',
-      'vim',
-      'vimdoc',
-      'nix',
-    },
-    sync_install = false,
-    auto_install = true,
-    ignore_install = { 'latex' },
-    highlight = {
-      enable = true,
-      disable = function(_, buf)
-        -- Don't disable for read-only buffers.
-        if not vim.bo[buf].modifiable then return false end
-
-        local ok, stats = pcall(vim.uv.fs_stat, vim.api.nvim_buf_get_name(buf))
-        -- Disable for files larger than 250 KB.
-        return ok and stats and stats.size > (250 * 1024)
-      end,
-    },
-    indent = { enable = true },
-  })
+  require('core.plugins.nvim-treesitter')
 end)
 
 MiniDeps.later(function()
@@ -262,13 +212,51 @@ end)
 
 MiniDeps.later(function()
   MiniDeps.add('stevearc/conform.nvim')
-  require('conform').setup({
-    formatters_by_ft = {
-      lua = { 'stylua' },
-      tex = { 'latexindent' },
-      templ = { 'templ' },
-    },
+  require('core.plugins.conform')
+end)
+
+MiniDeps.now(function()
+  MiniDeps.add('lervag/vimtex')
+  vim.g.vimtex_view_method = 'zathura'
+  vim.g.vimtex_quickfix_ignore_filters = {
+    -- HACK: OMEGA hack ignores latex errors for tufte-latex
+    'Package xcolor Warning',
+    'Marginpar on page',
+  }
+  vim.g.vimtex_syntax_conceal = {
+    accents = 1,
+    ligatures = 1,
+    cites = 1,
+    fancy = 0,
+    spacing = 0,
+    greek = 1,
+    math_bounds = 0,
+    math_delimiters = 1,
+    math_fracs = 0,
+    math_super_sub = 0,
+    math_symbols = 1,
+    sections = 0,
+    styles = 0,
+  }
+end)
+
+MiniDeps.later(function()
+  MiniDeps.add({
+    source = 'L3MON4D3/LuaSnip',
+    depends = { 'rafamadriz/friendly-snippets' },
   })
+
+  require('luasnip.loaders.from_vscode').lazy_load()
+
+  local ls = require('luasnip')
+
+  vim.keymap.set({ 'i' }, '<C-K>', function() ls.expand() end, { silent = true })
+  vim.keymap.set({ 'i', 's' }, '<C-L>', function() ls.jump(1) end, { silent = true })
+  vim.keymap.set({ 'i', 's' }, '<C-J>', function() ls.jump(-1) end, { silent = true })
+
+  vim.keymap.set({ 'i', 's' }, '<C-E>', function()
+    if ls.choice_active() then ls.change_choice(1) end
+  end, { silent = true })
 end)
 
 MiniDeps.later(function()
@@ -279,11 +267,4 @@ end)
 MiniDeps.later(function()
   MiniDeps.add('neovim/nvim-lspconfig')
   require('core.plugins.nvim-lspconfig')
-end)
-
-MiniDeps.later(function() MiniDeps.add('preservim/vimux') end)
-
-MiniDeps.later(function()
-  MiniDeps.add('vim-test/vim-test')
-  vim.cmd([[let test#strategy = "vimux"]])
 end)

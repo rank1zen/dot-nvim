@@ -1,7 +1,16 @@
 # Things to fix
 
-- [ ] Snippets
-- [ ] MiniComplete, MiniFuzzy
+## Quick
+- [ ] MiniVisits
+- [ ] linter and formatter setup pls
 - [ ] MiniComplete trigger autopairs
-- [ ] Templ multiple LSPs
 - [ ] TS inject SQL pls
+- [ ] Dictionary, latex/markdown spell check
+
+## Can't really fix (i.e. need better solutions)
+- [x] Snippets
+- [ ] MiniComplete, MiniFuzzy
+- [ ] Templ multiple LSPs
+- [ ] Testing, DAP
+
+## Cool
