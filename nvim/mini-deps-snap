@@ -1,12 +1,12 @@
 return {
-  ["conform.nvim"] = "88b699b595703f1ae9d9061c050e52b1fe7c33f1",
-  ["kanagawa.nvim"] = "08ed29989834f5f2606cb1ef9d5b24c5ea7b8fa5",
-  ["lazydev.nvim"] = "ddab2f1d901dc0c5c4f721da94c604cc1a86b5dc",
+  LuaSnip = "50fcf17db7c75af80e6b6109acfbfb4504768780",
+  ["conform.nvim"] = "9228b2ff4efd58b6e081defec643bf887ebadff6",
+  ["friendly-snippets"] = "682157939e57bd6a2c86277dfd4d6fbfce63dbac",
+  ["kanagawa.nvim"] = "fe5b2c9e2549862c3dc3f3c8e9cf7ddece0f40c2",
+  ["lazydev.nvim"] = "6184ebbbc8045d70077659b7d30c705a588dc62f",
   ["mason.nvim"] = "0950b15060067f752fde13a779a994f59516ce3d",
-  ["mini.nvim"] = "e736fe131e6c18d39eecffb43d582c3e95550a90",
-  ["nvim-lspconfig"] = "74e14808cdb15e625449027019406e1ff6dda020",
-  ["nvim-treesitter"] = "a80fe081b4c5890980561e0de2458f64aaffbfc7",
-  ["vim-test"] = "6acc7d96487abaaa57a19b0d43efaea6633d6bb7",
-  vimtex = "366ba106795db13879fdbfb4d6e4b8e1d616b684",
-  vimux = "fa35410805b82ffabc29e3cb5cdf3ad0b8dc402d"
+  ["mini.nvim"] = "ebc8cb0c1f73ee6c53e0560957a37a2307a70f98",
+  ["nvim-lspconfig"] = "bd7c76375a511994c9ca8d69441f134dc10ae3bd",
+  ["nvim-treesitter"] = "c29989f5d735a30b6d2350b54d5cd50be811f8b2",
+  vimtex = "8ed94566e6fe3f5b163131dc374d224d2d320db7"
 }
