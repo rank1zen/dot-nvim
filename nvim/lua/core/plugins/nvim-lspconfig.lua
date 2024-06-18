@@ -4,7 +4,7 @@ vim.diagnostic.config({
     spacing = 2,
   },
   float = {
-    border = 'rounded',
+    border = _G.Config.borderst,
     source = 'if_many',
   },
   signs = false,
@@ -14,8 +14,8 @@ local lspconfig = require('lspconfig')
 
 -- LSP settings (for overriding per client)
 local handlers = {
-  ['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, { border = 'rounded' }),
-  ['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = 'rounded' }),
+  ['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, { border = _G.Config.borders }),
+  ['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = _G.Config.borders }),
 }
 
 local on_attach_custom = function(client, buf_id)

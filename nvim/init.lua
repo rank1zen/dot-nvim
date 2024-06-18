@@ -27,11 +27,13 @@ MiniDeps.now(function()
   vim.cmd('colorscheme kanagawa')
 end)
 
-MiniDeps.later(function()
-  require('mini.notify').setup({
-    window = { config = { border = _G.Config.borders } },
-  })
-end)
+MiniDeps.later(
+  function()
+    require('mini.notify').setup({
+      window = { config = { border = _G.Config.borders } },
+    })
+  end
+)
 
 MiniDeps.later(function()
   local miniclue = require('mini.clue')
@@ -100,10 +102,7 @@ MiniDeps.later(function()
         return MiniCompletion.default_process_items(items, base)
       end,
     },
-    window = {
-      info = { border = 'double' },
-      signature = { border = 'rounded' },
-    },
+    window = { info = { border = _G.Config.borders } },
   })
 end)
 
@@ -113,7 +112,7 @@ MiniDeps.later(function()
     callback = function(args)
       local win_id = args.data.win_id
       vim.wo[win_id].winblend = 25
-      vim.api.nvim_win_set_config(win_id, { border = 'double' })
+      vim.api.nvim_win_set_config(win_id, { border = _G.Config.borders })
     end,
   })
 
@@ -140,7 +139,7 @@ MiniDeps.later(function()
     },
     window = {
       config = {
-        border = 'double',
+        border = _G.Config.borders,
       },
     },
   })
