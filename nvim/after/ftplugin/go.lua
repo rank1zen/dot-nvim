@@ -1,5 +1,2 @@
-vim.opt_local.expandtab = false
-vim.opt_local.tabstop = 8
-vim.opt_local.shiftwidth = 8
-
-vim.cmd('setlocal foldmethod=expr foldexpr=nvim_treesitter#foldexpr() nofoldenable')
+vim.cmd('setlocal tabstop=8 shiftwidth=8 noexpandtab')
+vim.cmd('setlocal foldmethod=expr foldexpr=nvim_treesitter#foldexpr() nofoldenable foldnestmax=1')

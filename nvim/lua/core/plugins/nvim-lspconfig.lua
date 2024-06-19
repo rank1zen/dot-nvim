@@ -20,9 +20,7 @@ local handlers = {
 
 local on_attach_custom = function(client, buf_id)
   vim.bo[buf_id].omnifunc = 'v:lua.MiniCompletion.completefunc_lsp'
-
   vim.keymap.set('n', 'K', vim.lsp.buf.hover, { buffer = client.buf })
-  vim.keymap.set('n', 'gd', vim.lsp.buf.definition, { buffer = client.buf })
   vim.keymap.set('i', '<C-s>', '<Cmd>lua vim.lsp.buf.signature_help()<CR>', { buffer = client.buf })
 end
 

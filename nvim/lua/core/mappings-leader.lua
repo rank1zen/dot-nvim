@@ -41,26 +41,30 @@ nmap_leader('eb', '<Cmd>Pick buffers<CR>',                                     '
 nmap_leader('eq', '<Cmd>lua Config.toggle_quickfix()<CR>',                     'Quickfix')
 
 -- +Other
-nmap_leader('tr', '<Cmd>Pick resume<CR>',                 'Last')
-nmap_leader('th', '<Cmd>Pick hipatterns<CR>',             'Hipatterns')
-nmap_leader('tg', '<Cmd>Pick hl_groups<CR>',              'Highlight groups')
-nmap_leader('t/', '<Cmd>Pick history scope="/"<CR>',      '"/" history')
-nmap_leader('t:', '<Cmd>Pick history scope=":"<CR>',      '":" history')
+nmap_leader('or', '<Cmd>Pick resume<CR>',                 'Last')
+nmap_leader('oh', '<Cmd>Pick hipatterns<CR>',             'Hipatterns')
+nmap_leader('og', '<Cmd>Pick hl_groups<CR>',              'Highlight groups')
+nmap_leader('o/', '<Cmd>Pick history scope="/"<CR>',      '"/" history')
+nmap_leader('o:', '<Cmd>Pick history scope=":"<CR>',      '":" history')
+nmap_leader('op', '<Cmd>lua Config.golang_test_file()<CR>', 'Switch to Go Test')
 
 -- +Git
 nmap_leader('gc', '<Cmd>Git commit<CR>',                             'Commit')
 nmap_leader('gC', '<Cmd>Git commit --amend<CR>',                     'Commit amend')
-nmap_leader('gl', '<Cmd>Git log --oneline<CR>',                      'Log')
+nmap_leader('gl', '<Cmd>Git log --oneline<CR>',                      'Log (all)')
 nmap_leader('gL', '<Cmd>Git log --oneline --follow -- %<CR>',        'Log (current)')
-nmap_leader('gv', '<Cmd>Pick git_commits<CR>',                       'Commits')
+
+nmap_leader('gv', '<Cmd>Pick git_commits<CR>',                       'Commits (all)')
 nmap_leader('gV', '<Cmd>Pick git_commits path="%"<CR>',              'Commits (current)')
-nmap_leader('gs', '<Cmd>Pick git_hunks scope="staged"<CR>',          'Added hunks')
+nmap_leader('gs', '<Cmd>Pick git_hunks scope="staged"<CR>',          'Added hunks (all)')
 nmap_leader('gS', '<Cmd>Pick git_hunks path="%" scope="staged"<CR>', 'Added hunks (current)')
-nmap_leader('gh', '<Cmd>Pick git_hunks<CR>',                         'Modified hunks')
+nmap_leader('gh', '<Cmd>Pick git_hunks<CR>',                         'Modified hunks (all)')
 nmap_leader('gH', '<Cmd>Pick git_hunks path="%"<CR>',                'Modified hunks (current)')
+nmap_leader('gb', '<Cmd>Pick git_branches<CR>',                         'Branches (all)')
+
 nmap_leader('go', '<Cmd>lua MiniDiff.toggle_overlay()<CR>',          'Toggle overlay')
--- nmap_leader('gs', '<Cmd>lua MiniGit.show_at_cursor()<CR>',           'Show at cursor')
--- xmap_leader('gs', '<Cmd>lua MiniGit.show_at_cursor()<CR>',           'Show at selection')
+nmap_leader('gs', '<Cmd>lua MiniGit.show_at_cursor()<CR>',           'Show at cursor')
+xmap_leader('gs', '<Cmd>lua MiniGit.show_at_cursor()<CR>',           'Show at selection')
 
 -- +LSP
 nmap_leader('lf', '<Cmd>lua require("conform").format({lsp_fallback=true})<CR>', 'Format')

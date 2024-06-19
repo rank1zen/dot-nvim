@@ -267,3 +267,25 @@ MiniDeps.later(function()
   MiniDeps.add('neovim/nvim-lspconfig')
   require('core.plugins.nvim-lspconfig')
 end)
+
+MiniDeps.later(function()
+  MiniDeps.add('kassio/neoterm')
+  -- Don't add extra call to REPL when sending
+  vim.g.neoterm_direct_open_repl = 1
+
+  -- Open terminal to the right by default
+  vim.g.neoterm_default_mod = 'vertical'
+
+  -- Go into insert mode when terminal is opened
+  vim.g.neoterm_autoinsert = 1
+
+  -- Scroll to recent command when it is executed
+  vim.g.neoterm_autoscroll = 1
+
+  if vim.fn.executable('zsh') == 1 then vim.g.neoterm_shell = 'zsh' end
+end)
+
+MiniDeps.later(function()
+  MiniDeps.add({ source = 'vim-test/vim-test', depends = { 'tpope/vim-dispatch' } })
+  vim.cmd([[let test#strategy = 'neoterm']])
+end)
