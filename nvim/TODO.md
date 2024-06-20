@@ -1,14 +1,13 @@
 # Things to fix
 
 ## Quick
-- [ ] Fix status bar, git integration, transparent
 - [ ] Golang integration (look at go.nvim)
-- [ ] Modify colour scheme
 - [ ] MiniVisits
 - [ ] linter and formatter setup pls
 - [ ] MiniComplete trigger autopairs
 - [ ] TS inject SQL pls
 - [ ] Dictionary, latex/markdown spell check
+- [ ] Add lua things like print a something
 
 ## Can't really fix (i.e. need better solutions)
 - [ ] lsp leader keys
@@ -20,3 +19,5 @@
 
 ## Cool
 - [x] Fix borders
+- [x] Modify colour scheme
+- [x] Fix status bar, git integration

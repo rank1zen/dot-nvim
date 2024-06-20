@@ -5,6 +5,10 @@ require('kanagawa').setup({
       all = {
         ui = {
           bg_gutter = 'NONE',
+          float = {
+            bg = 'NONE',
+            bg_border = 'NONE',
+          }
         },
       },
     },
@@ -12,10 +16,10 @@ require('kanagawa').setup({
   overrides = function(colors)
     local theme = colors.theme
     return {
-        Pmenu = { fg = theme.ui.fg_dim, bg = theme.ui.bg_m3 },
-        PmenuSel = { fg = "NONE", bg = theme.ui.bg_p2 },
-        PmenuSbar = { bg = theme.ui.bg_m1 },
-        PmenuThumb = { bg = theme.ui.bg_p2 },
+      Pmenu = { fg = theme.ui.fg_dim, bg = theme.ui.bg_m3 },
+      PmenuSel = { fg = 'NONE', bg = theme.ui.bg_p2 },
+      PmenuSbar = { bg = theme.ui.bg_m1 },
+      PmenuThumb = { bg = theme.ui.bg_p2 },
     }
   end,
   background = {

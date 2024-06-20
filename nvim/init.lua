@@ -1,6 +1,6 @@
 _G.Config = {}
 
-_G.Config.borders = 'double'
+_G.Config.borders = 'rounded'
 
 --- Clone 'mini.nvim' manually in a way that it gets managed by 'mini.deps'
 local path_package = vim.fn.stdpath('data') .. '/site/'
@@ -21,11 +21,13 @@ MiniDeps.now(function() require('core.functions') end)
 MiniDeps.now(function() require('core.mappings') end)
 MiniDeps.now(function() require('core.mappings-leader') end)
 
-MiniDeps.now(function()
-  MiniDeps.add('rebelot/kanagawa.nvim')
-  require('core.plugins.kanagawa')
-  vim.cmd('colorscheme kanagawa')
-end)
+vim.cmd('colorscheme zoom')
+
+-- MiniDeps.now(function()
+--   MiniDeps.add('rebelot/kanagawa.nvim')
+--   require('core.plugins.kanagawa')
+--   -- vim.cmd('colorscheme kanagawa')
+-- end)
 
 MiniDeps.later(
   function()
@@ -34,6 +36,28 @@ MiniDeps.later(
     })
   end
 )
+
+MiniDeps.now(function()
+  require('mini.statusline').setup({
+    content = {
+      active = function()
+        local git = MiniStatusline.section_git({ trunc_width = 40 })
+        local diff = MiniStatusline.section_diff({ trunc_width = 75 })
+        local diagnostics = MiniStatusline.section_diagnostics({ trunc_width = 75 })
+        local filename = MiniStatusline.section_filename({ trunc_width = 140 })
+
+        return MiniStatusline.combine_groups({
+          { strings = { filename } },
+          { strings = { git, diff, diagnostics } },
+          '%<', -- Mark general truncate point
+          '%=', -- End left alignment
+          '%-14.(%l,%c%V%)',
+          '%P',
+        })
+      end,
+    },
+  })
+end)
 
 MiniDeps.later(function()
   local miniclue = require('mini.clue')
@@ -138,6 +162,7 @@ MiniDeps.later(function()
       show = minipick.default_show,
     },
     window = {
+      prompt_prefix = ' ',
       config = {
         border = _G.Config.borders,
       },

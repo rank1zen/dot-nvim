@@ -71,14 +71,15 @@ nmap_leader('lf', '<Cmd>lua require("conform").format({lsp_fallback=true})<CR>',
 xmap_leader('lf', '<Cmd>lua require("conform").format({lsp_fallback=true})<CR>', 'Format Selection')
 nmap_leader('lo', '<Cmd>Pick lsp scope="document_symbol"<CR>',                   'Symbols buffer')
 nmap_leader('lO', '<Cmd>Pick lsp scope="workspace_symbol"<CR>',                  'Symbols workspace')
-nmap_leader('lq', '<Cmd>lua vim.diagnostic.open_float()<CR>',                    'Diagnostics popup')
+nmap_leader('lm', '<Cmd>lua vim.diagnostic.open_float()<CR>',                    'Diagnostics popup')
+
 nmap_leader('lq', '<Cmd>Pick diagnostic scope="current"<CR>',                    'Diagnostic buffer')
 nmap_leader('lQ', '<Cmd>Pick diagnostic scope="all"<CR>',                        'Diagnostic workspace')
 nmap_leader('lc', '<Cmd>lua vim.lsp.buf.rename()<CR>',                           'Rename')
 nmap_leader('lC', '<Cmd>lua vim.lsp.buf.code_action()<CR>',                      'Code Action')
 
 nmap_leader('ld', '<Cmd>lua vim.lsp.buf.definition()<CR>',                       'Definition')
-nmap_leader('ld', '<Cmd>Pick lsp scope="definition"<CR>', 'Definition')
+-- nmap_leader('ld', '<Cmd>Pick lsp scope="definition"<CR>', 'Definition')
 nmap_leader('lt', '<Cmd>lua vim.lsp.buf.type_definition()<CR>',                       'Type Definition')
 nmap_leader('lr', '<Cmd>lua vim.lsp.buf.references()<CR>',                       'References')
 nmap_leader('lR', '<Cmd>Pick lsp scope="references"<CR>', 'References')

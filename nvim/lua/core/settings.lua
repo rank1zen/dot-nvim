@@ -10,6 +10,7 @@ vim.o.pumheight      = 10
 vim.o.relativenumber = true
 vim.o.shiftwidth     = 2
 vim.o.tabstop        = 2
+vim.o.showmode       = false
 
 -- stylua: ignore end
 
