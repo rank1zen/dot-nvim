@@ -83,15 +83,29 @@ MiniDeps.later(function()
   })
 end)
 
+MiniDeps.later(function() require('mini.extra').setup() end)
+
 MiniDeps.later(function()
   local miniai = require('mini.ai')
+  local miniextra = require('mini.extra')
+
   miniai.setup({
     custom_textobjects = {
+      C = miniai.gen_spec.treesitter({ a = '@class.outer', i = '@class.inner' }),
       F = miniai.gen_spec.treesitter({ a = '@function.outer', i = '@function.inner' }),
+      A = miniai.gen_spec.treesitter({ a = '@assignment.outer', i = '@assignment.inner' }),
+      c = miniai.gen_spec.treesitter({ a = '@comment.outer', i = '@comment.inner' }),
+      p = miniai.gen_spec.treesitter({ a = '@parameter.outer', i = '@parameter.inner' }),
+      b = miniai.gen_spec.treesitter({ a = '@block.outer', i = '@block.inner' }),
       o = miniai.gen_spec.treesitter({
         a = { '@conditional.outer', '@loop.outer' },
         i = { '@conditional.inner', '@loop.inner' },
       }),
+      B = miniextra.gen_ai_spec.buffer(),
+      D = miniextra.gen_ai_spec.diagnostic(),
+      I = miniextra.gen_ai_spec.indent(),
+      L = miniextra.gen_ai_spec.line(),
+      N = miniextra.gen_ai_spec.number(),
     },
   })
 end)
@@ -102,6 +116,11 @@ MiniDeps.later(function() require('mini.bracketed').setup() end)
 MiniDeps.later(function() require('mini.surround').setup() end)
 MiniDeps.later(function() require('mini.splitjoin').setup() end)
 MiniDeps.later(function() require('mini.operators').setup() end)
+MiniDeps.later(function() require('mini.diff').setup() end)
+MiniDeps.later(function() require('mini.git').setup() end)
+MiniDeps.later(function() require('mini.bufremove').setup() end)
+MiniDeps.later(function() require('mini.move').setup() end)
+MiniDeps.later(function() require('mini.icons').setup() end)
 
 MiniDeps.later(function()
   require('mini.completion').setup({
@@ -137,16 +156,6 @@ MiniDeps.later(function()
   })
 end)
 
-MiniDeps.later(
-  function()
-    require('mini.icons').setup({
-      default = {
-        file = { glyph = '󰈤' },
-      },
-    })
-  end
-)
-
 MiniDeps.later(function()
   require('mini.pairs').setup({})
   vim.keymap.set('i', '<CR>', 'v:lua.Config.cr_action()', { expr = true })
@@ -156,19 +165,6 @@ MiniDeps.later(function()
   local minipick = require('mini.pick')
   minipick.setup({
     window = {
-      config = function()
-        local height = math.floor(0.25 * vim.o.lines)
-        local width = math.floor(0.5 * vim.o.columns)
-        return {
-          anchor = 'NW',
-          height = height,
-          width = width,
-          row = math.floor(0.25 * (vim.o.lines - height)),
-          col = math.floor(0.5 * (vim.o.columns - width)),
-
-          border = _G.Config.borders,
-        }
-      end,
       prompt_cursor = '▏',
       prompt_prefix = ' ',
     },
@@ -188,12 +184,6 @@ MiniDeps.later(function()
     },
   })
 end)
-
-MiniDeps.later(function() require('mini.diff').setup() end)
-MiniDeps.later(function() require('mini.git').setup() end)
-MiniDeps.later(function() require('mini.extra').setup() end)
-MiniDeps.later(function() require('mini.bufremove').setup() end)
-MiniDeps.later(function() require('mini.move').setup() end)
 
 MiniDeps.later(function()
   local minihipatterns = require('mini.hipatterns')

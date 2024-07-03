@@ -19,12 +19,31 @@ local xmap_leader = function(suffix, rhs, desc, opts)
   vim.keymap.set('x', '<Leader>' .. suffix, rhs, opts)
 end
 
+_G.Config.centered_picker = function()
+  local height = math.floor(0.25 * vim.o.lines)
+  local width = math.floor(0.5 * vim.o.columns)
+  return {
+    window = {
+      config = {
+        anchor = 'NW',
+        height = height,
+        width = width,
+        row = math.floor(0.25 * (vim.o.lines - height)),
+        col = math.floor(0.5 * (vim.o.columns - width)),
+
+        border = _G.Config.borders,
+      },
+    },
+  }
+end
+
 -- stylua: ignore start
 
 -- +General
+nmap_leader('ef', '<Cmd>lua MiniExtra.pickers.visit_paths({preserve_order=true}, Config.centered_picker())<CR>',         'Files (frequent)')
+
 nmap_leader('ed', '<Cmd>lua MiniFiles.open(vim.api.nvim_buf_get_name(0))<CR>', 'Directory (file)')
 nmap_leader('eD', '<Cmd>lua MiniFiles.open()<CR>',                             'Directory (cwd)')
-nmap_leader('ef', '<Cmd>Pick visit_paths<CR>',                                 'Files (frequent)')
 nmap_leader('eF', '<Cmd>Pick files<CR>',                                       'Files')
 nmap_leader('eg', '<Cmd>Pick grep_live<CR>',                                   'Grep')
 nmap_leader('eG', '<Cmd>Pick grep pattern="<cword>"<CR>',                      'Grep (current word)')
