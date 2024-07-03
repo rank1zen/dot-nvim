@@ -7,6 +7,5 @@ conform.setup({
     nix = { 'alejandra' },
     sql = { 'sqlfluff' },
     templ = { 'templ' },
-    tex = { 'latexindent' },
   },
 })

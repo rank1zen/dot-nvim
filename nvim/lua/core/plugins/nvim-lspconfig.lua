@@ -1,10 +1,7 @@
 vim.diagnostic.config({
-  virtual_text = {
-    prefix = '',
-    spacing = 2,
-  },
+  virtual_text = {},
   float = {
-    border = _G.Config.borderst,
+    border = _G.Config.borders,
     source = 'if_many',
   },
   signs = false,

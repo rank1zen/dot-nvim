@@ -1,6 +1,6 @@
 _G.Config = {}
 
-_G.Config.borders = 'rounded'
+_G.Config.borders = { '┏', '━', '┓', '┃', '┛', '━', '┗', '┃' }
 
 --- Clone 'mini.nvim' manually in a way that it gets managed by 'mini.deps'
 local path_package = vim.fn.stdpath('data') .. '/site/'
@@ -22,20 +22,6 @@ MiniDeps.now(function() require('core.mappings') end)
 MiniDeps.now(function() require('core.mappings-leader') end)
 
 vim.cmd('colorscheme zoom')
-
--- MiniDeps.now(function()
---   MiniDeps.add('rebelot/kanagawa.nvim')
---   require('core.plugins.kanagawa')
---   -- vim.cmd('colorscheme kanagawa')
--- end)
-
-MiniDeps.later(
-  function()
-    require('mini.notify').setup({
-      window = { config = { border = _G.Config.borders } },
-    })
-  end
-)
 
 MiniDeps.now(function()
   require('mini.statusline').setup({
@@ -102,6 +88,10 @@ MiniDeps.later(function()
   miniai.setup({
     custom_textobjects = {
       F = miniai.gen_spec.treesitter({ a = '@function.outer', i = '@function.inner' }),
+      o = miniai.gen_spec.treesitter({
+        a = { '@conditional.outer', '@loop.outer' },
+        i = { '@conditional.inner', '@loop.inner' },
+      }),
     },
   })
 end)
@@ -109,14 +99,12 @@ end)
 MiniDeps.later(function() require('mini.sessions').setup() end)
 MiniDeps.later(function() require('mini.align').setup() end)
 MiniDeps.later(function() require('mini.bracketed').setup() end)
-
 MiniDeps.later(function() require('mini.surround').setup() end)
 MiniDeps.later(function() require('mini.splitjoin').setup() end)
 MiniDeps.later(function() require('mini.operators').setup() end)
 
 MiniDeps.later(function()
   require('mini.completion').setup({
-    delay = { completion = 100, info = 100, signature = 10 ^ 7 },
     lsp_completion = {
       source_func = 'omnifunc',
       auto_setup = false,
@@ -126,7 +114,10 @@ MiniDeps.later(function()
         return MiniCompletion.default_process_items(items, base)
       end,
     },
-    window = { info = { border = _G.Config.borders } },
+    window = {
+      info = { border = _G.Config.borders },
+      signature = { border = _G.Config.borders },
+    },
   })
 end)
 
@@ -135,37 +126,51 @@ MiniDeps.later(function()
     pattern = 'MiniFilesWindowOpen',
     callback = function(args)
       local win_id = args.data.win_id
-      vim.wo[win_id].winblend = 25
       vim.api.nvim_win_set_config(win_id, { border = _G.Config.borders })
     end,
   })
 
   require('mini.files').setup({
-    content = {
-      prefix = function() end,
-    },
     options = {
       use_as_default_explorer = false,
     },
   })
 end)
 
+MiniDeps.later(
+  function()
+    require('mini.icons').setup({
+      default = {
+        file = { glyph = '󰈤' },
+      },
+    })
+  end
+)
+
 MiniDeps.later(function()
   require('mini.pairs').setup({})
-  vim.keymap.set('i', '<CR>', 'v:lua._G.cr_action()', { expr = true })
+  vim.keymap.set('i', '<CR>', 'v:lua.Config.cr_action()', { expr = true })
 end)
 
 MiniDeps.later(function()
   local minipick = require('mini.pick')
   minipick.setup({
-    source = {
-      show = minipick.default_show,
-    },
     window = {
+      config = function()
+        local height = math.floor(0.25 * vim.o.lines)
+        local width = math.floor(0.5 * vim.o.columns)
+        return {
+          anchor = 'NW',
+          height = height,
+          width = width,
+          row = math.floor(0.25 * (vim.o.lines - height)),
+          col = math.floor(0.5 * (vim.o.columns - width)),
+
+          border = _G.Config.borders,
+        }
+      end,
+      prompt_cursor = '▏',
       prompt_prefix = ' ',
-      config = {
-        border = _G.Config.borders,
-      },
     },
   })
 
@@ -203,17 +208,6 @@ MiniDeps.later(function()
   })
 end)
 
-MiniDeps.later(function()
-  local minimap = require('mini.map')
-  minimap.setup({
-    integrations = {
-      minimap.gen_integration.builtin_search(),
-      minimap.gen_integration.diagnostic(),
-      minimap.gen_integration.diff(),
-    },
-  })
-end)
-
 -- EXTRA PLUGINS
 
 MiniDeps.later(function()
@@ -226,6 +220,8 @@ MiniDeps.later(function()
     hooks = { post_checkout = function() vim.cmd('TSUpdate') end },
   })
 
+  MiniDeps.add('nvim-treesitter/nvim-treesitter-textobjects')
+
   require('core.plugins.nvim-treesitter')
 end)
 
@@ -237,6 +233,11 @@ end)
 MiniDeps.later(function()
   MiniDeps.add('stevearc/conform.nvim')
   require('core.plugins.conform')
+end)
+
+MiniDeps.now(function()
+  MiniDeps.add('lervag/wiki.vim')
+  vim.g.wiki_root = '~/wiki'
 end)
 
 MiniDeps.now(function()
@@ -307,10 +308,11 @@ MiniDeps.later(function()
   -- Scroll to recent command when it is executed
   vim.g.neoterm_autoscroll = 1
 
-  if vim.fn.executable('zsh') == 1 then vim.g.neoterm_shell = 'zsh' end
+  if vim.fn.executable('fish') == 1 then vim.g.neoterm_shell = 'fish' end
 end)
 
 MiniDeps.later(function()
   MiniDeps.add({ source = 'vim-test/vim-test', depends = { 'tpope/vim-dispatch' } })
   vim.cmd([[let test#strategy = 'neoterm']])
+  vim.cmd([[let test#go#gotest#options = '-v']])
 end)

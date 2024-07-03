@@ -39,12 +39,8 @@ set recolor-keephue             "true"
 set highlight-color             rgba(131,148,150,0.5) # base0
 set highlight-active-color      rgb(203, 70, 22,0.5) # orange
 
-set show-recent 999
-set show-directories "false"
-
 set guioptions ""
 set font "Geist Mono Nerd Font 9"
 
 map j feedkeys "<C-Down>"
 map k feedkeys "<C-Up>"
-unmap q
