@@ -48,6 +48,24 @@ Config.golang_test_file = function()
   end
 end
 
+Config.centered_picker = function()
+  local height = math.floor(0.25 * vim.o.lines)
+  local width = math.floor(0.5 * vim.o.columns)
+  return {
+    window = {
+      config = {
+        anchor = 'NW',
+        height = height,
+        width = width,
+        row = math.floor(0.25 * (vim.o.lines - height)),
+        col = math.floor(0.5 * (vim.o.columns - width)),
+
+        border = _G.Config.borders,
+      },
+    },
+  }
+end
+
 H.keys = {
   ['cr'] = vim.api.nvim_replace_termcodes('<CR>', true, true, true),
   ['ctrl-y'] = vim.api.nvim_replace_termcodes('<C-y>', true, true, true),

@@ -110,6 +110,20 @@ MiniDeps.later(function()
   })
 end)
 
+MiniDeps.later(function()
+  local minivisits = require('mini.visits')
+  minivisits.setup({
+    list = {
+      sort = minivisits.gen_sort.z(),
+    },
+    store = {
+      normalize = minivisits.gen_normalize.default({
+        prune_threshold = 0.1
+      }),
+    },
+  })
+end)
+
 MiniDeps.later(function() require('mini.sessions').setup() end)
 MiniDeps.later(function() require('mini.align').setup() end)
 MiniDeps.later(function() require('mini.bracketed').setup() end)
@@ -120,7 +134,6 @@ MiniDeps.later(function() require('mini.diff').setup() end)
 MiniDeps.later(function() require('mini.git').setup() end)
 MiniDeps.later(function() require('mini.bufremove').setup() end)
 MiniDeps.later(function() require('mini.move').setup() end)
-MiniDeps.later(function() require('mini.icons').setup() end)
 
 MiniDeps.later(function()
   require('mini.completion').setup({
@@ -165,24 +178,17 @@ MiniDeps.later(function()
   local minipick = require('mini.pick')
   minipick.setup({
     window = {
+      config = {
+        border = Config.borders,
+      },
       prompt_cursor = '▏',
       prompt_prefix = ' ',
     },
   })
 
-  vim.ui.select = MiniPick.ui_select
-end)
+  require('core.pickers')
 
-MiniDeps.later(function()
-  local minivisits = require('mini.visits')
-  minivisits.setup({
-    list = {
-      sort = minivisits.gen_sort.z(),
-    },
-    store = {
-      normalize = minivisits.gen_normalize.default(),
-    },
-  })
+  vim.ui.select = MiniPick.ui_select
 end)
 
 MiniDeps.later(function()
@@ -216,6 +222,19 @@ MiniDeps.later(function()
 end)
 
 MiniDeps.later(function()
+  MiniDeps.add('neovim/nvim-lspconfig')
+  require('core.plugins.nvim-lspconfig')
+end)
+
+MiniDeps.now(function()
+  MiniDeps.add('nvim-orgmode/orgmode')
+  require('orgmode').setup({
+    org_agenda_files = { '~/org/*' },
+    org_default_notes_file = '~/org/refile.org',
+  })
+end)
+
+MiniDeps.later(function()
   MiniDeps.add('williamboman/mason.nvim')
   require('mason').setup()
 end)
@@ -223,36 +242,6 @@ end)
 MiniDeps.later(function()
   MiniDeps.add('stevearc/conform.nvim')
   require('core.plugins.conform')
-end)
-
-MiniDeps.now(function()
-  MiniDeps.add('lervag/wiki.vim')
-  vim.g.wiki_root = '~/wiki'
-end)
-
-MiniDeps.now(function()
-  MiniDeps.add('lervag/vimtex')
-  vim.g.vimtex_view_method = 'zathura'
-  vim.g.vimtex_quickfix_ignore_filters = {
-    -- HACK: OMEGA hack ignores latex errors for tufte-latex
-    'Package xcolor Warning',
-    'Marginpar on page',
-  }
-  vim.g.vimtex_syntax_conceal = {
-    accents = 1,
-    ligatures = 1,
-    cites = 1,
-    fancy = 0,
-    spacing = 0,
-    greek = 1,
-    math_bounds = 0,
-    math_delimiters = 1,
-    math_fracs = 0,
-    math_super_sub = 0,
-    math_symbols = 1,
-    sections = 0,
-    styles = 0,
-  }
 end)
 
 MiniDeps.later(function()
@@ -277,11 +266,6 @@ end)
 MiniDeps.later(function()
   MiniDeps.add('folke/lazydev.nvim')
   require('lazydev').setup({})
-end)
-
-MiniDeps.later(function()
-  MiniDeps.add('neovim/nvim-lspconfig')
-  require('core.plugins.nvim-lspconfig')
 end)
 
 MiniDeps.later(function()
