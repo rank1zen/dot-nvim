@@ -4,6 +4,13 @@ require('mini.hues').setup({
   background = '#f9f9f9',
   foreground = '#363631',
   saturation = 'high',
+  plugins = {
+    default = false,
+    ['echasnovski/mini.nvim'] = true,
+  },
 })
+
+vim.api.nvim_set_hl(0, '@org.agenda.deadline', { fg = '#FFAAAA' })
+vim.api.nvim_set_hl(0, '@org.agenda.scheduled', { fg = '#AAFFAA' })
 
 vim.g.colors_name = "zoom"
