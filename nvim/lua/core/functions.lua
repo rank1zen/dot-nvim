@@ -22,19 +22,19 @@ end
 Config.golang_test_file = function()
   local file = vim.fn.expand('%')
   if #file <= 1 then
-    vim.notify("no buffer name", vim.log.levels.ERROR)
+    vim.notify('no buffer name', vim.log.levels.ERROR)
     return
   end
 
-  local is_test  = string.find(file, "_test%.go$")
-  local source = string.find(file, "%.go$")
+  local is_test = string.find(file, '_test%.go$')
+  local source = string.find(file, '%.go$')
   local is_source = (not is_test and source)
 
   local alt_file = file
   if is_test then
-    alt_file = string.gsub(file, "_test.go", ".go")
+    alt_file = string.gsub(file, '_test.go', '.go')
   elseif is_source then
-    alt_file = vim.fn.expand('%:r') .. "_test.go"
+    alt_file = vim.fn.expand('%:r') .. '_test.go'
   else
     vim.notify('not a go file', vim.log.levels.ERROR)
     return
@@ -48,10 +48,10 @@ Config.golang_test_file = function()
   end
 end
 
-Config.centered_picker = function()
+Config.pickers_window_center = function(opts)
   local height = math.floor(0.25 * vim.o.lines)
   local width = math.floor(0.5 * vim.o.columns)
-  return {
+  local local_opts = {
     window = {
       config = {
         anchor = 'NW',
@@ -64,6 +64,40 @@ Config.centered_picker = function()
       },
     },
   }
+
+  return vim.tbl_extend('force', opts or {}, local_opts)
+end
+
+Config.pickers_window_default = function(opts)
+  local local_opts = {
+    window = {
+      prompt_cursor = '▏',
+      prompt_prefix = ' ',
+      config = {
+        border = _G.Config.borders,
+      },
+    },
+  }
+
+  return vim.tbl_extend('force', opts or {}, local_opts)
+end
+
+Config.pickers_window_bottom = function(opts)
+  local height = math.floor(0.25 * vim.o.lines)
+  local local_opts = {
+    window = {
+      config = {
+        anchor = 'NW',
+        height = height,
+        row = vim.o.lines - height - 4,
+        col = 0,
+        width = vim.o.columns,
+        border = _G.Config.borders,
+      },
+    },
+  }
+
+  return vim.tbl_extend('force', opts or {}, local_opts)
 end
 
 H.keys = {

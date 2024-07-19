@@ -28,10 +28,10 @@ end
 
 nmap_leader('.', '<Cmd>Pick resume<CR>',                       'Resume Picker')
 
+nmap_leader('ef', '<Cmd>Pick visit_paths preserve_order=true<CR>',         'All')
+nmap_leader('ed', '<Cmd>Pick explorer_file<CR>', 'Directory (file)')
+
 -- +General
-nmap_leader('ed', '<Cmd>lua MiniFiles.open(vim.api.nvim_buf_get_name(0))<CR>', 'Directory (file)')
-nmap_leader('eD', '<Cmd>lua MiniFiles.open()<CR>',                             'Directory (cwd)')
-nmap_leader('ef', '<Cmd>Pick visit_paths<CR>',         'Files (frequent)')
 nmap_leader('eF', '<Cmd>Pick files<CR>',                                       'Files')
 nmap_leader('er', '<Cmd>lua MiniSessions.read()<CR>',                          'Sessions')
 nmap_leader('eR', '<Cmd>lua MiniSessions.select()<CR>',                        'Sessions (Select)')
@@ -87,6 +87,7 @@ nmap_leader('fH', '<Cmd>Pick commands<CR>',                                    '
 
 -- +Org
 nmap_leader('ofh', '<Cmd>Pick org_headlines<CR>',  'org headlines')
+nmap_leader('off', '<Cmd>Pick org_files<CR>',  'org files')
 
 -- +Git
 nmap_leader('gl', '<Cmd>Git log --oneline<CR>',                      'Log (all)')

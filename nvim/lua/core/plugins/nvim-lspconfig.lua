@@ -80,6 +80,8 @@ lspconfig.tailwindcss.setup({
   init_options = { userLanguages = { templ = 'html' } },
 })
 
+lspconfig.tsserver.setup({})
+
 -- lspconfig.html.setup({
 --   on_attach = on_attach_custom,
 --   filetypes = { 'html', 'templ' },

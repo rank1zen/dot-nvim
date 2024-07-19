@@ -17,11 +17,15 @@ dynamic_padding = true
 # opacity = 0.85
 
 [colors]
-draw_bold_text_with_bright_colors = true
+draw_bold_text_with_bright_colors = false
 
 [colors.primary]
-background = '#f9f9f9'
-foreground = '#586e75'
+background = '#ffffff'
+foreground = '#212121'
+
+[colors.cursor]
+background = '#212121'
+foreground = '#ffffff'
 
 [colors.normal]
 black   = '#073642'

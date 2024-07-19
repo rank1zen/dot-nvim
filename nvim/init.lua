@@ -86,46 +86,58 @@ MiniDeps.later(function()
 end)
 
 MiniDeps.later(function()
-  local minivisits = require('mini.visits')
-  minivisits.setup({
-    store = {
-      normalize = minivisits.gen_normalize.default({
-        decay_threshold = 200,
-        decay_target = 200,
-        prune_threshold = 0.9,
-      }),
+  local minipick = require('mini.pick')
+
+  local opts = {
+    mappings = {
+      toggle_info = '<C-k>',
+      toggle_preview = '<C-p>',
+      move_down = '<Tab>',
+      move_up = '<S-Tab>',
     },
-  })
+  }
+
+  opts = Config.pickers_window_default(opts)
+
+  minipick.setup(opts)
+
+  minipick.registry.visit_paths = function(local_opts, opts)
+    opts = Config.pickers_window_center(opts)
+    return MiniExtra.pickers.visit_paths(local_opts, opts)
+  end
+
+  minipick.registry.explorer_file = function(local_opts, opts)
+    local path = vim.api.nvim_buf_get_name(0)
+    local res = path:match('^.*/')
+
+    local_opts = {
+      cwd = res,
+    }
+
+    opts = Config.pickers_window_center(opts)
+
+    return MiniExtra.pickers.explorer(local_opts, opts)
+  end
 end)
 
+MiniDeps.later(function() require('mini.visits').setup() end)
+
 MiniDeps.later(function()
-  local minipick = require('mini.pick')
-  minipick.setup({
-    window = {
-      prompt_cursor = '▏',
-      prompt_prefix = ' ',
-      config = {
-        border = Config.borders,
-      },
-    },
+  require('mini.sessions').setup({
+    autoread = true,
   })
-
-  require('core.pickers')
-
-  vim.ui.select = MiniPick.ui_select
 end)
 
 MiniDeps.later(function() require('mini.diff').setup() end)
 MiniDeps.later(function() require('mini.git').setup() end)
 
-MiniDeps.later(function() require('mini.sessions').setup() end)
 MiniDeps.later(function() require('mini.align').setup() end)
-MiniDeps.later(function() require('mini.bracketed').setup() end)
 MiniDeps.later(function() require('mini.surround').setup() end)
-MiniDeps.later(function() require('mini.splitjoin').setup() end)
 MiniDeps.later(function() require('mini.operators').setup() end)
+MiniDeps.later(function() require('mini.splitjoin').setup() end)
+MiniDeps.later(function() require('mini.trailspace').setup() end)
+
 MiniDeps.later(function() require('mini.bufremove').setup() end)
-MiniDeps.later(function() require('mini.move').setup() end)
 
 MiniDeps.later(function()
   require('mini.completion').setup({
@@ -140,22 +152,6 @@ MiniDeps.later(function()
     window = {
       info = { border = _G.Config.borders },
       signature = { border = _G.Config.borders },
-    },
-  })
-end)
-
-MiniDeps.later(function()
-  vim.api.nvim_create_autocmd('User', {
-    pattern = 'MiniFilesWindowOpen',
-    callback = function(args)
-      local win_id = args.data.win_id
-      vim.api.nvim_win_set_config(win_id, { border = _G.Config.borders })
-    end,
-  })
-
-  require('mini.files').setup({
-    options = {
-      use_as_default_explorer = false,
     },
   })
 end)
@@ -194,7 +190,7 @@ MiniDeps.later(function()
   require('core.plugins.nvim-lspconfig')
 end)
 
-MiniDeps.now(function()
+MiniDeps.later(function()
   MiniDeps.add('nvim-orgmode/orgmode')
   require('core.plugins.orgmode')
 end)
