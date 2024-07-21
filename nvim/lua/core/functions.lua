@@ -1,5 +1,10 @@
 local H = {}
 
+Config.prompt_write_session = function()
+  local input = vim.fn.input("Save session name: ")
+  MiniSessions.write(input)
+end
+
 Config.cr_action = function()
   if vim.fn.pumvisible() ~= 0 then
     local item_selected = vim.fn.complete_info()['selected'] ~= -1

@@ -26,15 +26,14 @@ end
 
 -- stylua: ignore start
 
-nmap_leader('.', '<Cmd>Pick resume<CR>',                       'Resume Picker')
-
-nmap_leader('ef', '<Cmd>Pick visit_paths preserve_order=true<CR>',         'All')
-nmap_leader('ed', '<Cmd>Pick explorer_file<CR>', 'Directory (file)')
+-- +Edit
+nmap_leader('ef', '<Cmd>Pick visit_paths preserve_order=true<CR>', 'Files')
+nmap_leader('ex', '<Cmd>Pick explorer_file<CR>',                   'Explorer')
+nmap_leader('es', '<Cmd>lua Config.prompt_write_session()<CR>',    'Save')
+nmap_leader('ep', '<Cmd>lua MiniSessions.select("read")<CR>',      'Project')
+nmap_leader('ed', '<Cmd>lua MiniSessions.select("delete")<CR>',    'Delete')
 
 -- +General
-nmap_leader('eF', '<Cmd>Pick files<CR>',                                       'Files')
-nmap_leader('er', '<Cmd>lua MiniSessions.read()<CR>',                          'Sessions')
-nmap_leader('eR', '<Cmd>lua MiniSessions.select()<CR>',                        'Sessions (Select)')
 nmap_leader('eq', '<Cmd>lua Config.toggle_quickfix()<CR>',                     'Quickfix')
 
 -- +Buffers
@@ -43,7 +42,6 @@ nmap_leader('bd',  '<Cmd>lua MiniBufremove.delete()<CR>',         'Delete')
 nmap_leader('bD',  '<Cmd>lua MiniBufremove.delete(0, true)<CR>',  'Delete!')
 nmap_leader('bw',  '<Cmd>lua MiniBufremove.wipeout()<CR>',        'Wipeout')
 nmap_leader('bW',  '<Cmd>lua MiniBufremove.wipeout(0, true)<CR>', 'Wipeout!')
--- +find
 nmap_leader('bfl', '<Cmd>Pick buf_lines scope="all"<CR>',         'Pick Lines (all)')
 nmap_leader('bfL', '<Cmd>Pick buf_lines scope="current"<CR>',     'Pick Lines (current)')
 nmap_leader('bfb', '<Cmd>Pick buffers<CR>',                       'Pick Buffers')
@@ -54,12 +52,10 @@ nmap_leader('lt', '<Cmd>lua vim.lsp.buf.type_definition()<CR>', 'Type definition
 nmap_leader('lr', '<Cmd>lua vim.lsp.buf.references()<CR>',      'References')
 nmap_leader('li', '<Cmd>lua vim.lsp.buf.implementation()<CR>',  'Implementation')
 nmap_leader('ls', '<Cmd>lua vim.lsp.buf.signature_help()<CR>',  'Signature')
--- +actions
 nmap_leader('lar', '<Cmd>lua vim.lsp.buf.rename()<CR>',                           'Rename')
 nmap_leader('las', '<Cmd>lua vim.lsp.buf.code_action()<CR>',                      'Code Action')
 nmap_leader('laf', '<Cmd>lua require("conform").format({lsp_fallback=true})<CR>', 'Format')
 xmap_leader('laf', '<Cmd>lua require("conform").format({lsp_fallback=true})<CR>', 'Format Selection')
--- +find
 nmap_leader('lfo', '<Cmd>Pick lsp scope="document_symbol"<CR>',  'Document symbol')
 nmap_leader('lfw', '<Cmd>Pick lsp scope="workspace_symbol"<CR>', 'Workspace symbol')
 nmap_leader('lfq', '<Cmd>Pick lsp scope="definition"<CR>',       'Definition')
@@ -69,21 +65,19 @@ nmap_leader('lfu', '<Cmd>Pick lsp scope="declaration"<CR>',      'Declaration')
 nmap_leader('lft', '<Cmd>Pick lsp scope="type_definition"<CR>',  'Type definition')
 nmap_leader('lfd', '<Cmd>Pick diagnostic scope="all"<CR>',       'Diagnostic (all)')
 nmap_leader('lfD', '<Cmd>Pick diagnostic scope="current"<CR>',   'Diagnostic (current)')
--- +golang
 nmap_leader('lga', '<Cmd>lua Config.golang_test_file()<CR>', 'Switch Go _test')
--- TODO
-nmap_leader('ll', '<Cmd>TestLast<CR>',                           'Last')
-nmap_leader('ln', '<Cmd>TestNearest<CR>',                        'Nearest')
 
 -- +Find
+nmap_leader('ff', '<Cmd>Pick files<CR>',                  'Files')
 nmap_leader('fi', '<Cmd>Pick hipatterns<CR>',             'Hipatterns')
 nmap_leader('fj', '<Cmd>Pick hl_groups<CR>',              'Highlight groups')
-nmap_leader('f/', '<Cmd>Pick history scope="/"<CR>',      '"/" history')
-nmap_leader('f:', '<Cmd>Pick history scope=":"<CR>',      '":" history')
-nmap_leader('fg', '<Cmd>Pick grep_live<CR>',                                   'Grep')
-nmap_leader('fG', '<Cmd>Pick grep pattern="<cword>"<CR>',                      'Grep (current word)')
-nmap_leader('fh', '<Cmd>Pick help<CR>',                                        'Help')
-nmap_leader('fH', '<Cmd>Pick commands<CR>',                                    'Commands')
+nmap_leader('f/', '<Cmd>Pick history scope="/"<CR>',      '"/"')
+nmap_leader('f:', '<Cmd>Pick history scope=":"<CR>',      '":"')
+nmap_leader('fg', '<Cmd>Pick grep_live<CR>',              'Grep')
+nmap_leader('fG', '<Cmd>Pick grep pattern="<cword>"<CR>', 'Grep (current word)')
+nmap_leader('fh', '<Cmd>Pick help<CR>',                   'Help')
+nmap_leader('fH', '<Cmd>Pick commands<CR>',               'Commands')
+nmap_leader('f.', '<Cmd>Pick resume<CR>',                 'Resume')
 
 -- +Org
 nmap_leader('ofh', '<Cmd>Pick org_headlines<CR>',  'org headlines')
@@ -95,11 +89,9 @@ nmap_leader('gL', '<Cmd>Git log --oneline --follow -- %<CR>',        'Log (curre
 nmap_leader('go', '<Cmd>lua MiniDiff.toggle_overlay()<CR>',          'Toggle overlay')
 nmap_leader('gs', '<Cmd>lua MiniGit.show_at_cursor()<CR>',           'Show at cursor')
 xmap_leader('gs', '<Cmd>lua MiniGit.show_at_cursor()<CR>',           'Show at selection')
--- +actions
 nmap_leader('gaa', '<Cmd>Git add %<CR>',                              'Add file')
 nmap_leader('gac', '<Cmd>Git commit<CR>',                             'Commit')
 nmap_leader('gaC', '<Cmd>Git commit --amend<CR>',                     'Commit amend')
--- +find
 nmap_leader('gfc', '<Cmd>Pick git_commits<CR>',                       'Commits (all)')
 nmap_leader('gfC', '<Cmd>Pick git_commits path="%"<CR>',              'Commits (current)')
 nmap_leader('gfs', '<Cmd>Pick git_hunks scope="staged"<CR>',          'Added hunks (all)')

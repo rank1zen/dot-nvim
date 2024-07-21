@@ -88,14 +88,7 @@ end)
 MiniDeps.later(function()
   local minipick = require('mini.pick')
 
-  local opts = {
-    mappings = {
-      toggle_info = '<C-k>',
-      toggle_preview = '<C-p>',
-      move_down = '<Tab>',
-      move_up = '<S-Tab>',
-    },
-  }
+  local opts = {}
 
   opts = Config.pickers_window_default(opts)
 
@@ -121,12 +114,7 @@ MiniDeps.later(function()
 end)
 
 MiniDeps.later(function() require('mini.visits').setup() end)
-
-MiniDeps.later(function()
-  require('mini.sessions').setup({
-    autoread = true,
-  })
-end)
+MiniDeps.later(function() require('mini.sessions').setup() end)
 
 MiniDeps.later(function() require('mini.diff').setup() end)
 MiniDeps.later(function() require('mini.git').setup() end)
