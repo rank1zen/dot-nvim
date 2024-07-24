@@ -5,9 +5,6 @@ program = "/usr/bin/fish"
 size = 10.7
 normal = { family = "GeistMono Nerd Font", style = "SemiBold" }
 bold   = { family = "GeistMono Nerd Font", style = "Black" }
-# normal = { family = "IosevkaTerm Nerd Font", style = "Bold" }
-# normal = { family = "JuliaMono", style = "Bold" }
-# normal = { family = "BlexMono Nerd Font", style = "SemiBold" }
 
 builtin_box_drawing = true
 
@@ -28,21 +25,11 @@ background = '#212121'
 foreground = '#ffffff'
 
 [colors.normal]
-black   = '#073642'
-red     = '#dc322f'
-green   = '#859900'
-yellow  = '#b58900'
-blue    = '#268bd2'
-magenta = '#d33682'
-cyan    = '#2aa198'
-white   = '#eee8d5'
-
-[colors.bright]
-black   = '#002b36'
-red     = '#cb4b16'
-green   = '#586e75'
-yellow  = '#657b83'
-blue    = '#839496'
-magenta = '#6c71c4'
-cyan    = '#93a1a1'
-white   = '#fdf6e3'
+black   = '#212121'
+red     = '#212121'
+green   = '#212121'
+yellow  = '#212121'
+blue    = '#212121'
+magenta = '#212121'
+cyan    = '#212121'
+white   = '#ffffff'

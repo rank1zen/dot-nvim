@@ -1,7 +1,15 @@
 local H = {}
 
+Config.borders = { '┏', '━', '┓', '┃', '┛', '━', '┗', '┃' }
+
+H.keys = {
+  ['cr'] = vim.api.nvim_replace_termcodes('<CR>', true, true, true),
+  ['ctrl-y'] = vim.api.nvim_replace_termcodes('<C-y>', true, true, true),
+  ['ctrl-y_cr'] = vim.api.nvim_replace_termcodes('<C-y><CR>', true, true, true),
+}
+
 Config.prompt_write_session = function()
-  local input = vim.fn.input("Save session name: ")
+  local input = vim.fn.input('Save session name: ')
   MiniSessions.write(input)
 end
 
@@ -31,82 +39,29 @@ Config.golang_test_file = function()
     return
   end
 
-  local is_test = string.find(file, '_test%.go$')
-  local source = string.find(file, '%.go$')
-  local is_source = (not is_test and source)
-
-  local alt_file = file
-  if is_test then
-    alt_file = string.gsub(file, '_test.go', '.go')
-  elseif is_source then
-    alt_file = vim.fn.expand('%:r') .. '_test.go'
+  if string.find(file, '_test%.go$') then
+    vim.cmd('edit' .. string.gsub(file, '_test.go', '.go'))
+  elseif string.find(file, '%.go$') then
+    vim.cmd('edit' .. vim.fn.expand('%:r') .. '_test.go')
   else
     vim.notify('not a go file', vim.log.levels.ERROR)
-    return
-  end
-
-  if not vim.fn.filereadable(alt_file) or not vim.fn.bufexists(alt_file) then
-    vim.notify("couldn't find " .. alt_file, vim.log.levels.ERROR)
-    return
-  else
-    vim.cmd('edit ' .. alt_file)
   end
 end
 
-Config.pickers_window_center = function(opts)
-  local height = math.floor(0.25 * vim.o.lines)
-  local width = math.floor(0.5 * vim.o.columns)
-  local local_opts = {
-    window = {
-      config = {
-        anchor = 'NW',
-        height = height,
-        width = width,
-        row = math.floor(0.25 * (vim.o.lines - height)),
-        col = math.floor(0.5 * (vim.o.columns - width)),
-
-        border = _G.Config.borders,
-      },
-    },
-  }
-
-  return vim.tbl_extend('force', opts or {}, local_opts)
+Config.float_win_centered = function()
+  local h, w = math.floor(0.2 * vim.o.lines), math.min(math.floor(0.5 * vim.o.columns), 80)
+  local r, c = math.floor(0.25 * (vim.o.lines - h)), math.floor(0.5 * (vim.o.columns - w))
+  return { anchor = 'NW', height = h, width = w, row = r, col = c, border = Config.borders }
 end
 
-Config.pickers_window_default = function(opts)
-  local local_opts = {
-    window = {
-      prompt_cursor = '▏',
-      prompt_prefix = ' ',
-      config = {
-        border = _G.Config.borders,
-      },
-    },
-  }
-
-  return vim.tbl_extend('force', opts or {}, local_opts)
+Config.float_win_full = function()
+  local h, w = math.floor(0.9 * vim.o.lines), math.floor(0.9 * vim.o.columns)
+  local r, c = math.floor(0.35 * (vim.o.lines - h)), math.floor(0.5 * (vim.o.columns - w))
+  return { anchor = 'NW', height = h, width = w, row = r, col = c, border = Config.borders }
 end
 
-Config.pickers_window_bottom = function(opts)
-  local height = math.floor(0.25 * vim.o.lines)
-  local local_opts = {
-    window = {
-      config = {
-        anchor = 'NW',
-        height = height,
-        row = vim.o.lines - height - 4,
-        col = 0,
-        width = vim.o.columns,
-        border = _G.Config.borders,
-      },
-    },
-  }
-
-  return vim.tbl_extend('force', opts or {}, local_opts)
+Config.floating_window_bottom = function()
+  local h, w = math.floor(0.3 * vim.o.lines), vim.o.columns
+  local r, c = vim.o.lines - h, 0
+  return { anchor = 'NW', height = h, width = w, row = r, col = c, border = Config.borders }
 end
-
-H.keys = {
-  ['cr'] = vim.api.nvim_replace_termcodes('<CR>', true, true, true),
-  ['ctrl-y'] = vim.api.nvim_replace_termcodes('<C-y>', true, true, true),
-  ['ctrl-y_cr'] = vim.api.nvim_replace_termcodes('<C-y><CR>', true, true, true),
-}

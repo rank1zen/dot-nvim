@@ -1,7 +1,5 @@
 _G.Config = {}
 
-_G.Config.borders = { '┏', '━', '┓', '┃', '┛', '━', '┗', '┃' }
-
 local path_package = vim.fn.stdpath('data') .. '/site/'
 local mini_path = path_package .. 'pack/deps/start/mini.nvim'
 if not vim.loop.fs_stat(mini_path) then
@@ -24,7 +22,7 @@ MiniDeps.later(function()
   local miniclue = require('mini.clue')
   miniclue.setup({
     clues = {
-      _G.Config.leader_group_clues,
+      Config.leader_group_clues,
       miniclue.gen_clues.builtin_completion(),
       miniclue.gen_clues.g(),
       miniclue.gen_clues.marks(),
@@ -54,7 +52,7 @@ MiniDeps.later(function()
       { mode = 'i', keys = '<C-x>' },
       { mode = 'c', keys = '<C-r>' },
     },
-    window = { config = { border = _G.Config.borders } },
+    window = { config = { border = Config.borders } },
   })
 end)
 
@@ -87,30 +85,49 @@ end)
 
 MiniDeps.later(function()
   local minipick = require('mini.pick')
+  local miniextra = require('mini.extra')
 
-  local opts = {}
+  minipick.setup()
 
-  opts = Config.pickers_window_default(opts)
+  local picker_configs = {}
 
-  minipick.setup(opts)
+  picker_configs.visit_paths = {
+    window = { config = Config.float_win_centered, prompt_prefix = ' ' },
+  }
 
-  minipick.registry.visit_paths = function(local_opts, opts)
-    opts = Config.pickers_window_center(opts)
-    return MiniExtra.pickers.visit_paths(local_opts, opts)
+  picker_configs.git_hunks = {
+    window = { config = Config.float_win_full },
+  }
+
+  picker_configs.diagnostic = {
+    window = { config = Config.float_win_full },
+  }
+
+  for name, config in pairs(picker_configs) do
+    minipick.registry[name] = function(local_opts) return miniextra.pickers[name](local_opts, config) end
   end
+end)
 
-  minipick.registry.explorer_file = function(local_opts, opts)
-    local path = vim.api.nvim_buf_get_name(0)
-    local res = path:match('^.*/')
+MiniDeps.later(function()
+  require('mini.files').setup({
+    content = { prefix = function() end },
+    mappings = {
+      close = '<C-c>',
+    },
+    options = { permanent_delete = true, use_as_default_explorer = false },
+  })
 
-    local_opts = {
-      cwd = res,
-    }
+  vim.api.nvim_create_autocmd('User', {
+    pattern = 'MiniFilesWindowOpen',
+    callback = function(args)
+      local win_id = args.data.win_id
 
-    opts = Config.pickers_window_center(opts)
-
-    return MiniExtra.pickers.explorer(local_opts, opts)
-  end
+      vim.wo[win_id].winblend = 10
+      local config = vim.api.nvim_win_get_config(win_id)
+      config.border = Config.borders
+      vim.api.nvim_win_set_config(win_id, config)
+    end,
+  })
 end)
 
 MiniDeps.later(function() require('mini.visits').setup() end)
@@ -151,9 +168,10 @@ end)
 
 MiniDeps.later(function()
   local minihipatterns = require('mini.hipatterns')
+
   minihipatterns.setup({
     highlighters = {
-      hex_color = minihipatterns.gen_highlighter.hex_color(),
+      colour = minihipatterns.gen_highlighter.hex_color(),
     },
   })
 end)
