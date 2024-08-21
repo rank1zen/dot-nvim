@@ -56,24 +56,21 @@ MiniDeps.later(function()
   })
 end)
 
-MiniDeps.later(function() require('mini.extra').setup() end)
-
 MiniDeps.later(function()
-  local miniai = require('mini.ai')
-  local miniextra = require('mini.extra')
+  local miniai, miniextra = require('mini.ai'), require('mini.extra')
 
   miniai.setup({
     custom_textobjects = {
-      C = miniai.gen_spec.treesitter({ a = '@class.outer', i = '@class.inner' }),
-      F = miniai.gen_spec.treesitter({ a = '@function.outer', i = '@function.inner' }),
-      A = miniai.gen_spec.treesitter({ a = '@assignment.outer', i = '@assignment.inner' }),
-      c = miniai.gen_spec.treesitter({ a = '@comment.outer', i = '@comment.inner' }),
-      p = miniai.gen_spec.treesitter({ a = '@parameter.outer', i = '@parameter.inner' }),
-      b = miniai.gen_spec.treesitter({ a = '@block.outer', i = '@block.inner' }),
-      o = miniai.gen_spec.treesitter({
-        a = { '@conditional.outer', '@loop.outer' },
-        i = { '@conditional.inner', '@loop.inner' },
-      }),
+      -- stylua: ignore start
+      C = miniai.gen_spec.treesitter({ a = '@class.outer',       i = '@class.inner' }),
+      F = miniai.gen_spec.treesitter({ a = '@function.outer',    i = '@function.inner' }),
+      A = miniai.gen_spec.treesitter({ a = '@assignment.outer',  i = '@assignment.inner' }),
+      c = miniai.gen_spec.treesitter({ a = '@comment.outer',     i = '@comment.inner' }),
+      p = miniai.gen_spec.treesitter({ a = '@parameter.outer',   i = '@parameter.inner' }),
+      b = miniai.gen_spec.treesitter({ a = '@block.outer',       i = '@block.inner' }),
+      l = miniai.gen_spec.treesitter({ a = '@loop.outer',        i = '@loop.inner' }),
+      o = miniai.gen_spec.treesitter({ a = '@conditional.outer', i = '@conditional.inner' }),
+      -- stylua: ignore end
       B = miniextra.gen_ai_spec.buffer(),
       D = miniextra.gen_ai_spec.diagnostic(),
       I = miniextra.gen_ai_spec.indent(),
@@ -83,66 +80,38 @@ MiniDeps.later(function()
   })
 end)
 
+MiniDeps.later(function() require('mini.extra').setup() end)
+
 MiniDeps.later(function()
   local minipick = require('mini.pick')
-  local miniextra = require('mini.extra')
 
-  minipick.setup()
-
-  local picker_configs = {}
-
-  picker_configs.visit_paths = {
-    window = { config = Config.float_win_centered, prompt_prefix = ' ' },
-  }
-
-  picker_configs.git_hunks = {
-    window = { config = Config.float_win_full },
-  }
-
-  picker_configs.diagnostic = {
-    window = { config = Config.float_win_full },
-  }
-
-  for name, config in pairs(picker_configs) do
-    minipick.registry[name] = function(local_opts) return miniextra.pickers[name](local_opts, config) end
+  local floating_window_bottom = function()
+    local h, w = math.floor(0.25 * vim.o.lines), vim.o.columns
+    local r, c = vim.o.lines - h - 4, 0
+    return { anchor = 'NW', height = h, width = w, row = r, col = c, border = Config.borders }
   end
+
+  minipick.setup({
+    window = { config = floating_window_bottom, prompt_prefix = ' ' },
+  })
 end)
 
 MiniDeps.later(function()
   require('mini.files').setup({
     content = { prefix = function() end },
-    mappings = {
-      close = '<C-c>',
-    },
     options = { permanent_delete = true, use_as_default_explorer = false },
   })
 
   vim.api.nvim_create_autocmd('User', {
     pattern = 'MiniFilesWindowOpen',
     callback = function(args)
-      local win_id = args.data.win_id
-
-      vim.wo[win_id].winblend = 10
-      local config = vim.api.nvim_win_get_config(win_id)
+      vim.wo[args.data.win_id].winblend = 10
+      local config = vim.api.nvim_win_get_config(args.data.win_id)
       config.border = Config.borders
-      vim.api.nvim_win_set_config(win_id, config)
+      vim.api.nvim_win_set_config(args.data.win_id, config)
     end,
   })
 end)
-
-MiniDeps.later(function() require('mini.visits').setup() end)
-MiniDeps.later(function() require('mini.sessions').setup() end)
-
-MiniDeps.later(function() require('mini.diff').setup() end)
-MiniDeps.later(function() require('mini.git').setup() end)
-
-MiniDeps.later(function() require('mini.align').setup() end)
-MiniDeps.later(function() require('mini.surround').setup() end)
-MiniDeps.later(function() require('mini.operators').setup() end)
-MiniDeps.later(function() require('mini.splitjoin').setup() end)
-MiniDeps.later(function() require('mini.trailspace').setup() end)
-
-MiniDeps.later(function() require('mini.bufremove').setup() end)
 
 MiniDeps.later(function()
   require('mini.completion').setup({
@@ -167,16 +136,30 @@ MiniDeps.later(function()
 end)
 
 MiniDeps.later(function()
-  local minihipatterns = require('mini.hipatterns')
+  local minihipatterns, miniextra = require('mini.hipatterns'), require('mini.extra')
 
   minihipatterns.setup({
     highlighters = {
-      colour = minihipatterns.gen_highlighter.hex_color(),
+      hex_colour = minihipatterns.gen_highlighter.hex_color(),
+      -- stylua: ignore start
+      fixme = miniextra.gen_highlighter.words({ 'FIXME', 'Fixme'}, 'MiniHipatternsFixme'),
+      hack  = miniextra.gen_highlighter.words({ 'HACK',  'Hack'},  'MiniHipatternsHack'),
+      todo  = miniextra.gen_highlighter.words({ 'TODO',  'Todo'},  'MiniHipatternsTodo'),
+      note  = miniextra.gen_highlighter.words({ 'NOTE',  'Note'},  'MiniHipatternsNote'),
+      -- stylua: ignore end
     },
   })
 end)
 
--- EXTRA PLUGINS
+MiniDeps.later(function() require('mini.align').setup() end)
+MiniDeps.later(function() require('mini.bufremove').setup() end)
+MiniDeps.later(function() require('mini.diff').setup() end)
+MiniDeps.later(function() require('mini.git').setup() end)
+MiniDeps.later(function() require('mini.operators').setup() end)
+MiniDeps.later(function() require('mini.splitjoin').setup() end)
+MiniDeps.later(function() require('mini.surround').setup() end)
+MiniDeps.later(function() require('mini.trailspace').setup() end)
+MiniDeps.later(function() require('mini.visits').setup() end)
 
 MiniDeps.later(function()
   MiniDeps.add({
@@ -194,11 +177,6 @@ end)
 MiniDeps.later(function()
   MiniDeps.add('neovim/nvim-lspconfig')
   require('core.plugins.nvim-lspconfig')
-end)
-
-MiniDeps.later(function()
-  MiniDeps.add('nvim-orgmode/orgmode')
-  require('core.plugins.orgmode')
 end)
 
 MiniDeps.later(function()

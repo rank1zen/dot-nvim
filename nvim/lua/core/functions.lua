@@ -1,6 +1,7 @@
 local H = {}
 
-Config.borders = { '┏', '━', '┓', '┃', '┛', '━', '┗', '┃' }
+-- Config.borders = { '┏', '━', '┓', '┃', '┛', '━', '┗', '┃' }
+Config.borders = 'rounded'
 
 H.keys = {
   ['cr'] = vim.api.nvim_replace_termcodes('<CR>', true, true, true),
@@ -22,16 +23,6 @@ Config.cr_action = function()
   end
 end
 
-Config.toggle_quickfix = function()
-  local quickfix_wins = vim.tbl_filter(
-    function(win_id) return vim.fn.getwininfo(win_id)[1].quickfix == 1 end,
-    vim.api.nvim_tabpage_list_wins(0)
-  )
-
-  local command = #quickfix_wins == 0 and 'copen' or 'cclose'
-  vim.cmd(command)
-end
-
 Config.golang_test_file = function()
   local file = vim.fn.expand('%')
   if #file <= 1 then
@@ -40,28 +31,30 @@ Config.golang_test_file = function()
   end
 
   if string.find(file, '_test%.go$') then
-    vim.cmd('edit' .. string.gsub(file, '_test.go', '.go'))
+    vim.cmd('edit ' .. string.gsub(file, '_test.go', '.go'))
   elseif string.find(file, '%.go$') then
-    vim.cmd('edit' .. vim.fn.expand('%:r') .. '_test.go')
+    vim.cmd('edit ' .. vim.fn.expand('%:r') .. '_test.go')
   else
     vim.notify('not a go file', vim.log.levels.ERROR)
   end
 end
 
-Config.float_win_centered = function()
-  local h, w = math.floor(0.2 * vim.o.lines), math.min(math.floor(0.5 * vim.o.columns), 80)
-  local r, c = math.floor(0.25 * (vim.o.lines - h)), math.floor(0.5 * (vim.o.columns - w))
-  return { anchor = 'NW', height = h, width = w, row = r, col = c, border = Config.borders }
+Config.visit_stack_next = function()
+  local opts = { sort = MiniVisits.gen_sort.default({ recency_weight = 1 }) }
+  MiniVisits.iterate_paths('backward', nil, opts)
 end
 
-Config.float_win_full = function()
-  local h, w = math.floor(0.9 * vim.o.lines), math.floor(0.9 * vim.o.columns)
-  local r, c = math.floor(0.35 * (vim.o.lines - h)), math.floor(0.5 * (vim.o.columns - w))
-  return { anchor = 'NW', height = h, width = w, row = r, col = c, border = Config.borders }
+Config.visit_stack_prev = function()
+  local opts = { sort = MiniVisits.gen_sort.default({ recency_weight = 1 }) }
+  MiniVisits.iterate_paths('forward', nil, opts)
 end
 
-Config.floating_window_bottom = function()
-  local h, w = math.floor(0.3 * vim.o.lines), vim.o.columns
-  local r, c = vim.o.lines - h, 0
-  return { anchor = 'NW', height = h, width = w, row = r, col = c, border = Config.borders }
+Config.toggle_quickfix = function()
+  local quickfix_wins = vim.tbl_filter(
+    function(win_id) return vim.fn.getwininfo(win_id)[1].quickfix == 1 end,
+    vim.api.nvim_tabpage_list_wins(0)
+  )
+
+  local command = #quickfix_wins == 0 and 'copen' or 'cclose'
+  vim.cmd(command)
 end

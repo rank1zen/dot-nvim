@@ -1,37 +1,33 @@
 vim.diagnostic.config({
   virtual_text = {},
-  float = {
-    border = _G.Config.borders,
-    source = 'if_many',
-  },
+  float = { border = Config.borders, source = 'if_many' },
   signs = false,
 })
 
 local lspconfig = require('lspconfig')
 
--- LSP settings (for overriding per client)
-local handlers = {
-  ['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, { border = _G.Config.borders }),
-  ['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = _G.Config.borders }),
+require('lspconfig.ui.windows').default_opts({ border = Config.borders })
+
+local default_config = {
+  handlers = {
+    ['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, { border = Config.borders }),
+    ['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = Config.borders }),
+  },
 }
 
-local on_attach_custom = function(client, buf_id)
-  vim.bo[buf_id].omnifunc = 'v:lua.MiniCompletion.completefunc_lsp'
-  vim.keymap.set('n', 'K', vim.lsp.buf.hover, { buffer = client.buf })
-  vim.keymap.set('i', '<C-s>', '<Cmd>lua vim.lsp.buf.signature_help()<CR>', { buffer = client.buf })
-end
+lspconfig.util.default_config = vim.tbl_extend('force', lspconfig.util.default_config, default_config)
 
-lspconfig.lua_ls.setup({
-  on_attach = on_attach_custom,
-  handlers = handlers,
+vim.api.nvim_create_autocmd('LspAttach', {
+  group = vim.api.nvim_create_augroup('UserLspConfig', {}),
+  callback = function(ev) vim.bo[ev.buf].omnifunc = 'v:lua.MiniCompletion.completefunc_lsp' end,
 })
+
+lspconfig.lua_ls.setup({})
 
 -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#clangd
 -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#pyright
 
 lspconfig.gopls.setup({
-  on_attach = on_attach_custom,
-  handlers = handlers,
   settings = {
     gopls = {
       gofumpt = true,
@@ -70,19 +66,13 @@ lspconfig.gopls.setup({
   },
 })
 
-lspconfig.templ.setup({
-  on_attach = on_attach_custom,
-})
+lspconfig.templ.setup({})
 
 lspconfig.tailwindcss.setup({
-  on_attach = on_attach_custom,
   filetypes = { 'templ', 'astro', 'javascript', 'typescript', 'react' },
   init_options = { userLanguages = { templ = 'html' } },
 })
 
 lspconfig.tsserver.setup({})
 
--- lspconfig.html.setup({
---   on_attach = on_attach_custom,
---   filetypes = { 'html', 'templ' },
--- })
+lspconfig.pyright.setup({})

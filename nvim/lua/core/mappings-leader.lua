@@ -1,24 +1,3 @@
-_G.Config.leader_group_clues = {
-  { mode = 'n', keys = '<Leader>e',  desc = '+Edit' },
-  { mode = 'n', keys = '<Leader>ef', desc = '+find' },
-
-  { mode = 'n', keys = '<Leader>s',  desc = '+Session' },
-
-  { mode = 'n', keys = '<Leader>b',  desc = '+Buffers' },
-  { mode = 'n', keys = '<Leader>bf', desc = '+find' },
-
-  { mode = 'n', keys = '<Leader>f',  desc = '+Find' },
-
-  { mode = 'n', keys = '<Leader>g',  desc = '+Git' },
-  { mode = 'n', keys = '<Leader>gf', desc = '+find' },
-  { mode = 'n', keys = '<Leader>ga', desc = '+actions' },
-
-  { mode = 'n', keys = '<Leader>l',  desc = '+LSP' },
-  { mode = 'x', keys = '<Leader>l',  desc = '+LSP' },
-  { mode = 'n', keys = '<Leader>lf', desc = '+find' },
-  { mode = 'n', keys = '<Leader>la', desc = '+actions' },
-}
-
 local nmap_leader = function(suffix, rhs, desc, opts)
   opts = opts or {}
   opts.desc = desc
@@ -33,27 +12,38 @@ end
 
 -- stylua: ignore start
 
--- +Edit
-nmap_leader('ed',  '<Cmd>lua MiniFiles.open(vim.api.nvim_buf_get_name(0))<CR>', 'Directory')
-nmap_leader('ef', '<Cmd>Pick visit_paths preserve_order=true<CR>',             'Files')
-nmap_leader('eq', '<Cmd>lua Config.toggle_quickfix()<CR>',                     'Quickfix')
+Config.leader_group_clues = {
+  { mode = 'n', keys = '<Leader>e',  desc = '+Edit' },
+  { mode = 'n', keys = '<Leader>ef', desc = '+find' },
+  { mode = 'n', keys = '<Leader>b',  desc = '+Buffers' },
+  { mode = 'n', keys = '<Leader>bf', desc = '+find' },
+  { mode = 'n', keys = '<Leader>f',  desc = '+Find' },
+  { mode = 'n', keys = '<Leader>g',  desc = '+Git' },
+  { mode = 'n', keys = '<Leader>gf', desc = '+find' },
+  { mode = 'n', keys = '<Leader>ga', desc = '+actions' },
+  { mode = 'n', keys = '<Leader>l',  desc = '+LSP' },
+  { mode = 'x', keys = '<Leader>l',  desc = '+LSP' },
+  { mode = 'n', keys = '<Leader>lf', desc = '+find' },
+  { mode = 'n', keys = '<Leader>la', desc = '+actions' },
+}
 
--- +Session
-nmap_leader('sf',  '<Cmd>lua MiniSessions.select("read")<CR>',    'Find')
-nmap_leader('ss',  '<Cmd>lua Config.prompt_write_session()<CR>',  'Save')
-nmap_leader('sd',  '<Cmd>lua MiniSessions.select("delete")<CR>',  'Delete')
-nmap_leader('sgc', '<Cmd>lua MiniSessions.read("nvim.cfg")<CR>',  'Configs')
-nmap_leader('sgo', '<Cmd>lua MiniSessions.read("org")<CR>',       'Org')
+-- +Edit
+nmap_leader('ed', '<Cmd>lua MiniFiles.open(vim.api.nvim_buf_get_name(0))<CR>',                  'Explorer')
+nmap_leader('ef', '<Cmd>Pick visit_paths preserve_order=true sort=MiniVisits.gen_sort.z()<CR>', 'Recent files')
+nmap_leader('es', '<Cmd>Pick visit_paths preserve_order=true recency_weight=1<CR>',             'Visit stack')
+nmap_leader('ep', '<Cmd>lua Config.visit_stack_prev()<CR>',                                     'Visit stack previous')
+nmap_leader('en', '<Cmd>lua Config.visit_stack_next()<CR>',                                     'Visit stack next')
+nmap_leader('eq', '<Cmd>lua Config.toggle_quickfix()<CR>', 'Quickfix')
 
 -- +Buffers
-nmap_leader('ba',  '<Cmd>b#<CR>',                                 'Alternate')
-nmap_leader('bd',  '<Cmd>lua MiniBufremove.delete()<CR>',         'Delete')
-nmap_leader('bD',  '<Cmd>lua MiniBufremove.delete(0, true)<CR>',  'Delete!')
-nmap_leader('bw',  '<Cmd>lua MiniBufremove.wipeout()<CR>',        'Wipeout')
-nmap_leader('bW',  '<Cmd>lua MiniBufremove.wipeout(0, true)<CR>', 'Wipeout!')
-nmap_leader('bfl', '<Cmd>Pick buf_lines scope="all"<CR>',         'Pick Lines (all)')
-nmap_leader('bfL', '<Cmd>Pick buf_lines scope="current"<CR>',     'Pick Lines (current)')
-nmap_leader('bfb', '<Cmd>Pick buffers<CR>',                       'Pick Buffers')
+nmap_leader('ba', '<Cmd>b#<CR>', 'Alternate')
+nmap_leader('bd', '<Cmd>lua MiniBufremove.delete()<CR>', 'Delete')
+nmap_leader('bD', '<Cmd>lua MiniBufremove.delete(0, true)<CR>', 'Delete!')
+nmap_leader('bw', '<Cmd>lua MiniBufremove.wipeout()<CR>', 'Wipeout')
+nmap_leader('bW', '<Cmd>lua MiniBufremove.wipeout(0, true)<CR>', 'Wipeout!')
+nmap_leader('bfl', '<Cmd>Pick buf_lines scope="all"<CR>', 'Pick Lines (all)')
+nmap_leader('bfL', '<Cmd>Pick buf_lines scope="current"<CR>', 'Pick Lines (current)')
+nmap_leader('bfb', '<Cmd>Pick buffers<CR>', 'Pick Buffers')
 
 -- +Lang
 nmap_leader('lq',  '<Cmd>lua vim.lsp.buf.definition()<CR>',                       'Definition')
@@ -74,7 +64,7 @@ nmap_leader('lfu', '<Cmd>Pick lsp scope="declaration"<CR>',                     
 nmap_leader('lft', '<Cmd>Pick lsp scope="type_definition"<CR>',                   'Type definition')
 nmap_leader('lfd', '<Cmd>Pick diagnostic scope="all"<CR>',                        'Diagnostic (all)')
 nmap_leader('lfD', '<Cmd>Pick diagnostic scope="current"<CR>',                    'Diagnostic (current)')
-nmap_leader('lga', '<Cmd>lua Config.golang_test_file()<CR>',                      'Switch Go _test')
+nmap_leader('lga', '<Cmd>lua Config.golang_test_file()<CR>', 'Switch Go _test')
 
 -- +Find
 nmap_leader('ff', '<Cmd>Pick files<CR>',                  'Files')
@@ -88,23 +78,19 @@ nmap_leader('fh', '<Cmd>Pick help<CR>',                   'Help')
 nmap_leader('fH', '<Cmd>Pick commands<CR>',               'Commands')
 nmap_leader('f.', '<Cmd>Pick resume<CR>',                 'Resume')
 
--- +Org
-nmap_leader('ofh', '<Cmd>Pick org_headlines<CR>',           'Org headlines')
-nmap_leader('off', '<Cmd>Pick org_files<CR>',               'Org files')
-
 -- +Git
-nmap_leader('gl',  '<Cmd>Git log --oneline<CR>',                      'Log (all)')
-nmap_leader('gL',  '<Cmd>Git log --oneline --follow -- %<CR>',        'Log (current)')
-nmap_leader('go',  '<Cmd>lua MiniDiff.toggle_overlay()<CR>',          'Toggle overlay')
-nmap_leader('gs',  '<Cmd>lua MiniGit.show_at_cursor()<CR>',           'Show at cursor')
-xmap_leader('gs',  '<Cmd>lua MiniGit.show_at_cursor()<CR>',           'Show at selection')
-nmap_leader('gaa', '<Cmd>Git add %<CR>',                              'Add file')
-nmap_leader('gac', '<Cmd>Git commit<CR>',                             'Commit')
-nmap_leader('gaC', '<Cmd>Git commit --amend<CR>',                     'Commit amend')
-nmap_leader('gfc', '<Cmd>Pick git_commits<CR>',                       'Commits (all)')
-nmap_leader('gfC', '<Cmd>Pick git_commits path="%"<CR>',              'Commits (current)')
-nmap_leader('gfs', '<Cmd>Pick git_hunks scope="staged"<CR>',          'Added hunks (all)')
+nmap_leader('gl', '<Cmd>Git log --oneline<CR>', 'Log (all)')
+nmap_leader('gL', '<Cmd>Git log --oneline --follow -- %<CR>', 'Log (current)')
+nmap_leader('go', '<Cmd>lua MiniDiff.toggle_overlay()<CR>', 'Toggle overlay')
+nmap_leader('gs', '<Cmd>lua MiniGit.show_at_cursor()<CR>', 'Show at cursor')
+xmap_leader('gs', '<Cmd>lua MiniGit.show_at_cursor()<CR>', 'Show at selection')
+nmap_leader('gaa', '<Cmd>Git add %<CR>', 'Add file')
+nmap_leader('gac', '<Cmd>Git commit<CR>', 'Commit')
+nmap_leader('gaC', '<Cmd>Git commit --amend<CR>', 'Commit amend')
+nmap_leader('gfc', '<Cmd>Pick git_commits<CR>', 'Commits (all)')
+nmap_leader('gfC', '<Cmd>Pick git_commits path="%"<CR>', 'Commits (current)')
+nmap_leader('gfs', '<Cmd>Pick git_hunks scope="staged"<CR>', 'Added hunks (all)')
 nmap_leader('gfS', '<Cmd>Pick git_hunks path="%" scope="staged"<CR>', 'Added hunks (current)')
-nmap_leader('gfh', '<Cmd>Pick git_hunks<CR>',                         'Modified hunks (all)')
-nmap_leader('gfH', '<Cmd>Pick git_hunks path="%"<CR>',                'Modified hunks (current)')
-nmap_leader('gfb', '<Cmd>Pick git_branches<CR>',                      'Branches (all)')
+nmap_leader('gfh', '<Cmd>Pick git_hunks<CR>', 'Modified hunks (all)')
+nmap_leader('gfH', '<Cmd>Pick git_hunks path="%"<CR>', 'Modified hunks (current)')
+nmap_leader('gfb', '<Cmd>Pick git_branches<CR>', 'Branches (all)')
