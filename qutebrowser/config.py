@@ -24,12 +24,13 @@ c.tabs.show = 'never'
 
 c.fonts.default_size = '10pt'
 c.fonts.default_family = 'Geist'
-c.fonts.hints = "bold 13px 'Geist Mono NF'"
+c.fonts.hints = "bold 11px 'Geist Mono NF'"
 c.fonts.keyhint = "bold 13px 'Geist Mono NF'"
 
 c.url.searchengines['DEFAULT'] = 'https://google.com/search?q={}'
 c.url.searchengines['pw'] = 'https://proofwiki.org?search={}'
 c.url.searchengines['wiki'] = 'https://en.wikipedia.org/wiki/Special:Search/{}'
+
 c.url.default_page = 'about:blank'
 c.url.start_pages = 'about:blank'
 
@@ -40,8 +41,28 @@ c.completion.open_categories = [ 'quickmarks', 'bookmarks', 'history' ]
 
 c.statusbar.widgets = [ 'keypress', 'search_match', 'url', 'history' ]
 
-config.bind('<Space>p', 'tab-focus stack-prev')
-config.bind('<Space>n', 'tab-focus stack-next')
+config.bind('<Space>ep', 'tab-focus stack-prev')
+config.bind('<Space>en', 'tab-focus stack-next')
+
+config.bind("zl", "spawn --userscript qute-pass -d bemenu")
+
+config.bind('"y', ':open https://www.youtube.com')
+config.bind('"c', ':open https://chatgpt.com')
+config.bind('"a', ':open https://acorn.utoronto.ca')
+config.bind('"q', ':open https://q.utoronto.ca')
+config.bind('"g', ':open https://tasks.google.com')
+config.bind('"m', ':open https://mail.google.com')
+config.bind('"o', ':open https://outlook.office.com')
+config.bind('"b', ':open https://www.cibc.com')
+
+config.bind('"Y', ':open --tab https://www.youtube.com')
+config.bind('"C', ':open --tab https://chatgpt.com')
+config.bind('"A', ':open --tab https://acorn.utoronto.ca')
+config.bind('"Q', ':open --tab https://q.utoronto.ca')
+config.bind('"G', ':open --tab https://tasks.google.com')
+config.bind('"M', ':open --tab https://mail.google.com')
+config.bind('"O', ':open --tab https://outlook.office.com')
+config.bind('"B', ':open --tab https://www.cibc.com')
 
 config.unbind('J')
 config.unbind('K')

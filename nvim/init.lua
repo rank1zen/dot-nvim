@@ -85,14 +85,15 @@ MiniDeps.later(function() require('mini.extra').setup() end)
 MiniDeps.later(function()
   local minipick = require('mini.pick')
 
-  local floating_window_bottom = function()
-    local h, w = math.floor(0.25 * vim.o.lines), vim.o.columns
-    local r, c = vim.o.lines - h - 4, 0
-    return { anchor = 'NW', height = h, width = w, row = r, col = c, border = Config.borders }
-  end
-
   minipick.setup({
-    window = { config = floating_window_bottom, prompt_prefix = ' ' },
+    window = {
+      config = function()
+        local h, w = math.floor(0.25 * vim.o.lines), vim.o.columns
+        local r, c = vim.o.lines - h - 4, 0
+        return { anchor = 'NW', height = h, width = w, row = r, col = c, border = Config.borders }
+      end,
+      prompt_prefix = ' ',
+    },
   })
 end)
 
@@ -124,8 +125,8 @@ MiniDeps.later(function()
       end,
     },
     window = {
-      info = { border = _G.Config.borders },
-      signature = { border = _G.Config.borders },
+      info = { border = Config.borders },
+      signature = { border = Config.borders },
     },
   })
 end)
@@ -155,6 +156,8 @@ MiniDeps.later(function() require('mini.align').setup() end)
 MiniDeps.later(function() require('mini.bufremove').setup() end)
 MiniDeps.later(function() require('mini.diff').setup() end)
 MiniDeps.later(function() require('mini.git').setup() end)
+MiniDeps.later(function() require('mini.jump').setup() end)
+MiniDeps.later(function() require('mini.move').setup() end)
 MiniDeps.later(function() require('mini.operators').setup() end)
 MiniDeps.later(function() require('mini.splitjoin').setup() end)
 MiniDeps.later(function() require('mini.surround').setup() end)
