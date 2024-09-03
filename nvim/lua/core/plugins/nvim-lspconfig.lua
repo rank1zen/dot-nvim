@@ -25,7 +25,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
 lspconfig.lua_ls.setup({})
 
 -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#clangd
--- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#pyright
 
 lspconfig.gopls.setup({
   settings = {
@@ -76,3 +75,5 @@ lspconfig.tailwindcss.setup({
 lspconfig.tsserver.setup({})
 
 lspconfig.pyright.setup({})
+
+lspconfig.ccls.setup({})
