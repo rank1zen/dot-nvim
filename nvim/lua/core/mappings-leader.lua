@@ -33,6 +33,7 @@ nmap_leader('ef', '<Cmd>Pick visit_paths preserve_order=true sort=MiniVisits.gen
 nmap_leader('es', '<Cmd>Pick visit_paths preserve_order=true recency_weight=1<CR>',             'Visit stack')
 nmap_leader('ep', '<Cmd>lua Config.visit_stack_prev()<CR>',                                     'Visit stack previous')
 nmap_leader('en', '<Cmd>lua Config.visit_stack_next()<CR>',                                     'Visit stack next')
+nmap_leader('el', '<Cmd>b#<CR>',                                                                'Alternate buffer')
 nmap_leader('eq', '<Cmd>lua Config.toggle_quickfix()<CR>', 'Quickfix')
 
 -- +Buffers

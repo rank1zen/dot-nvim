@@ -30,6 +30,10 @@ c.fonts.keyhint = "bold 13px 'Geist Mono NF'"
 c.url.searchengines['DEFAULT'] = 'https://google.com/search?q={}'
 c.url.searchengines['pw'] = 'https://proofwiki.org?search={}'
 c.url.searchengines['wiki'] = 'https://en.wikipedia.org/wiki/Special:Search/{}'
+c.url.searchengines['j'] = 'https://jisho.org/search/{}'
+
+c.downloads.position = 'bottom'
+c.downloads.open_dispatcher = 'zathura'
 
 c.url.default_page = 'about:blank'
 c.url.start_pages = 'about:blank'
@@ -45,6 +49,8 @@ config.bind('<Space>ep', 'tab-focus stack-prev')
 config.bind('<Space>en', 'tab-focus stack-next')
 
 config.bind("zl", "spawn --userscript qute-pass -d bemenu")
+config.bind("zul", "spawn --userscript qute-pass -d bemenu --username-only")
+config.bind("zpl", "spawn --userscript qute-pass -d bemenu --password-only")
 
 config.bind('"y', ':open https://www.youtube.com')
 config.bind('"c', ':open https://chatgpt.com')
