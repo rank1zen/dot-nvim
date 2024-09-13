@@ -15,8 +15,6 @@ end
 Config.leader_group_clues = {
   { mode = 'n', keys = '<Leader>e',  desc = '+Edit' },
   { mode = 'n', keys = '<Leader>ef', desc = '+find' },
-  { mode = 'n', keys = '<Leader>b',  desc = '+Buffers' },
-  { mode = 'n', keys = '<Leader>bf', desc = '+find' },
   { mode = 'n', keys = '<Leader>f',  desc = '+Find' },
   { mode = 'n', keys = '<Leader>g',  desc = '+Git' },
   { mode = 'n', keys = '<Leader>gf', desc = '+find' },
@@ -35,16 +33,6 @@ nmap_leader('ep', '<Cmd>lua Config.visit_stack_prev()<CR>',                     
 nmap_leader('en', '<Cmd>lua Config.visit_stack_next()<CR>',                                     'Visit stack next')
 nmap_leader('el', '<Cmd>b#<CR>',                                                                'Alternate buffer')
 nmap_leader('eq', '<Cmd>lua Config.toggle_quickfix()<CR>', 'Quickfix')
-
--- +Buffers
-nmap_leader('ba', '<Cmd>b#<CR>', 'Alternate')
-nmap_leader('bd', '<Cmd>lua MiniBufremove.delete()<CR>', 'Delete')
-nmap_leader('bD', '<Cmd>lua MiniBufremove.delete(0, true)<CR>', 'Delete!')
-nmap_leader('bw', '<Cmd>lua MiniBufremove.wipeout()<CR>', 'Wipeout')
-nmap_leader('bW', '<Cmd>lua MiniBufremove.wipeout(0, true)<CR>', 'Wipeout!')
-nmap_leader('bfl', '<Cmd>Pick buf_lines scope="all"<CR>', 'Pick Lines (all)')
-nmap_leader('bfL', '<Cmd>Pick buf_lines scope="current"<CR>', 'Pick Lines (current)')
-nmap_leader('bfb', '<Cmd>Pick buffers<CR>', 'Pick Buffers')
 
 -- +Lang
 nmap_leader('lq',  '<Cmd>lua vim.lsp.buf.definition()<CR>',                       'Definition')
@@ -78,6 +66,9 @@ nmap_leader('fG', '<Cmd>Pick grep pattern="<cword>"<CR>', 'Grep (current word)')
 nmap_leader('fh', '<Cmd>Pick help<CR>',                   'Help')
 nmap_leader('fH', '<Cmd>Pick commands<CR>',               'Commands')
 nmap_leader('f.', '<Cmd>Pick resume<CR>',                 'Resume')
+nmap_leader('fl', '<Cmd>Pick buf_lines scope="all"<CR>', 'Pick Lines (all)')
+nmap_leader('fL', '<Cmd>Pick buf_lines scope="current"<CR>', 'Pick Lines (current)')
+nmap_leader('fb', '<Cmd>Pick buffers<CR>', 'Pick Buffers')
 
 -- +Git
 nmap_leader('gl', '<Cmd>Git log --oneline<CR>', 'Log (all)')
