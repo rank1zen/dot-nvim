@@ -1,12 +1,11 @@
 return {
-  LuaSnip = "ce0a05ab4e2839e1c48d072c5236cce846a387bc",
-  ["conform.nvim"] = "797de8f79055334104cf77893cd93fe3fc2ac154",
+  LuaSnip = "e808bee352d1a6fcf902ca1a71cee76e60e24071",
+  ["conform.nvim"] = "1a99fdc1d3aa9ccdf3021e67982a679a8c5c740c",
   ["friendly-snippets"] = "00ebcaa159e817150bd83bfe2d51fa3b3377d5c4",
-  ["lazydev.nvim"] = "02f1055a777264d4b65896051ec28d0f322f7932",
+  ["lazydev.nvim"] = "491452cf1ca6f029e90ad0d0368848fac717c6d2",
   ["mason.nvim"] = "e2f7f9044ec30067bc11800a9e266664b88cda22",
-  ["mini.nvim"] = "23669ab7abc2cd10f9a5166de07400bb34eaecda",
-  ["nvim-lspconfig"] = "1ea7c6126a1aa0121098e4f16c04d5dde1a4ba22",
-  ["nvim-treesitter"] = "002537a3e364b6662c6b63e3f4b33b33e219cc6c",
-  ["nvim-treesitter-textobjects"] = "34867c69838078df7d6919b130c0541c0b400c47",
-  orgmode = "c0584ec5fbe472ad7e7556bc97746b09aa7b8221"
+  ["mini.nvim"] = "e50cf9de614500a20e47cfc50e30a100042f91c3",
+  ["nvim-lspconfig"] = "bb682c167a0878338b4313b55538953d1c039085",
+  ["nvim-treesitter"] = "e0338f2b74fbad808f2569c7d4eadd8796af2118",
+  ["nvim-treesitter-textobjects"] = "bf8d2ad35d1d1a687eae6c065c3d524f7ab61b23"
 }
