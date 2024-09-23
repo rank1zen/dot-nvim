@@ -14,9 +14,8 @@ require('mini.deps').setup({ path = { package = path_package } })
 MiniDeps.now(function() require('core.settings') end)
 MiniDeps.now(function() require('core.functions') end)
 MiniDeps.now(function() require('core.mappings') end)
-MiniDeps.now(function() require('core.mappings-leader') end)
 
-MiniDeps.now(function() require('mini.sessions') end)
+MiniDeps.now(function() require('mini.sessions').setup() end)
 
 vim.cmd('colorscheme zoom')
 

@@ -72,8 +72,6 @@ lspconfig.tailwindcss.setup({
   init_options = { userLanguages = { templ = 'html' } },
 })
 
-lspconfig.tsserver.setup({})
-
 lspconfig.pyright.setup({})
 
 lspconfig.ccls.setup({})
