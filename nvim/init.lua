@@ -120,12 +120,13 @@ MiniDeps.later(function()
 end)
 
 MiniDeps.later(function()
-  local minihipatterns, miniextra = require('mini.hipatterns'), require('mini.extra')
-  minihipatterns.setup({
+  local hipatterns = require('mini.hipatterns')
+  hipatterns.setup({
     highlighters = {
-      hex_colour = minihipatterns.gen_highlighter.hex_color(),
-      fixme = miniextra.gen_highlighter.words({ 'FIXME' }, 'MiniHipatternsFixme'),
-      todo = miniextra.gen_highlighter.words({ 'TODO' }, 'MiniHipatternsTodo'),
+      hex_colour = hipatterns.gen_highlighter.hex_color(),
+      fixme = { pattern = '%f[%S]FIXME%f[:]', group = 'MiniHipatternsFixme' },
+      todo = { pattern = '%f[%S]TODO%f[:]', group = 'MiniHipatternsTodo' },
+      note = { pattern = '%f[%S]NOTE%f[:]', group = 'MiniHipatternsNote' },
     },
   })
 end)
