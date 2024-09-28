@@ -13,28 +13,25 @@ end
 -- stylua: ignore start
 
 Config.leader_group_clues = {
-  { mode = 'n', keys = '<Leader>e',  desc = '+Edit' },
-  { mode = 'n', keys = '<Leader>ef', desc = '+find' },
-  { mode = 'n', keys = '<Leader>f',  desc = '+Find' },
-  { mode = 'n', keys = '<Leader>g',  desc = '+Git' },
-  { mode = 'n', keys = '<Leader>gf', desc = '+find' },
-  { mode = 'n', keys = '<Leader>ga', desc = '+actions' },
-  { mode = 'n', keys = '<Leader>l',  desc = '+LSP' },
-  { mode = 'x', keys = '<Leader>l',  desc = '+LSP' },
-  { mode = 'n', keys = '<Leader>lf', desc = '+find' },
-  { mode = 'n', keys = '<Leader>la', desc = '+actions' },
+  { mode = 'n', keys = '<Leader>l', desc = '+Lang' },
+  { mode = 'x', keys = '<Leader>l', desc = '+Lang' },
+  { mode = 'n', keys = '<Leader>g', desc = '+Git' },
 }
 
--- +Edit
-nmap_leader('ed', '<Cmd>lua MiniFiles.open(vim.api.nvim_buf_get_name(0))<CR>',                  'Explorer')
-nmap_leader('ef', '<Cmd>Pick visit_paths preserve_order=true sort=MiniVisits.gen_sort.z()<CR>', 'Recent files')
-nmap_leader('es', '<Cmd>Pick visit_paths preserve_order=true recency_weight=1<CR>',             'Visit stack')
-nmap_leader('ep', '<Cmd>lua Config.visit_stack_prev()<CR>',                                     'Visit stack previous')
-nmap_leader('en', '<Cmd>lua Config.visit_stack_next()<CR>',                                     'Visit stack next')
-nmap_leader('el', '<Cmd>b#<CR>',                                                                'Alternate buffer')
+nmap_leader('ez', '<Cmd>Pick visit_paths sort=MiniVisits.gen_sort.z()<CR>',         'Z')
+nmap_leader('es', '<Cmd>Pick visit_paths preserve_order=true recency_weight=1<CR>', 'Stack')
+nmap_leader('ep', '<Cmd>lua MiniVisits.iterate_paths("forward", nil)<CR>',          'Previous')
+nmap_leader('en', '<Cmd>lua MiniVisits.iterate_paths("backward", nil)<CR>',         'Next')
+nmap_leader('el', '<Cmd>b#<CR>',                                                    'Alternate')
 
 nmap_leader('sr', '<Cmd>lua MiniSessions.select("read")<CR>',   'Read session')
 nmap_leader('sd', '<Cmd>lua MiniSessions.select("delete")<CR>', 'Delete session')
+
+nmap_leader('ed', '<Cmd>lua MiniFiles.open(vim.api.nvim_buf_get_name(0))<CR>', 'Explorer')
+nmap_leader('ff', '<Cmd>Pick files<CR>',                  'Files')
+nmap_leader('fg', '<Cmd>Pick grep_live<CR>',              'Grep')
+nmap_leader('fG', '<Cmd>Pick grep pattern="<cword>"<CR>', 'Grep (current word)')
+nmap_leader('fh', '<Cmd>Pick help<CR>',                   'Help')
 
 -- +Lang
 nmap_leader('lq',  '<Cmd>lua vim.lsp.buf.definition()<CR>',                       'Definition')
@@ -57,15 +54,10 @@ nmap_leader('lfd', '<Cmd>Pick diagnostic scope="all"<CR>',                      
 nmap_leader('lfD', '<Cmd>Pick diagnostic scope="current"<CR>',                    'Diagnostic (current)')
 nmap_leader('lga', '<Cmd>lua Config.golang_test_file()<CR>', 'Switch Go _test')
 
--- +Find
-nmap_leader('ff', '<Cmd>Pick files<CR>',                  'Files')
 nmap_leader('fi', '<Cmd>Pick hipatterns<CR>',             'Hipatterns')
 nmap_leader('fj', '<Cmd>Pick hl_groups<CR>',              'Highlight groups')
 nmap_leader('f/', '<Cmd>Pick history scope="/"<CR>',      '"/"')
 nmap_leader('f:', '<Cmd>Pick history scope=":"<CR>',      '":"')
-nmap_leader('fg', '<Cmd>Pick grep_live<CR>',              'Grep')
-nmap_leader('fG', '<Cmd>Pick grep pattern="<cword>"<CR>', 'Grep (current word)')
-nmap_leader('fh', '<Cmd>Pick help<CR>',                   'Help')
 nmap_leader('fH', '<Cmd>Pick commands<CR>',               'Commands')
 nmap_leader('f.', '<Cmd>Pick resume<CR>',                 'Resume')
 nmap_leader('fl', '<Cmd>Pick buf_lines scope="all"<CR>', 'Pick Lines (all)')

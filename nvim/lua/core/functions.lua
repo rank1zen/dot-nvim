@@ -40,11 +40,9 @@ Config.golang_test_file = function()
 end
 
 Config.visit_stack_next = function()
-  local opts = { sort = MiniVisits.gen_sort.default({ recency_weight = 1 }) }
-  MiniVisits.iterate_paths('backward', nil, opts)
+  MiniVisits.iterate_paths('backward', nil)
 end
 
 Config.visit_stack_prev = function()
-  local opts = { sort = MiniVisits.gen_sort.default({ recency_weight = 1 }) }
-  MiniVisits.iterate_paths('forward', nil, opts)
+  MiniVisits.iterate_paths('forward', nil)
 end
