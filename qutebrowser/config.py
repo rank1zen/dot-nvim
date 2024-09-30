@@ -21,6 +21,10 @@ config.set('content.local_content_can_access_remote_urls', True, 'file:///home/g
 config.set('content.local_content_can_access_file_urls', False, 'file:///home/gordo/.local/share/qutebrowser/userscripts/*')
 
 c.tabs.show = 'never'
+c.fileselect.handler = 'external'
+c.fileselect.folder.command = ['foot', '-e', 'zsh', '-c', 'realpath $(find . -type -d | fzf) > {}']
+c.fileselect.multiple_files.command = ['foot', '-e', 'zsh', '-c', 'realpath $(fzf -m) > {}']
+c.fileselect.single_file.command = ['foot', '-e', 'zsh', '-c', 'realpath $(fzf) > {}']
 
 c.fonts.default_size = '10pt'
 c.fonts.default_family = 'Geist'
