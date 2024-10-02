@@ -138,13 +138,7 @@ MiniDeps.later(function() require('mini.jump').setup() end)
 MiniDeps.later(function() require('mini.operators').setup() end)
 MiniDeps.later(function() require('mini.splitjoin').setup() end)
 MiniDeps.later(function() require('mini.surround').setup() end)
-
-MiniDeps.later(function()
-  local visits = require('mini.visits')
-  visits.setup({
-    list = { filter = visits.gen_filter.default(), sort = visits.gen_sort.default({ recency_weight = 1 }) },
-  })
-end)
+MiniDeps.later(function() require('mini.visits').setup() end)
 
 MiniDeps.later(function()
   MiniDeps.add({

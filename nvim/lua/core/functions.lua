@@ -38,11 +38,3 @@ Config.golang_test_file = function()
     vim.notify('not a go file', vim.log.levels.ERROR)
   end
 end
-
-Config.visit_stack_next = function()
-  MiniVisits.iterate_paths('backward', nil)
-end
-
-Config.visit_stack_prev = function()
-  MiniVisits.iterate_paths('forward', nil)
-end
