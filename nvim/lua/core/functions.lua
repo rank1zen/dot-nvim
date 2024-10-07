@@ -22,19 +22,3 @@ Config.cr_action = function()
     return require('mini.pairs').cr()
   end
 end
-
-Config.golang_test_file = function()
-  local file = vim.fn.expand('%')
-  if #file <= 1 then
-    vim.notify('no buffer name', vim.log.levels.ERROR)
-    return
-  end
-
-  if string.find(file, '_test%.go$') then
-    vim.cmd('edit ' .. string.gsub(file, '_test.go', '.go'))
-  elseif string.find(file, '%.go$') then
-    vim.cmd('edit ' .. vim.fn.expand('%:r') .. '_test.go')
-  else
-    vim.notify('not a go file', vim.log.levels.ERROR)
-  end
-end

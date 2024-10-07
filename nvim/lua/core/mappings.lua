@@ -22,6 +22,22 @@ Config.visit_stack_next = function() MiniVisits.iterate_paths('backward', nil, H
 Config.visit_stack_prev = function() MiniVisits.iterate_paths('forward', nil, H.gen.visit_stack()) end
 Config.visit_stack = function() MiniExtra.pickers.visit_paths(H.gen.visit_stack()) end
 
+Config.golang_test_file = function()
+  local file = vim.fn.expand('%')
+  if #file <= 1 then
+    vim.notify('no buffer name', vim.log.levels.ERROR)
+    return
+  end
+
+  if string.find(file, '_test%.go$') then
+    vim.cmd('edit ' .. string.gsub(file, '_test.go', '.go'))
+  elseif string.find(file, '%.go$') then
+    vim.cmd('edit ' .. vim.fn.expand('%:r') .. '_test.go')
+  else
+    vim.notify('not a go file', vim.log.levels.ERROR)
+  end
+end
+
 -- stylua: ignore start
 
 nmap_leader('ef', '<Cmd>Pick files<CR>',                                       'Find files')
