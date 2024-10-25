@@ -21,6 +21,16 @@ config.set('content.local_content_can_access_remote_urls', True, 'file:///home/g
 config.set('content.local_content_can_access_file_urls', False, 'file:///home/gordo/.local/share/qutebrowser/userscripts/*')
 
 c.tabs.show = 'never'
+c.tabs.select_on_remove = 'last-used'
+c.tabs.last_close = 'close'
+
+c.input.insert_mode.auto_enter = False
+c.input.insert_mode.auto_leave = False
+
+c.scrolling.bar = 'never'
+
+c.editor.command = ['foot', '-e', 'nvim', '{file}', '-c', 'normal {line}G{column0}l']
+
 c.fileselect.handler = 'external'
 c.fileselect.folder.command = ['foot', '-e', 'zsh', '-c', 'realpath $(find . -type -d | fzf) > {}']
 c.fileselect.multiple_files.command = ['foot', '-e', 'zsh', '-c', 'realpath $(fzf -m) > {}']
@@ -38,23 +48,24 @@ c.url.searchengines['j'] = 'https://jisho.org/search/{}'
 
 c.downloads.position = 'bottom'
 c.downloads.open_dispatcher = 'zathura'
+c.downloads.location.directory = '/home/gordo/downloads'
+c.downloads.location.prompt = False
 
 c.url.default_page = 'about:blank'
 c.url.start_pages = 'about:blank'
 
 c.completion.height = '25%'
-c.completion.use_best_match = True
-c.completion.quick = False
 c.completion.open_categories = [ 'quickmarks', 'bookmarks', 'history' ]
 
-c.statusbar.widgets = [ 'keypress', 'search_match', 'url', 'history' ]
+c.statusbar.widgets = [ 'search_match', 'url', 'progress' ]
 
-config.bind('<Space>ep', 'tab-focus stack-prev')
-config.bind('<Space>en', 'tab-focus stack-next')
+config.bind('gp', 'tab-focus stack-prev')
+config.bind('gn', 'tab-focus stack-next')
+config.bind('gl', 'tab-focus last')
 
-config.bind("zl", "spawn --userscript qute-pass -d bemenu")
-config.bind("zul", "spawn --userscript qute-pass -d bemenu --username-only")
-config.bind("zpl", "spawn --userscript qute-pass -d bemenu --password-only")
+config.bind('zl', 'spawn --userscript qute-pass -n -d bemenu -U secret -u "username: (.+)"')
+config.bind("zul", 'spawn --userscript qute-pass -n -d bemenu -U secret -u "username: (.+)" --username-only')
+config.bind("zpl", "spawn --userscript qute-pass -n -d bemenu --password-only")
 
 config.bind('xc', ':open https://chatgpt.com')
 config.bind('xt', ':open https://tasks.google.com')
@@ -73,5 +84,8 @@ config.bind('xQ', ':open --tab https://q.utoronto.ca')
 config.bind('xM', ':open --tab https://mail.utoronto.ca')
 config.bind('xG', ':open --tab https://mail.google.com')
 config.bind('xR', ':open --tab https://www.reddit.com')
+
+config.bind('ey', ':cmd-set-text :tab-focus https://www.youtube.com')
+config.bind('ec', ':cmd-set-text :tab-focus https://chatgpt.com')
 
 config.source('colour.py')
