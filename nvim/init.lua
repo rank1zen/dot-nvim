@@ -120,6 +120,16 @@ MiniDeps.later(function()
 end)
 
 MiniDeps.later(function()
+  local jump2d = require('mini.jump2d')
+
+  local opts = {
+    mappings = { start_jumping = '' },
+  }
+
+  jump2d.setup(opts)
+end)
+
+MiniDeps.later(function()
   local hipatterns = require('mini.hipatterns')
   hipatterns.setup({
     highlighters = {

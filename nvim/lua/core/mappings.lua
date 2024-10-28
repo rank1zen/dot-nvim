@@ -39,6 +39,15 @@ Config.golang_test_file = function()
 end
 
 -- stylua: ignore start
+nmap_leader('jl', '<CMD>lua MiniJump2d.start(MiniJump2d.builtin_opts.line_start)<CR>')
+nmap_leader('jw', '<CMD>lua MiniJump2d.start(MiniJump2d.builtin_opts.word_start)<CR>', '')
+nmap_leader('jc', '<CMD>lua MiniJump2d.start(MiniJump2d.builtin_opts.single_character)<CR>')
+nmap_leader('jf', '<CMD>lua MiniJump2d.start(MiniJump2d.builtin_opts.query)<CR>')
+
+xmap_leader('jl', '<CMD>lua MiniJump2d.start(MiniJump2d.builtin_opts.line_start)<CR>')
+xmap_leader('jw', '<CMD>lua MiniJump2d.start(MiniJump2d.builtin_opts.word_start)<CR>')
+xmap_leader('jc', '<CMD>lua MiniJump2d.start(MiniJump2d.builtin_opts.single_character)<CR>')
+xmap_leader('jf', '<CMD>lua MiniJump2d.start(MiniJump2d.builtin_opts.query)<CR>')
 
 nmap_leader('ef', '<Cmd>Pick files<CR>',                                       'Find files')
 nmap_leader('ed', '<Cmd>lua MiniFiles.open(vim.api.nvim_buf_get_name(0))<CR>', 'Open Explorer')
