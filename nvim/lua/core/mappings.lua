@@ -1,5 +1,3 @@
-local H = {}
-
 local nmap_leader = function(suffix, rhs, desc, opts)
   opts = opts or {}
   opts.desc = desc
@@ -12,49 +10,39 @@ local xmap_leader = function(suffix, rhs, desc, opts)
   vim.keymap.set('x', '<Leader>' .. suffix, rhs, opts)
 end
 
-H.gen = {}
+local H = {}
 
-H.gen.visit_stack = function()
-  return { filter = MiniVisits.gen_filter.this_session(), sort = MiniVisits.gen_sort.default({ recency_weight = 1 }) }
-end
+H.gen_opts = {}
 
-Config.visit_stack_next = function() MiniVisits.iterate_paths('backward', nil, H.gen.visit_stack()) end
-Config.visit_stack_prev = function() MiniVisits.iterate_paths('forward', nil, H.gen.visit_stack()) end
-Config.visit_stack = function() MiniExtra.pickers.visit_paths(H.gen.visit_stack()) end
-
-Config.golang_test_file = function()
-  local file = vim.fn.expand('%')
-  if #file <= 1 then
-    vim.notify('no buffer name', vim.log.levels.ERROR)
-    return
-  end
-
-  if string.find(file, '_test%.go$') then
-    vim.cmd('edit ' .. string.gsub(file, '_test.go', '.go'))
-  elseif string.find(file, '%.go$') then
-    vim.cmd('edit ' .. vim.fn.expand('%:r') .. '_test.go')
-  else
-    vim.notify('not a go file', vim.log.levels.ERROR)
-  end
-end
+Config.mappings = {}
 
 -- stylua: ignore start
 nmap_leader('jl', '<CMD>lua MiniJump2d.start(MiniJump2d.builtin_opts.line_start)<CR>')
 nmap_leader('jw', '<CMD>lua MiniJump2d.start(MiniJump2d.builtin_opts.word_start)<CR>', '')
 nmap_leader('jc', '<CMD>lua MiniJump2d.start(MiniJump2d.builtin_opts.single_character)<CR>')
 nmap_leader('jf', '<CMD>lua MiniJump2d.start(MiniJump2d.builtin_opts.query)<CR>')
-
 xmap_leader('jl', '<CMD>lua MiniJump2d.start(MiniJump2d.builtin_opts.line_start)<CR>')
 xmap_leader('jw', '<CMD>lua MiniJump2d.start(MiniJump2d.builtin_opts.word_start)<CR>')
 xmap_leader('jc', '<CMD>lua MiniJump2d.start(MiniJump2d.builtin_opts.single_character)<CR>')
 xmap_leader('jf', '<CMD>lua MiniJump2d.start(MiniJump2d.builtin_opts.query)<CR>')
+-- stylua: ignore end
 
+Config.mappings.stack_previous = function() MiniVisits.iterate_paths('forward', nil, H.gen_opts.stack()) end
+Config.mappings.stack_next = function() MiniVisits.iterate_paths('backward', nil, H.gen_opts.stack()) end
+Config.mappings.stack_recent = function() MiniVisits.iterate_paths('first', nil, H.gen_opts.stack()) end
+Config.mappings.stack = function() MiniExtra.pickers.visit_paths(H.gen_opts.stack()) end
+
+-- stylua: ignore start
+nmap_leader('es', '<CMD>lua Config.mappings.stack()<CR>')
+nmap_leader('en', '<CMD>lua Config.mappings.stack_next()<CR>')
+nmap_leader('ep', '<CMD>lua Config.mappings.stack_previous()<CR>')
+nmap_leader('er', '<CMD>lua Config.mappings.stack_recent()<CR>')
+nmap_leader('ez', '<CMD>Pick visit_paths sort=MiniVisits.gen_sort.z()<CR>')
+-- stylua: ignore end
+
+-- stylua: ignore start
 nmap_leader('ef', '<Cmd>Pick files<CR>',                                       'Find files')
 nmap_leader('ed', '<Cmd>lua MiniFiles.open(vim.api.nvim_buf_get_name(0))<CR>', 'Open Explorer')
-nmap_leader('ez', '<Cmd>Pick visit_paths sort=MiniVisits.gen_sort.z()<CR>',    'Z sort')
-nmap_leader('es', '<Cmd>lua Config.visit_stack()<CR>',                         'Visit stack')
-nmap_leader('en', '<Cmd>lua Config.visit_stack_next()<CR>',                    'Next file')
-nmap_leader('ep', '<Cmd>lua Config.visit_stack_prev()<CR>',                    'Previous file')
 nmap_leader('el', '<Cmd>b#<CR>',                                               'Alternate file')
 
 nmap_leader('sr', '<Cmd>lua MiniSessions.select("read")<CR>',   'Read session')
@@ -114,3 +102,28 @@ Config.leader_group_clues = {
   { mode = 'x', keys = '<Leader>l', desc = '+Lang' },
   { mode = 'n', keys = '<Leader>g', desc = '+Git' },
 }
+
+Config.golang_test_file = function()
+  local file = vim.fn.expand('%')
+  if #file <= 1 then
+    vim.notify('no buffer name', vim.log.levels.ERROR)
+    return
+  end
+
+  if string.find(file, '_test%.go$') then
+    vim.cmd('edit ' .. string.gsub(file, '_test.go', '.go'))
+  elseif string.find(file, '%.go$') then
+    vim.cmd('edit ' .. vim.fn.expand('%:r') .. '_test.go')
+  else
+    vim.notify('not a go file', vim.log.levels.ERROR)
+  end
+end
+
+-- stylua: ignore end
+
+H.gen_opts.stack = function()
+  return {
+    filter = function(path_data) return vim.fn.isdirectory(path_data.path) == 0 end,
+    sort = MiniVisits.gen_sort.default({ recency_weight = 1 }),
+  }
+end
