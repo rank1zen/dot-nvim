@@ -11,8 +11,53 @@ if not vim.loop.fs_stat(mini_path) then
 end
 require('mini.deps').setup({ path = { package = path_package } })
 
-MiniDeps.now(function() require('core.settings') end)
-MiniDeps.now(function() require('core.functions') end)
+MiniDeps.now(function()
+  Config.borders = 'rounded'
+  -- stylua: ignore start
+  vim.g.mapleader      = ' '
+  vim.g.maplocalleader = '\\'
+
+  vim.o.autoindent     = true
+  vim.o.breakindent    = true
+  vim.o.expandtab      = true
+  vim.o.number         = true
+  vim.o.relativenumber = true
+  vim.o.pumheight      = 10
+  vim.o.shiftwidth     = 2
+  vim.o.tabstop        = 2
+  vim.o.showmode       = false
+  vim.o.scrolloff      = 999
+  -- stylua: ignore end
+
+  vim.o.statusline = '%<%f %h%m%r %{getbufvar(bufnr(), "minigit_summary_string")}%= %-14.(%l,%c%V%) %P'
+
+  vim.filetype.add({
+    extension = { templ = 'templ' },
+    pattern = { ['.*/hypr/.*%.conf'] = 'hyprlang' },
+  })
+end)
+
+MiniDeps.now(function()
+  local keys = {
+    ['cr'] = vim.api.nvim_replace_termcodes('<CR>', true, true, true),
+    ['ctrl-y'] = vim.api.nvim_replace_termcodes('<C-y>', true, true, true),
+    ['ctrl-y_cr'] = vim.api.nvim_replace_termcodes('<C-y><CR>', true, true, true),
+  }
+
+  _G.cr_action = function()
+    if vim.fn.pumvisible() ~= 0 then
+      local item_selected = vim.fn.complete_info()['selected'] ~= -1
+      return item_selected and keys['ctrl-y'] or keys['ctrl-y_cr']
+    else
+      return require('mini.pairs').cr()
+    end
+  end
+
+  vim.keymap.set('i', '<Tab>', [[pumvisible() ? "\<C-n>" : "\<Tab>"]], { expr = true })
+  vim.keymap.set('i', '<S-Tab>', [[pumvisible() ? "\<C-p>" : "\<S-Tab>"]], { expr = true })
+  vim.keymap.set('i', '<CR>', 'v:lua._G.cr_action()', { expr = true })
+end)
+
 MiniDeps.now(function() require('core.mappings') end)
 
 vim.cmd('colorscheme zoom')
@@ -21,7 +66,8 @@ MiniDeps.later(function() require('mini.extra').setup() end)
 
 MiniDeps.later(function()
   local miniai, miniextra = require('mini.ai'), require('mini.extra')
-  miniai.setup({
+
+  local opts = {
     custom_textobjects = {
       -- stylua: ignore start
       C = miniai.gen_spec.treesitter({ a = '@class.outer',       i = '@class.inner' }),
@@ -36,7 +82,9 @@ MiniDeps.later(function()
       I = miniextra.gen_ai_spec.indent(),
       L = miniextra.gen_ai_spec.line(),
     },
-  })
+  }
+
+  miniai.setup(opts)
 end)
 
 MiniDeps.later(function()
@@ -63,25 +111,24 @@ MiniDeps.later(function()
 end)
 
 MiniDeps.later(function()
-  require('mini.completion').setup({
+  local completion = require('mini.completion')
+
+  local opts = {
     lsp_completion = {
       auto_setup = false,
       source_func = 'omnifunc',
       process_items = function(items, base)
         items = vim.tbl_filter(function(x) return x.kind ~= 1 and x.kind ~= 15 end, items)
-        return MiniCompletion.default_process_items(items, base)
+        return completion.default_process_items(items, base)
       end,
     },
     window = {
       info = { border = Config.borders },
       signature = { border = Config.borders },
     },
-  })
-end)
+  }
 
-MiniDeps.later(function()
-  require('mini.pairs').setup({})
-  vim.keymap.set('i', '<CR>', 'v:lua.Config.cr_action()', { expr = true })
+  completion.setup(opts)
 end)
 
 MiniDeps.later(function()
@@ -106,6 +153,7 @@ MiniDeps.later(function()
   })
 end)
 
+MiniDeps.later(function() require('mini.pairs').setup() end)
 MiniDeps.later(function() require('mini.align').setup() end)
 MiniDeps.later(function() require('mini.diff').setup() end)
 MiniDeps.later(function() require('mini.git').setup() end)
