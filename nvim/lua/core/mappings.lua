@@ -94,12 +94,6 @@ nmap_leader('gfh', '<Cmd>Pick git_hunks<CR>', 'Modified hunks (all)')
 nmap_leader('gfH', '<Cmd>Pick git_hunks path="%"<CR>', 'Modified hunks (current)')
 nmap_leader('gfb', '<Cmd>Pick git_branches<CR>', 'Branches (all)')
 
-Config.leader_group_clues = {
-  { mode = 'n', keys = '<Leader>l', desc = '+Lang' },
-  { mode = 'x', keys = '<Leader>l', desc = '+Lang' },
-  { mode = 'n', keys = '<Leader>g', desc = '+Git' },
-}
-
 Config.golang_test_file = function()
   local file = vim.fn.expand('%')
   if #file <= 1 then

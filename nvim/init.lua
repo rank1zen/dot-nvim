@@ -20,39 +20,6 @@ vim.cmd('colorscheme zoom')
 MiniDeps.later(function() require('mini.extra').setup() end)
 
 MiniDeps.later(function()
-  local clue = require('mini.clue')
-  clue.setup({
-    clues = {
-      Config.leader_group_clues,
-      clue.gen_clues.marks(),
-      clue.gen_clues.registers(),
-      clue.gen_clues.windows(),
-      clue.gen_clues.g(),
-    },
-    triggers = {
-      { mode = 'n', keys = '<Leader>' },
-      { mode = 'x', keys = '<Leader>' },
-
-      { mode = 'n', keys = "'" },
-      { mode = 'x', keys = "'" },
-      { mode = 'n', keys = '`' },
-      { mode = 'x', keys = '`' },
-
-      { mode = 'n', keys = '"' },
-      { mode = 'x', keys = '"' },
-      { mode = 'i', keys = '<C-r>' },
-      { mode = 'c', keys = '<C-r>' },
-
-      { mode = 'n', keys = '<C-w>' },
-
-      { mode = 'n', keys = 'g' },
-      { mode = 'x', keys = 'g' },
-    },
-    window = { config = { border = Config.borders } },
-  })
-end)
-
-MiniDeps.later(function()
   local miniai, miniextra = require('mini.ai'), require('mini.extra')
   miniai.setup({
     custom_textobjects = {
