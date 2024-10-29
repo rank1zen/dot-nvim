@@ -45,9 +45,6 @@ nmap_leader('ef', '<Cmd>Pick files<CR>',                                       '
 nmap_leader('ed', '<Cmd>lua MiniFiles.open(vim.api.nvim_buf_get_name(0))<CR>', 'Open Explorer')
 nmap_leader('el', '<Cmd>b#<CR>',                                               'Alternate file')
 
-nmap_leader('sr', '<Cmd>lua MiniSessions.select("read")<CR>',   'Read session')
-nmap_leader('sd', '<Cmd>lua MiniSessions.select("delete")<CR>', 'Delete session')
-
 nmap_leader('fg', '<Cmd>Pick grep_live<CR>',              'Grep')
 nmap_leader('fG', '<Cmd>Pick grep pattern="<cword>"<CR>', 'Grep (current word)')
 nmap_leader('fh', '<Cmd>Pick help<CR>',                   'Help')

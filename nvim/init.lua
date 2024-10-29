@@ -15,8 +15,6 @@ MiniDeps.now(function() require('core.settings') end)
 MiniDeps.now(function() require('core.functions') end)
 MiniDeps.now(function() require('core.mappings') end)
 
-MiniDeps.now(function() require('mini.sessions').setup() end)
-
 vim.cmd('colorscheme zoom')
 
 MiniDeps.later(function() require('mini.extra').setup() end)
@@ -149,6 +147,7 @@ MiniDeps.later(function() require('mini.operators').setup() end)
 MiniDeps.later(function() require('mini.splitjoin').setup() end)
 MiniDeps.later(function() require('mini.surround').setup() end)
 MiniDeps.later(function() require('mini.visits').setup() end)
+MiniDeps.later(function() require('mini.trailspace').setup() end)
 
 MiniDeps.later(function()
   MiniDeps.add({
