@@ -42,6 +42,7 @@ c.fonts.hints = "bold 11px 'Geist Mono NF'"
 c.fonts.keyhint = "bold 13px 'Geist Mono NF'"
 
 c.url.searchengines['DEFAULT'] = 'https://google.com/search?q={}'
+c.url.searchengines['yt'] = 'https://www.youtube.com/results?search_query={}'
 c.url.searchengines['pw'] = 'https://proofwiki.org?search={}'
 c.url.searchengines['wiki'] = 'https://en.wikipedia.org/wiki/Special:Search/{}'
 c.url.searchengines['j'] = 'https://jisho.org/search/{}'
