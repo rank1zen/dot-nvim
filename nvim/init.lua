@@ -38,6 +38,10 @@ MiniDeps.now(function()
 end)
 
 MiniDeps.now(function()
+  vim.keymap.set('i', '<C-a>', '<C-o>A')
+end)
+
+MiniDeps.now(function()
   local keys = {
     ['cr'] = vim.api.nvim_replace_termcodes('<CR>', true, true, true),
     ['ctrl-y'] = vim.api.nvim_replace_termcodes('<C-y>', true, true, true),
