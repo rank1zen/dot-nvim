@@ -60,9 +60,8 @@ c.completion.open_categories = [ 'quickmarks', 'bookmarks', 'history' ]
 
 c.statusbar.widgets = [ 'search_match', 'url', 'progress' ]
 
-config.bind('gp', 'tab-focus stack-prev')
-config.bind('gn', 'tab-focus stack-next')
-config.bind('gl', 'tab-focus last')
+config.bind('<Ctrl-o>', 'tab-focus stack-prev')
+config.bind('<Ctrl-i>', 'tab-focus stack-next')
 
 config.bind('zl', 'spawn --userscript qute-pass -n -d bemenu -U secret -u "username: (.+)"')
 config.bind("zul", 'spawn --userscript qute-pass -n -d bemenu -U secret -u "username: (.+)" --username-only')
