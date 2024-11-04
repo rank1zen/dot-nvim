@@ -84,6 +84,6 @@ config.bind('xG', ':open --tab https://mail.google.com')
 config.bind('ey', ':cmd-set-text :tab-focus https://www.youtube.com')
 config.bind('ec', ':cmd-set-text :tab-focus https://chatgpt.com')
 config.bind('eq', ':cmd-set-text :tab-focus https://q.utoronto.ca')
-config.bind('et', ':cmd-set-text :tab-focus https://tasks.google.com')
+config.bind('et', ':cmd-set-text :tab-focus https://calendar.google.com')
 
 config.source('colour.py')
