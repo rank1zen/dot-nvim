@@ -145,18 +145,6 @@ MiniDeps.later(function()
   jump2d.setup(opts)
 end)
 
-MiniDeps.later(function()
-  local hipatterns = require('mini.hipatterns')
-  hipatterns.setup({
-    highlighters = {
-      hex_colour = hipatterns.gen_highlighter.hex_color(),
-      fixme = { pattern = '%f[%S]FIXME%f[:]', group = 'MiniHipatternsFixme' },
-      todo = { pattern = '%f[%S]TODO%f[:]', group = 'MiniHipatternsTodo' },
-      note = { pattern = '%f[%S]NOTE%f[:]', group = 'MiniHipatternsNote' },
-    },
-  })
-end)
-
 MiniDeps.later(function() require('mini.pairs').setup() end)
 MiniDeps.later(function() require('mini.align').setup() end)
 MiniDeps.later(function() require('mini.diff').setup() end)
