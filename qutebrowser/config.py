@@ -20,8 +20,9 @@ config.set('content.javascript.enabled', True, 'qute://*/*')
 config.set('content.local_content_can_access_remote_urls', True, 'file:///home/gordo/.local/share/qutebrowser/userscripts/*')
 config.set('content.local_content_can_access_file_urls', False, 'file:///home/gordo/.local/share/qutebrowser/userscripts/*')
 
-c.tabs.show = 'never'
-c.tabs.last_close = 'close'
+config.set('tabs.show', 'never')
+config.set('tabs.last_close', 'close')
+config.set('tabs.select_on_remove', 'last-used')
 
 c.input.insert_mode.auto_enter = False
 c.input.insert_mode.auto_leave = False
