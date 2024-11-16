@@ -24,6 +24,12 @@ config.set('tabs.show', 'never')
 config.set('tabs.last_close', 'close')
 config.set('tabs.select_on_remove', 'last-used')
 
+c.url.searchengines['yt'] = 'https://www.youtube.com/results?search_query={}'
+c.url.searchengines['pw'] = 'https://proofwiki.org?search={}'
+c.url.searchengines['wi'] = 'https://en.wikipedia.org/wiki/Special:Search/{}'
+c.url.searchengines['gh'] = 'https://github.com/search?q={}'
+c.url.searchengines['ji'] = 'https://jisho.org/search/{}'
+
 c.input.insert_mode.auto_enter = False
 c.input.insert_mode.auto_leave = False
 
@@ -37,11 +43,6 @@ c.fileselect.multiple_files.command = ['foot', '-e', 'zsh', '-c', 'realpath $(fz
 c.fileselect.single_file.command = ['foot', '-e', 'zsh', '-c', 'realpath $(fzf) > {}']
 
 c.fonts.default_family = "BreezeSans"
-
-c.url.searchengines['yt'] = 'https://www.youtube.com/results?search_query={}'
-c.url.searchengines['pw'] = 'https://proofwiki.org?search={}'
-c.url.searchengines['wiki'] = 'https://en.wikipedia.org/wiki/Special:Search/{}'
-c.url.searchengines['j'] = 'https://jisho.org/search/{}'
 
 c.downloads.position = 'bottom'
 c.downloads.open_dispatcher = 'zathura'
