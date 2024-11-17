@@ -24,6 +24,10 @@ config.set('tabs.show', 'never')
 config.set('tabs.last_close', 'close')
 config.set('tabs.select_on_remove', 'last-used')
 
+config.set('completion.open_categories', ['quickmarks', 'history'])
+config.set('completion.scrollbar.padding', 0)
+config.set('completion.scrollbar.width', 0)
+
 c.url.searchengines['yt'] = 'https://www.youtube.com/results?search_query={}'
 c.url.searchengines['pw'] = 'https://proofwiki.org?search={}'
 c.url.searchengines['wi'] = 'https://en.wikipedia.org/wiki/Special:Search/{}'
@@ -74,3 +78,27 @@ config.bind('et', ':cmd-set-text :tab-focus https://calendar.google.com')
 config.bind('zl', 'spawn --userscript qute-pass -n -d bemenu -U secret -u "username: (.+)"')
 config.bind("zul", 'spawn --userscript qute-pass -n -d bemenu -U secret -u "username: (.+)" --username-only')
 config.bind("zpl", "spawn --userscript qute-pass -n -d bemenu --password-only")
+
+U0 = '#000000'
+U1 = '#444444'
+U2 = '#888888'
+U3 = '#ffffff'
+UE = 'transparent'
+
+config.set('colors.completion.item.selected.border.bottom', UE)
+config.set('colors.completion.item.selected.border.top',    UE)
+config.set('colors.completion.item.selected.bg',            U2)
+config.set('colors.completion.item.selected.fg',            U1)
+config.set('colors.completion.item.selected.match.fg',      U0)
+
+config.set('colors.completion.category.border.bottom', UE)
+config.set('colors.completion.category.border.top',    UE)
+config.set('colors.completion.category.bg',            U3)
+config.set('colors.completion.category.fg',            U0)
+
+config.set('colors.completion.even.bg', U3)
+config.set('colors.completion.odd.bg',  U3)
+config.set('colors.completion.fg',      U1)
+
+config.set('colors.completion.scrollbar.bg', U3)
+config.set('colors.completion.scrollbar.fg', U0)
