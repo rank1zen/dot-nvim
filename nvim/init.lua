@@ -20,13 +20,10 @@ MiniDeps.now(function()
   vim.o.autoindent     = true
   vim.o.breakindent    = true
   vim.o.expandtab      = true
-  vim.o.number         = true
-  vim.o.relativenumber = true
   vim.o.pumheight      = 10
   vim.o.shiftwidth     = 2
   vim.o.tabstop        = 2
   vim.o.showmode       = false
-  vim.o.scrolloff      = 999
   -- stylua: ignore end
 
   vim.o.statusline = '%<%f %h%m%r %{getbufvar(bufnr(), "minigit_summary_string")}%= %-14.(%l,%c%V%) %P'
@@ -36,8 +33,6 @@ MiniDeps.now(function()
     pattern = { ['.*/hypr/.*%.conf'] = 'hyprlang' },
   })
 end)
-
-MiniDeps.now(function() vim.keymap.set('i', '<C-a>', '<C-o>A') end)
 
 MiniDeps.now(function()
   local keys = {
@@ -67,30 +62,19 @@ MiniDeps.now(function()
 
   Config.mappings = {}
 
-  local nmap_leader = function(suffix, rhs, desc, opts)
+  local mapn = function(suffix, rhs, desc, opts)
     opts = opts or {}
     opts.desc = desc
     vim.keymap.set('n', '<Leader>' .. suffix, rhs, opts)
   end
 
-  local xmap_leader = function(suffix, rhs, desc, opts)
+  local mapx = function(suffix, rhs, desc, opts)
     opts = opts or {}
     opts.desc = desc
     vim.keymap.set('x', '<Leader>' .. suffix, rhs, opts)
   end
 
-  nmap_leader('ci', '<CMD>edit $MYVIMRC<CR>')
-
-  -- stylua: ignore start
-  nmap_leader('jl', '<CMD>lua MiniJump2d.start(MiniJump2d.builtin_opts.line_start)<CR>')
-  nmap_leader('jw', '<CMD>lua MiniJump2d.start(MiniJump2d.builtin_opts.word_start)<CR>', '')
-  nmap_leader('jc', '<CMD>lua MiniJump2d.start(MiniJump2d.builtin_opts.single_character)<CR>')
-  nmap_leader('jf', '<CMD>lua MiniJump2d.start(MiniJump2d.builtin_opts.query)<CR>')
-  xmap_leader('jl', '<CMD>lua MiniJump2d.start(MiniJump2d.builtin_opts.line_start)<CR>')
-  xmap_leader('jw', '<CMD>lua MiniJump2d.start(MiniJump2d.builtin_opts.word_start)<CR>')
-  xmap_leader('jc', '<CMD>lua MiniJump2d.start(MiniJump2d.builtin_opts.single_character)<CR>')
-  xmap_leader('jf', '<CMD>lua MiniJump2d.start(MiniJump2d.builtin_opts.query)<CR>')
-  -- stylua: ignore end
+  mapn('ci', '<CMD>edit $MYVIMRC<CR>')
 
   Config.mappings.stack_previous = function() MiniVisits.iterate_paths('forward', nil, H.gen_opts.stack()) end
   Config.mappings.stack_next = function() MiniVisits.iterate_paths('backward', nil, H.gen_opts.stack()) end
@@ -98,66 +82,73 @@ MiniDeps.now(function()
   Config.mappings.stack = function() MiniExtra.pickers.visit_paths(H.gen_opts.stack()) end
 
   -- stylua: ignore start
-  nmap_leader('es', '<CMD>lua Config.mappings.stack()<CR>')
-  nmap_leader('en', '<CMD>lua Config.mappings.stack_next()<CR>')
-  nmap_leader('ep', '<CMD>lua Config.mappings.stack_previous()<CR>')
-  nmap_leader('er', '<CMD>lua Config.mappings.stack_recent()<CR>')
-  nmap_leader('ez', '<CMD>Pick visit_paths sort=MiniVisits.gen_sort.z()<CR>')
+  mapn('es', '<CMD>lua Config.mappings.stack()<CR>')
+  mapn('en', '<CMD>lua Config.mappings.stack_next()<CR>')
+  mapn('ep', '<CMD>lua Config.mappings.stack_previous()<CR>')
+  mapn('er', '<CMD>lua Config.mappings.stack_recent()<CR>')
+  mapn('ez', '<CMD>Pick visit_paths sort=MiniVisits.gen_sort.z()<CR>')
   -- stylua: ignore end
 
   -- stylua: ignore start
-  nmap_leader('ef', '<Cmd>Pick files<CR>',                                       'Find files')
-  nmap_leader('ed', '<Cmd>lua MiniFiles.open(vim.api.nvim_buf_get_name(0))<CR>', 'Open Explorer')
-  nmap_leader('el', '<Cmd>b#<CR>',                                               'Alternate file')
+  mapn('ef', '<Cmd>Pick files<CR>',                                       'Find files')
+  mapn('ed', '<Cmd>lua MiniFiles.open(vim.api.nvim_buf_get_name(0))<CR>', 'Open Explorer')
+  mapn('el', '<Cmd>b#<CR>',                                               'Alternate file')
 
-  nmap_leader('fg', '<Cmd>Pick grep_live<CR>',              'Grep')
-  nmap_leader('fG', '<Cmd>Pick grep pattern="<cword>"<CR>', 'Grep (current word)')
-  nmap_leader('fh', '<Cmd>Pick help<CR>',                   'Help')
-  nmap_leader('fi', '<Cmd>Pick hipatterns<CR>',             'Hipatterns')
-  nmap_leader('fj', '<Cmd>Pick hl_groups<CR>',              'Highlight groups')
-  nmap_leader('f/', '<Cmd>Pick history scope="/"<CR>',      '"/"')
-  nmap_leader('f:', '<Cmd>Pick history scope=":"<CR>',      '":"')
-  nmap_leader('fH', '<Cmd>Pick commands<CR>',               'Commands')
-  nmap_leader('f.', '<Cmd>Pick resume<CR>',                 'Resume')
-  nmap_leader('fl', '<Cmd>Pick buf_lines scope="all"<CR>', 'Pick Lines (all)')
-  nmap_leader('fL', '<Cmd>Pick buf_lines scope="current"<CR>', 'Pick Lines (current)')
-  nmap_leader('fb', '<Cmd>Pick buffers<CR>', 'Pick Buffers')
+  mapn('fg', '<Cmd>Pick grep_live<CR>',              'Grep')
+  mapn('fG', '<Cmd>Pick grep pattern="<cword>"<CR>', 'Grep (current word)')
+  mapn('fh', '<Cmd>Pick help<CR>',                   'Help')
+  mapn('fi', '<Cmd>Pick hipatterns<CR>',             'Hipatterns')
+  mapn('fj', '<Cmd>Pick hl_groups<CR>',              'Highlight groups')
+  mapn('f/', '<Cmd>Pick history scope="/"<CR>',      '"/"')
+  mapn('f:', '<Cmd>Pick history scope=":"<CR>',      '":"')
+  mapn('fH', '<Cmd>Pick commands<CR>',               'Commands')
+  mapn('f.', '<Cmd>Pick resume<CR>',                 'Resume')
+  mapn('fl', '<Cmd>Pick buf_lines scope="all"<CR>', 'Pick Lines (all)')
+  mapn('fL', '<Cmd>Pick buf_lines scope="current"<CR>', 'Pick Lines (current)')
+  mapn('fb', '<Cmd>Pick buffers<CR>', 'Pick Buffers')
 
-  nmap_leader('lq',  '<Cmd>lua vim.lsp.buf.definition()<CR>',                       'Definition')
-  nmap_leader('lt',  '<Cmd>lua vim.lsp.buf.type_definition()<CR>',                  'Type definition')
-  nmap_leader('lr',  '<Cmd>lua vim.lsp.buf.references()<CR>',                       'References')
-  nmap_leader('li',  '<Cmd>lua vim.lsp.buf.implementation()<CR>',                   'Implementation')
-  nmap_leader('ls',  '<Cmd>lua vim.lsp.buf.signature_help()<CR>',                   'Signature')
-  nmap_leader('lar', '<Cmd>lua vim.lsp.buf.rename()<CR>',                           'Rename')
-  nmap_leader('las', '<Cmd>lua vim.lsp.buf.code_action()<CR>',                      'Code Action')
-  nmap_leader('laf', '<Cmd>lua require("conform").format({lsp_fallback=true})<CR>', 'Format')
-  xmap_leader('laf', '<Cmd>lua require("conform").format({lsp_fallback=true})<CR>', 'Format Selection')
-  nmap_leader('lfo', '<Cmd>Pick lsp scope="document_symbol"<CR>',                   'Document symbol')
-  nmap_leader('lfw', '<Cmd>Pick lsp scope="workspace_symbol"<CR>',                  'Workspace symbol')
-  nmap_leader('lfq', '<Cmd>Pick lsp scope="definition"<CR>',                        'Definition')
-  nmap_leader('lfr', '<Cmd>Pick lsp scope="references"<CR>',                        'References')
-  nmap_leader('lfi', '<Cmd>Pick lsp scope="implementation"<CR>',                    'Implementation')
-  nmap_leader('lfu', '<Cmd>Pick lsp scope="declaration"<CR>',                       'Declaration')
-  nmap_leader('lft', '<Cmd>Pick lsp scope="type_definition"<CR>',                   'Type definition')
-  nmap_leader('lfd', '<Cmd>Pick diagnostic scope="all"<CR>',                        'Diagnostic (all)')
-  nmap_leader('lfD', '<Cmd>Pick diagnostic scope="current"<CR>',                    'Diagnostic (current)')
-  nmap_leader('lga', '<Cmd>lua Config.golang_test_file()<CR>', 'Switch Go _test')
+  mapn('lq',  '<Cmd>lua vim.lsp.buf.definition()<CR>',                       'Definition')
+  mapn('lt',  '<Cmd>lua vim.lsp.buf.type_definition()<CR>',                  'Type definition')
+  mapn('lr',  '<Cmd>lua vim.lsp.buf.references()<CR>',                       'References')
+  mapn('li',  '<Cmd>lua vim.lsp.buf.implementation()<CR>',                   'Implementation')
+  mapn('ls',  '<Cmd>lua vim.lsp.buf.signature_help()<CR>',                   'Signature')
+  mapn('lar', '<Cmd>lua vim.lsp.buf.rename()<CR>',                           'Rename')
+  mapn('las', '<Cmd>lua vim.lsp.buf.code_action()<CR>',                      'Code Action')
+  mapn('laf', '<Cmd>lua require("conform").format({lsp_fallback=true})<CR>', 'Format')
+  mapx('laf', '<Cmd>lua require("conform").format({lsp_fallback=true})<CR>', 'Format Selection')
+  mapn('lfo', '<Cmd>Pick lsp scope="document_symbol"<CR>',                   'Document symbol')
+  mapn('lfw', '<Cmd>Pick lsp scope="workspace_symbol"<CR>',                  'Workspace symbol')
+  mapn('lfq', '<Cmd>Pick lsp scope="definition"<CR>',                        'Definition')
+  mapn('lfr', '<Cmd>Pick lsp scope="references"<CR>',                        'References')
+  mapn('lfi', '<Cmd>Pick lsp scope="implementation"<CR>',                    'Implementation')
+  mapn('lfu', '<Cmd>Pick lsp scope="declaration"<CR>',                       'Declaration')
+  mapn('lft', '<Cmd>Pick lsp scope="type_definition"<CR>',                   'Type definition')
+  mapn('lfd', '<Cmd>Pick diagnostic scope="all"<CR>',                        'Diagnostic (all)')
+  mapn('lfD', '<Cmd>Pick diagnostic scope="current"<CR>',                    'Diagnostic (current)')
+  mapn('lga', '<Cmd>lua Config.golang_test_file()<CR>', 'Switch Go _test')
 
-  nmap_leader('gl', '<Cmd>Git log --oneline<CR>', 'Log (all)')
-  nmap_leader('gL', '<Cmd>Git log --oneline --follow -- %<CR>', 'Log (current)')
-  nmap_leader('go', '<Cmd>lua MiniDiff.toggle_overlay()<CR>', 'Toggle overlay')
-  nmap_leader('gs', '<Cmd>lua MiniGit.show_at_cursor()<CR>', 'Show at cursor')
-  xmap_leader('gs', '<Cmd>lua MiniGit.show_at_cursor()<CR>', 'Show at selection')
-  nmap_leader('gaa', '<Cmd>Git add %<CR>', 'Add file')
-  nmap_leader('gac', '<Cmd>Git commit<CR>', 'Commit')
-  nmap_leader('gaC', '<Cmd>Git commit --amend<CR>', 'Commit amend')
-  nmap_leader('gfc', '<Cmd>Pick git_commits<CR>', 'Commits (all)')
-  nmap_leader('gfC', '<Cmd>Pick git_commits path="%"<CR>', 'Commits (current)')
-  nmap_leader('gfs', '<Cmd>Pick git_hunks scope="staged"<CR>', 'Added hunks (all)')
-  nmap_leader('gfS', '<Cmd>Pick git_hunks path="%" scope="staged"<CR>', 'Added hunks (current)')
-  nmap_leader('gfh', '<Cmd>Pick git_hunks<CR>', 'Modified hunks (all)')
-  nmap_leader('gfH', '<Cmd>Pick git_hunks path="%"<CR>', 'Modified hunks (current)')
-  nmap_leader('gfb', '<Cmd>Pick git_branches<CR>', 'Branches (all)')
+  mapn('gcc', '<CMD>Git commit<CR>')
+  mapn('gca', '<CMD>Git commit --amend<CR>')
+  mapn('gbb', '<CMD>vert Git blame -- %<CR>')
+
+  mapn('gczz', '<CMD>Git stash<CR>')
+  mapn('gczw', '<CMD>Git stash --keep-index<CR>')
+  mapn('gczA', '<CMD>Git stash apply<CR>')
+  mapn('gczP', '<CMD>Git stash pop<CR>')
+
+  mapn('gl', '<Cmd>Git log --oneline<CR>', 'Log (all)')
+  mapn('gL', '<Cmd>Git log --oneline --follow -- %<CR>', 'Log (current)')
+  mapn('go', '<Cmd>lua MiniDiff.toggle_overlay()<CR>', 'Toggle overlay')
+  mapn('gs', '<Cmd>lua MiniGit.show_at_cursor()<CR>', 'Show at cursor')
+  mapx('gs', '<Cmd>lua MiniGit.show_at_cursor()<CR>', 'Show at selection')
+  mapn('gaa', '<Cmd>Git add %<CR>', 'Add file')
+  mapn('gfc', '<Cmd>Pick git_commits<CR>', 'Commits (all)')
+  mapn('gfC', '<Cmd>Pick git_commits path="%"<CR>', 'Commits (current)')
+  mapn('gfs', '<Cmd>Pick git_hunks scope="staged"<CR>', 'Added hunks (all)')
+  mapn('gfS', '<Cmd>Pick git_hunks path="%" scope="staged"<CR>', 'Added hunks (current)')
+  mapn('gfh', '<Cmd>Pick git_hunks<CR>', 'Modified hunks (all)')
+  mapn('gfH', '<Cmd>Pick git_hunks path="%"<CR>', 'Modified hunks (current)')
+  mapn('gfb', '<Cmd>Pick git_branches<CR>', 'Branches (all)')
   -- stylua: ignore end
 
   Config.golang_test_file = function()
@@ -202,7 +193,6 @@ MiniDeps.later(function()
       l = miniai.gen_spec.treesitter({ a = '@loop.outer',        i = '@loop.inner' }),
       o = miniai.gen_spec.treesitter({ a = '@conditional.outer', i = '@conditional.inner' }),
       -- stylua: ignore end
-      B = miniextra.gen_ai_spec.buffer(),
       I = miniextra.gen_ai_spec.indent(),
       L = miniextra.gen_ai_spec.line(),
     },
@@ -213,7 +203,9 @@ end)
 
 MiniDeps.later(function()
   require('mini.pick').setup({
-    window = { prompt_prefix = ' ' },
+    source = { show = require('mini.pick').default_show },
+    window = { prompt_prefix = ' ', config = { border = Config.borders } },
+    options = { content_from_bottom = true },
   })
 end)
 
@@ -223,19 +215,6 @@ MiniDeps.later(function()
     options = { permanent_delete = true, use_as_default_explorer = false },
   })
 
-  local show_gitfiles = false
-  local toggle_gitfiles = function()
-    show_gitfiles = not show_gitfiles
-    local new_filter = 0
-    MiniFiles.refresh({ content = { filter = new_filter } })
-  end
-
-  vim.api.nvim_create_autocmd('User', {
-    pattern = 'MiniFilesBufferCreate',
-    callback = function(args) vim.keymap.set('n', 'g.', toggle_gitfiles, { buffer = args.data.buf_id }) end,
-  })
-
-  -- there are more things you can do with auto commands
   vim.api.nvim_create_autocmd('User', {
     pattern = 'MiniFilesWindowOpen',
     callback = function(args)
@@ -267,20 +246,31 @@ MiniDeps.later(function()
   completion.setup(opts)
 end)
 
+MiniDeps.later(function() require('mini.jump2d').setup() end)
+
+MiniDeps.later(function() require('mini.diff').setup() end)
+
 MiniDeps.later(function()
-  local jump2d = require('mini.jump2d')
+  require('mini.git').setup()
 
-  local opts = {
-    mappings = { start_jumping = '' },
-  }
+  local align_blame = function(au_data)
+    if au_data.data.git_subcommand ~= 'blame' then return end
 
-  jump2d.setup(opts)
+    -- Align blame output with source
+    local win_src = au_data.data.win_source
+    vim.wo.wrap = false
+    vim.fn.winrestview({ topline = vim.fn.line('w0', win_src) })
+    vim.api.nvim_win_set_cursor(0, { vim.fn.line('.', win_src), 0 })
+
+    -- Bind both windows so that they scroll together
+    vim.wo[win_src].scrollbind, vim.wo.scrollbind = true, true
+  end
+
+  vim.api.nvim_create_autocmd('User', { pattern = 'MiniGitCommandSplit', callback = align_blame })
 end)
 
 MiniDeps.later(function() require('mini.pairs').setup() end)
 MiniDeps.later(function() require('mini.align').setup() end)
-MiniDeps.later(function() require('mini.diff').setup() end)
-MiniDeps.later(function() require('mini.git').setup() end)
 MiniDeps.later(function() require('mini.jump').setup() end)
 MiniDeps.later(function() require('mini.operators').setup() end)
 MiniDeps.later(function() require('mini.splitjoin').setup() end)
