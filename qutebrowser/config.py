@@ -28,11 +28,13 @@ config.set('completion.open_categories', ['quickmarks', 'history'])
 config.set('completion.scrollbar.padding', 0)
 config.set('completion.scrollbar.width', 0)
 
-c.url.searchengines['yt'] = 'https://www.youtube.com/results?search_query={}'
-c.url.searchengines['pw'] = 'https://proofwiki.org?search={}'
-c.url.searchengines['wi'] = 'https://en.wikipedia.org/wiki/Special:Search/{}'
+c.url.searchengines['br'] = 'https://www.britannica.com/search?query={}'
 c.url.searchengines['gh'] = 'https://github.com/search?q={}'
 c.url.searchengines['ji'] = 'https://jisho.org/search/{}'
+c.url.searchengines['pw'] = 'https://proofwiki.org?search={}'
+c.url.searchengines['re'] = 'https://www.reddit.com/search/?q={}'
+c.url.searchengines['wi'] = 'https://en.wikipedia.org/wiki/Special:Search/{}'
+c.url.searchengines['yt'] = 'https://www.youtube.com/results?search_query={}'
 
 c.input.insert_mode.auto_enter = False
 c.input.insert_mode.auto_leave = False
