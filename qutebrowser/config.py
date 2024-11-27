@@ -7,21 +7,7 @@ c: ConfigContainer = c  # noqa: F821 pylint: disable=E0602,C0103
 
 config.load_autoconfig(False)
 
-config.set('content.cookies.accept', 'all', 'devtools://*')
-config.set('content.headers.accept_language', '', 'https://matchmaker.krunker.io/*')
-config.set('content.headers.user_agent', 'Mozilla/5.0 ({os_info}) AppleWebKit/{webkit_version} (KHTML, like Gecko) {upstream_browser_key}/{upstream_browser_version} Safari/{webkit_version}', 'https://web.whatsapp.com/')
-config.set('content.headers.user_agent', 'Mozilla/5.0 ({os_info}; rv:90.0) Gecko/20100101 Firefox/90.0', 'https://accounts.google.com/*')
-config.set('content.images', True, 'chrome-devtools://*')
-config.set('content.images', True, 'devtools://*')
-config.set('content.javascript.enabled', True, 'chrome-devtools://*')
-config.set('content.javascript.enabled', True, 'devtools://*')
-config.set('content.javascript.enabled', True, 'chrome://*/*')
-config.set('content.javascript.enabled', True, 'qute://*/*')
-config.set('content.local_content_can_access_remote_urls', True, 'file:///home/gordo/.local/share/qutebrowser/userscripts/*')
-config.set('content.local_content_can_access_file_urls', False, 'file:///home/gordo/.local/share/qutebrowser/userscripts/*')
-
 config.set('tabs.show', 'never')
-config.set('tabs.last_close', 'close')
 config.set('tabs.select_on_remove', 'last-used')
 
 config.set('completion.open_categories', ['quickmarks', 'history'])
@@ -35,6 +21,7 @@ c.url.searchengines['pw'] = 'https://proofwiki.org?search={}'
 c.url.searchengines['re'] = 'https://www.reddit.com/search/?q={}'
 c.url.searchengines['wi'] = 'https://en.wikipedia.org/wiki/Special:Search/{}'
 c.url.searchengines['yt'] = 'https://www.youtube.com/results?search_query={}'
+c.url.searchengines['ms'] = 'https://math.stackexchange.com/search?q={}'
 
 c.input.insert_mode.auto_enter = False
 c.input.insert_mode.auto_leave = False
@@ -54,8 +41,6 @@ c.downloads.position = 'bottom'
 c.downloads.open_dispatcher = 'zathura'
 c.downloads.location.directory = '/home/gordo/downloads'
 c.downloads.location.prompt = False
-
-c.completion.open_categories = [ 'quickmarks', 'bookmarks', 'history' ]
 
 config.bind('<Ctrl-o>', 'tab-focus stack-prev')
 config.bind('<Ctrl-i>', 'tab-focus stack-next')
