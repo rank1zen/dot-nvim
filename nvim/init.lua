@@ -200,11 +200,25 @@ MiniDeps.later(function()
 end)
 
 MiniDeps.later(function()
-  require('mini.pick').setup({
-    source = { show = require('mini.pick').default_show },
-    window = { prompt_prefix = ' ', config = { border = Config.borders } },
+  local pick = require('mini.pick')
+  local spec = {
     options = { content_from_bottom = true },
-  })
+    source = { show = pick.default_show },
+    window = {
+      prompt_prefix = '',
+      prompt_cursor = '█ ',
+      config = function()
+        return {
+          height = math.floor(0.5 * vim.o.lines),
+          width = vim.o.columns,
+          row = 0,
+          col = 0,
+          border = { ' ', ' ', ' ', ' ', ' ', '─', ' ', ' ' },
+        }
+      end,
+    },
+  }
+  pick.setup(spec)
 end)
 
 MiniDeps.later(function()
