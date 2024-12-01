@@ -7,6 +7,8 @@ c: ConfigContainer = c  # noqa: F821 pylint: disable=E0602,C0103
 
 config.load_autoconfig(False)
 
+config.source('colors/zoom.py')
+
 config.set('tabs.show', 'never')
 config.set('tabs.select_on_remove', 'last-used')
 
@@ -66,33 +68,3 @@ config.bind('zl', 'spawn --userscript qute-pass -n -d bemenu -U secret -u "usern
 config.bind("zul", 'spawn --userscript qute-pass -n -d bemenu -U secret -u "username: (.+)" --username-only')
 config.bind("zpl", "spawn --userscript qute-pass -n -d bemenu --password-only")
 
-U0 = '#000000'
-U7 = '#777777'
-UE = '#eeeeee'
-UF = '#ffffff'
-UG = 'transparent'
-
-config.set('colors.completion.item.selected.border.bottom', UG)
-config.set('colors.completion.item.selected.border.top',    UG)
-config.set('colors.completion.item.selected.bg',            UE)
-config.set('colors.completion.item.selected.fg',            U7)
-config.set('colors.completion.item.selected.match.fg',      U0)
-config.set('colors.completion.category.border.bottom',      UG)
-config.set('colors.completion.category.border.top',         UG)
-config.set('colors.completion.category.bg',                 UF)
-config.set('colors.completion.category.fg',                 U0)
-config.set('colors.completion.even.bg',                     UF)
-config.set('colors.completion.odd.bg',                      UF)
-config.set('colors.completion.fg',                          U7)
-config.set('colors.completion.match.fg',                    U0)
-
-config.set('hints.border',          UG)
-config.set('colors.hints.bg',       UG)
-config.set('colors.hints.fg',       U7)
-config.set('colors.hints.match.fg', U0)
-
-config.set('colors.prompts.selected.bg', UE)
-config.set('colors.prompts.selected.fg', U0)
-config.set('colors.prompts.border',      UE)
-config.set('colors.prompts.bg',          UF)
-config.set('colors.prompts.fg',          U0)
