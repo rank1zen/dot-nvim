@@ -1,4 +1,12 @@
-_G.Config = {}
+_G.Cfg = {}
+
+Cfg.leader = function(suffix, rhs, desc, opts)
+  opts = opts or {}
+  opts.desc = desc
+  vim.keymap.set('n', '<Leader>' .. suffix, rhs, opts)
+end
+
+Cfg.maps = {}
 
 local path_package = vim.fn.stdpath('data') .. '/site/'
 local mini_path = path_package .. 'pack/deps/start/mini.nvim'
@@ -12,7 +20,7 @@ end
 require('mini.deps').setup({ path = { package = path_package } })
 
 MiniDeps.now(function()
-  Config.borders = 'rounded'
+  Cfg.borders = 'rounded'
   -- stylua: ignore start
   vim.g.mapleader      = ' '
   vim.g.maplocalleader = '\\'
@@ -22,9 +30,10 @@ MiniDeps.now(function()
   vim.o.pumheight      = 10
   vim.o.shiftwidth     = 2
   vim.o.tabstop        = 2
+  vim.o.showmode       = false
   -- stylua: ignore end
 
-  vim.o.statusline = '%<%f %h%m%r %{getbufvar(bufnr(), "minigit_summary_string")}%= %-14.(%l,%c%V%) %P'
+  vim.o.statusline = '%<%f %{getbufvar(bufnr(), "minigit_summary_string")} %h%m%r %= %-14.(%l,%c%V%) %P'
 
   vim.filetype.add({
     extension = { templ = 'templ' },
@@ -53,129 +62,42 @@ MiniDeps.now(function()
   vim.keymap.set('i', '<CR>', 'v:lua._G.cr_action()', { expr = true })
 end)
 
+vim.cmd('colorscheme zoom')
+
+MiniDeps.later(function() require('mini.extra').setup() end)
+
 MiniDeps.now(function()
-  local H = {}
-
-  H.gen_opts = {}
-
-  Config.mappings = {}
-
-  local mapn = function(suffix, rhs, desc, opts)
-    opts = opts or {}
-    opts.desc = desc
-    vim.keymap.set('n', '<Leader>' .. suffix, rhs, opts)
-  end
-
-  local mapx = function(suffix, rhs, desc, opts)
-    opts = opts or {}
-    opts.desc = desc
-    vim.keymap.set('x', '<Leader>' .. suffix, rhs, opts)
-  end
-
-  mapn('ci', '<CMD>edit $MYVIMRC<CR>')
-
-  Config.mappings.stack_previous = function() MiniVisits.iterate_paths('forward', nil, H.gen_opts.stack()) end
-  Config.mappings.stack_next = function() MiniVisits.iterate_paths('backward', nil, H.gen_opts.stack()) end
-  Config.mappings.stack_recent = function() MiniVisits.iterate_paths('first', nil, H.gen_opts.stack()) end
-  Config.mappings.stack = function() MiniExtra.pickers.visit_paths(H.gen_opts.stack()) end
-
-  -- stylua: ignore start
-  mapn('es', '<CMD>lua Config.mappings.stack()<CR>')
-  mapn('en', '<CMD>lua Config.mappings.stack_next()<CR>')
-  mapn('ep', '<CMD>lua Config.mappings.stack_previous()<CR>')
-  mapn('er', '<CMD>lua Config.mappings.stack_recent()<CR>')
-  mapn('ez', '<CMD>Pick visit_paths sort=MiniVisits.gen_sort.z()<CR>')
-  -- stylua: ignore end
-
-  -- stylua: ignore start
-  mapn('ef', '<Cmd>Pick files<CR>',                                       'Find files')
-  mapn('ed', '<Cmd>lua MiniFiles.open(vim.api.nvim_buf_get_name(0))<CR>', 'Open Explorer')
-  mapn('el', '<Cmd>b#<CR>',                                               'Alternate file')
-
-  mapn('fg', '<Cmd>Pick grep_live<CR>',              'Grep')
-  mapn('fG', '<Cmd>Pick grep pattern="<cword>"<CR>', 'Grep (current word)')
-  mapn('fh', '<Cmd>Pick help<CR>',                   'Help')
-  mapn('fi', '<Cmd>Pick hipatterns<CR>',             'Hipatterns')
-  mapn('fj', '<Cmd>Pick hl_groups<CR>',              'Highlight groups')
-  mapn('f/', '<Cmd>Pick history scope="/"<CR>',      '"/"')
-  mapn('f:', '<Cmd>Pick history scope=":"<CR>',      '":"')
-  mapn('fH', '<Cmd>Pick commands<CR>',               'Commands')
-  mapn('f.', '<Cmd>Pick resume<CR>',                 'Resume')
-  mapn('fl', '<Cmd>Pick buf_lines scope="all"<CR>', 'Pick Lines (all)')
-  mapn('fL', '<Cmd>Pick buf_lines scope="current"<CR>', 'Pick Lines (current)')
-  mapn('fb', '<Cmd>Pick buffers<CR>', 'Pick Buffers')
-
-  mapn('lq',  '<Cmd>lua vim.lsp.buf.definition()<CR>',                       'Definition')
-  mapn('lt',  '<Cmd>lua vim.lsp.buf.type_definition()<CR>',                  'Type definition')
-  mapn('lr',  '<Cmd>lua vim.lsp.buf.references()<CR>',                       'References')
-  mapn('li',  '<Cmd>lua vim.lsp.buf.implementation()<CR>',                   'Implementation')
-  mapn('ls',  '<Cmd>lua vim.lsp.buf.signature_help()<CR>',                   'Signature')
-  mapn('lar', '<Cmd>lua vim.lsp.buf.rename()<CR>',                           'Rename')
-  mapn('las', '<Cmd>lua vim.lsp.buf.code_action()<CR>',                      'Code Action')
-  mapn('laf', '<Cmd>lua require("conform").format({lsp_fallback=true})<CR>', 'Format')
-  mapx('laf', '<Cmd>lua require("conform").format({lsp_fallback=true})<CR>', 'Format Selection')
-  mapn('lfo', '<Cmd>Pick lsp scope="document_symbol"<CR>',                   'Document symbol')
-  mapn('lfw', '<Cmd>Pick lsp scope="workspace_symbol"<CR>',                  'Workspace symbol')
-  mapn('lfq', '<Cmd>Pick lsp scope="definition"<CR>',                        'Definition')
-  mapn('lfr', '<Cmd>Pick lsp scope="references"<CR>',                        'References')
-  mapn('lfi', '<Cmd>Pick lsp scope="implementation"<CR>',                    'Implementation')
-  mapn('lfu', '<Cmd>Pick lsp scope="declaration"<CR>',                       'Declaration')
-  mapn('lft', '<Cmd>Pick lsp scope="type_definition"<CR>',                   'Type definition')
-  mapn('lfd', '<Cmd>Pick diagnostic scope="all"<CR>',                        'Diagnostic (all)')
-  mapn('lfD', '<Cmd>Pick diagnostic scope="current"<CR>',                    'Diagnostic (current)')
-  mapn('lga', '<Cmd>lua Config.golang_test_file()<CR>', 'Switch Go _test')
-
-  mapn('gcc', '<CMD>Git commit<CR>')
-  mapn('gca', '<CMD>Git commit --amend<CR>')
-  mapn('gbb', '<CMD>vert Git blame -- %<CR>')
-
-  mapn('gczz', '<CMD>Git stash<CR>')
-  mapn('gczw', '<CMD>Git stash --keep-index<CR>')
-  mapn('gczA', '<CMD>Git stash apply<CR>')
-  mapn('gczP', '<CMD>Git stash pop<CR>')
-
-  mapn('gl', '<Cmd>Git log --oneline<CR>', 'Log (all)')
-  mapn('gL', '<Cmd>Git log --oneline --follow -- %<CR>', 'Log (current)')
-  mapn('go', '<Cmd>lua MiniDiff.toggle_overlay()<CR>', 'Toggle overlay')
-  mapn('gs', '<Cmd>lua MiniGit.show_at_cursor()<CR>', 'Show at cursor')
-  mapx('gs', '<Cmd>lua MiniGit.show_at_cursor()<CR>', 'Show at selection')
-  mapn('gaa', '<Cmd>Git add %<CR>', 'Add file')
-  mapn('gfc', '<Cmd>Pick git_commits<CR>', 'Commits (all)')
-  mapn('gfC', '<Cmd>Pick git_commits path="%"<CR>', 'Commits (current)')
-  mapn('gfs', '<Cmd>Pick git_hunks scope="staged"<CR>', 'Added hunks (all)')
-  mapn('gfS', '<Cmd>Pick git_hunks path="%" scope="staged"<CR>', 'Added hunks (current)')
-  mapn('gfh', '<Cmd>Pick git_hunks<CR>', 'Modified hunks (all)')
-  mapn('gfH', '<Cmd>Pick git_hunks path="%"<CR>', 'Modified hunks (current)')
-  mapn('gfb', '<Cmd>Pick git_branches<CR>', 'Branches (all)')
-  -- stylua: ignore end
-
-  Config.golang_test_file = function()
-    local file = vim.fn.expand('%')
-    if #file <= 1 then
-      vim.notify('no buffer name', vim.log.levels.ERROR)
-      return
-    end
-
-    if string.find(file, '_test%.go$') then
-      vim.cmd('edit ' .. string.gsub(file, '_test.go', '.go'))
-    elseif string.find(file, '%.go$') then
-      vim.cmd('edit ' .. vim.fn.expand('%:r') .. '_test.go')
-    else
-      vim.notify('not a go file', vim.log.levels.ERROR)
-    end
-  end
-
-  H.gen_opts.stack = function()
+  local stack_opts = function()
     return {
       filter = function(path_data) return vim.fn.isdirectory(path_data.path) == 0 end,
       sort = MiniVisits.gen_sort.default({ recency_weight = 1 }),
     }
   end
+
+  Cfg.maps.stack_prev = function() MiniVisits.iterate_paths('forward', nil, stack_opts()) end
+  Cfg.maps.stack_next = function() MiniVisits.iterate_paths('backward', nil, stack_opts()) end
+  Cfg.maps.stack_recent = function() MiniVisits.iterate_paths('first', nil, stack_opts()) end
+
+  Cfg.leader('en', '<cmd>lua Cfg.maps.stack_next()<cr>')
+  Cfg.leader('ep', '<cmd>lua Cfg.maps.stack_prev()<cr>')
+  Cfg.leader('er', '<cmd>lua Cfg.maps.stack_recent()<cr>')
+
+  -- stylua: ignore start
+  Cfg.leader('ei', '<cmd>edit $MYVIMRC<cr>',                                    'Go to init.lua')
+  Cfg.leader('eg', '<cmd>Pick grep_live<cr>',                                   'Live grep')
+  Cfg.leader('eh', '<cmd>Pick help<cr>',                                        'List help files')
+  Cfg.leader('es', '<cmd>Pick visit_paths recency_weight=1<cr>',                'List the MRU file stack')
+  Cfg.leader('ez', '<cmd>Pick visit_paths sort=MiniVisits.gen_sort.z()<cr>',    'List the Z file stack')
+  Cfg.leader('ef', '<cmd>Pick files<cr>',                                       'List directory files')
+  Cfg.leader('ed', '<cmd>lua MiniFiles.open(vim.api.nvim_buf_get_name(0))<cr>', 'Open the file explorer')
+  Cfg.leader('e.', '<cmd>Pick resume<cr>',                                      'Resume most recent picker')
+  Cfg.leader('eq', '<cmd>Pick list scope="jump"<cr>',                           'List the jumplist')
+  Cfg.leader('ew', '<cmd>Pick grep pattern="<cword>"<cr>',                      'Grep current word')
+  Cfg.leader('et', '<cmd>Pick history scope=":"<cr>',                           'List command history')
+  -- stylua: ignore end
 end)
 
-vim.cmd('colorscheme zoom')
-
-MiniDeps.later(function() require('mini.extra').setup() end)
+MiniDeps.later(function() require('mini.visits').setup() end)
 
 MiniDeps.later(function()
   local miniai, miniextra = require('mini.ai'), require('mini.extra')
@@ -231,7 +153,7 @@ MiniDeps.later(function()
     pattern = 'MiniFilesWindowOpen',
     callback = function(args)
       local config = vim.api.nvim_win_get_config(args.data.win_id)
-      config.border = Config.borders
+      config.border = Cfg.borders
       vim.api.nvim_win_set_config(args.data.win_id, config)
     end,
   })
@@ -250,8 +172,8 @@ MiniDeps.later(function()
       end,
     },
     window = {
-      info = { border = Config.borders },
-      signature = { border = Config.borders },
+      info = { border = Cfg.borders },
+      signature = { border = Cfg.borders },
     },
   }
 
@@ -259,6 +181,21 @@ MiniDeps.later(function()
 end)
 
 MiniDeps.later(function() require('mini.jump2d').setup() end)
+
+MiniDeps.now(function()
+  -- stylua: ignore start
+  Cfg.leader('gcc',  '<cmd>Git commit<cr>',                               'Create a commit')
+  Cfg.leader('gca',  '<cmd>Git commit --amend<cr>',                       'Amend the last commit and edit the message')
+
+  Cfg.leader('gbb',  '<cmd>vert Git blame -- %<cr>')
+
+  Cfg.leader('gczz', '<cmd>Git stash<cr>',                                'Push stash')
+  Cfg.leader('gczw', '<cmd>Git stash --keep-index<cr>',                   'Push stash of the work-tree')
+
+  Cfg.leader('ghu',  '<cmd>Pick git_hunks scope="unstaged"<cr>',          'List unstaged hunks')
+  Cfg.leader('ghU',  '<cmd>Pick git_hunks scope="unstaged" path="%"<cr>', 'List unstaged hunks of current file')
+  -- stylua: ignore end
+end)
 
 MiniDeps.later(function() require('mini.diff').setup() end)
 
@@ -287,7 +224,6 @@ MiniDeps.later(function() require('mini.jump').setup() end)
 MiniDeps.later(function() require('mini.operators').setup() end)
 MiniDeps.later(function() require('mini.splitjoin').setup() end)
 MiniDeps.later(function() require('mini.surround').setup() end)
-MiniDeps.later(function() require('mini.visits').setup() end)
 MiniDeps.later(function() require('mini.trailspace').setup() end)
 
 MiniDeps.later(function()
@@ -342,23 +278,68 @@ MiniDeps.later(function()
   })
 end)
 
+MiniDeps.now(function()
+  -- stylua: ignore start
+  Cfg.leader('lq',  '<cmd>lua vim.lsp.buf.definition()<cr>',                       'Definition')
+  Cfg.leader('lt',  '<cmd>lua vim.lsp.buf.type_definition()<cr>',                  'Type definition')
+  Cfg.leader('lr',  '<cmd>lua vim.lsp.buf.references()<cr>',                       'References')
+  Cfg.leader('li',  '<cmd>lua vim.lsp.buf.implementation()<cr>',                   'Implementation')
+  Cfg.leader('ls',  '<cmd>lua vim.lsp.buf.signature_help()<cr>',                   'Signature')
+
+  Cfg.leader('lfo', '<cmd>Pick lsp scope="document_symbol"<CR>',                   'Document symbol')
+  Cfg.leader('lfw', '<cmd>Pick lsp scope="workspace_symbol"<CR>',                  'Workspace symbol')
+
+  Cfg.leader('lfq', '<cmd>Pick lsp scope="definition"<CR>',                        'Definition')
+  Cfg.leader('lfr', '<cmd>Pick lsp scope="references"<CR>',                        'References')
+  Cfg.leader('lfi', '<cmd>Pick lsp scope="implementation"<CR>',                    'Implementation')
+  Cfg.leader('lfu', '<cmd>Pick lsp scope="declaration"<CR>',                       'Declaration')
+  Cfg.leader('lft', '<cmd>Pick lsp scope="type_definition"<CR>',                   'Type definition')
+
+  Cfg.leader('lfd', '<cmd>Pick diagnostic scope="all"<CR>',                        'Diagnostic (all)')
+  Cfg.leader('lfD', '<cmd>Pick diagnostic scope="current"<CR>',                    'Diagnostic (current)')
+
+  Cfg.leader('lar', '<cmd>lua vim.lsp.buf.rename()<CR>',                           'Rename')
+  Cfg.leader('las', '<cmd>lua vim.lsp.buf.code_action()<CR>',                      'Code Action')
+  Cfg.leader('laf', '<cmd>lua require("conform").format({lsp_fallback=true})<CR>', 'Format')
+  Cfg.leader('laf', '<cmd>lua require("conform").format({lsp_fallback=true})<CR>', 'Format Selection')
+
+  Cfg.leader('lga', '<cmd>lua Cfg.golang_test_file()<CR>',                         'Switch Go _test')
+  -- stylua: ignore end
+
+  Cfg.golang_test_file = function()
+    local file = vim.fn.expand('%')
+    if #file <= 1 then
+      vim.notify('no buffer name', vim.log.levels.ERROR)
+      return
+    end
+
+    if string.find(file, '_test%.go$') then
+      vim.cmd('edit ' .. string.gsub(file, '_test.go', '.go'))
+    elseif string.find(file, '%.go$') then
+      vim.cmd('edit ' .. vim.fn.expand('%:r') .. '_test.go')
+    else
+      vim.notify('not a go file', vim.log.levels.ERROR)
+    end
+  end
+end)
+
 MiniDeps.later(function()
   MiniDeps.add('neovim/nvim-lspconfig')
 
   vim.diagnostic.config({
     virtual_text = {},
-    float = { border = Config.borders, source = 'if_many' },
+    float = { border = Cfg.borders, source = 'if_many' },
     signs = false,
   })
 
   local lspconfig = require('lspconfig')
 
-  require('lspconfig.ui.windows').default_opts({ border = Config.borders })
+  require('lspconfig.ui.windows').default_opts({ border = Cfg.borders })
 
   local default_config = {
     handlers = {
-      ['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, { border = Config.borders }),
-      ['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = Config.borders }),
+      ['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, { border = Cfg.borders }),
+      ['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = Cfg.borders }),
     },
   }
 
