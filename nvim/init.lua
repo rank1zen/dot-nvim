@@ -6,6 +6,12 @@ Cfg.leader = function(suffix, rhs, desc, opts)
   vim.keymap.set('n', '<Leader>' .. suffix, rhs, opts)
 end
 
+Cfg.xeader = function(suffix, rhs, desc, opts)
+  opts = opts or {}
+  opts.desc = desc
+  vim.keymap.set('x', '<Leader>' .. suffix, rhs, opts)
+end
+
 Cfg.maps = {}
 
 local path_package = vim.fn.stdpath('data') .. '/site/'
@@ -67,21 +73,9 @@ vim.cmd('colorscheme zoom')
 MiniDeps.later(function() require('mini.extra').setup() end)
 
 MiniDeps.now(function()
-  local stack_opts = function()
-    return {
-      filter = function(path_data) return vim.fn.isdirectory(path_data.path) == 0 end,
-      sort = MiniVisits.gen_sort.default({ recency_weight = 1 }),
-    }
-  end
-
-  Cfg.maps.stack_prev = function() MiniVisits.iterate_paths('forward', nil, stack_opts()) end
-  Cfg.maps.stack_next = function() MiniVisits.iterate_paths('backward', nil, stack_opts()) end
-  Cfg.maps.stack_recent = function() MiniVisits.iterate_paths('first', nil, stack_opts()) end
-
   Cfg.leader('en', '<cmd>lua Cfg.maps.stack_next()<cr>')
   Cfg.leader('ep', '<cmd>lua Cfg.maps.stack_prev()<cr>')
   Cfg.leader('er', '<cmd>lua Cfg.maps.stack_recent()<cr>')
-
   -- stylua: ignore start
   Cfg.leader('ei', '<cmd>edit $MYVIMRC<cr>',                                    'Go to init.lua')
   Cfg.leader('eg', '<cmd>Pick grep_live<cr>',                                   'Live grep')
@@ -107,9 +101,7 @@ MiniDeps.later(function()
       -- stylua: ignore start
       C = miniai.gen_spec.treesitter({ a = '@class.outer',       i = '@class.inner' }),
       F = miniai.gen_spec.treesitter({ a = '@function.outer',    i = '@function.inner' }),
-      c = miniai.gen_spec.treesitter({ a = '@comment.outer',     i = '@comment.inner' }),
-      p = miniai.gen_spec.treesitter({ a = '@parameter.outer',   i = '@parameter.inner' }),
-      b = miniai.gen_spec.treesitter({ a = '@block.outer',       i = '@block.inner' }),
+      P = miniai.gen_spec.treesitter({ a = '@parameter.outer',   i = '@parameter.inner' }),
       l = miniai.gen_spec.treesitter({ a = '@loop.outer',        i = '@loop.inner' }),
       o = miniai.gen_spec.treesitter({ a = '@conditional.outer', i = '@conditional.inner' }),
       -- stylua: ignore end
@@ -237,32 +229,9 @@ MiniDeps.later(function()
   MiniDeps.add('nvim-treesitter/nvim-treesitter-textobjects')
 
   require('nvim-treesitter.configs').setup({
-    ensure_installed = {
-      'bash',
-      'c',
-      'cpp',
-      'fish',
-      'gitcommit',
-      'javascript',
-      'json',
-      'json5',
-      'jsonc',
-      'lua',
-      'markdown',
-      'markdown_inline',
-      'python',
-      'query',
-      'regex',
-      'rust',
-      'scss',
-      'toml',
-      'typescript',
-      'vim',
-      'vimdoc',
-      'nix',
-    },
+    ensure_installed = { },
     sync_install = false,
-    auto_install = true,
+    auto_install = false,
     highlight = {
       enable = true,
       disable = function(_, buf)
@@ -286,41 +255,45 @@ MiniDeps.now(function()
   Cfg.leader('li',  '<cmd>lua vim.lsp.buf.implementation()<cr>',                   'Implementation')
   Cfg.leader('ls',  '<cmd>lua vim.lsp.buf.signature_help()<cr>',                   'Signature')
 
-  Cfg.leader('lfo', '<cmd>Pick lsp scope="document_symbol"<CR>',                   'Document symbol')
-  Cfg.leader('lfw', '<cmd>Pick lsp scope="workspace_symbol"<CR>',                  'Workspace symbol')
+  Cfg.leader('lfo', '<cmd>Pick lsp scope="document_symbol"<cr>',                   'Document symbol')
+  Cfg.leader('lfw', '<cmd>Pick lsp scope="workspace_symbol"<cr>',                  'Workspace symbol')
 
-  Cfg.leader('lfq', '<cmd>Pick lsp scope="definition"<CR>',                        'Definition')
-  Cfg.leader('lfr', '<cmd>Pick lsp scope="references"<CR>',                        'References')
-  Cfg.leader('lfi', '<cmd>Pick lsp scope="implementation"<CR>',                    'Implementation')
-  Cfg.leader('lfu', '<cmd>Pick lsp scope="declaration"<CR>',                       'Declaration')
-  Cfg.leader('lft', '<cmd>Pick lsp scope="type_definition"<CR>',                   'Type definition')
+  Cfg.leader('lfq', '<cmd>Pick lsp scope="definition"<cr>',                        'Definition')
+  Cfg.leader('lfr', '<cmd>Pick lsp scope="references"<cr>',                        'References')
+  Cfg.leader('lfi', '<cmd>Pick lsp scope="implementation"<cr>',                    'Implementation')
+  Cfg.leader('lfu', '<cmd>Pick lsp scope="declaration"<cr>',                       'Declaration')
+  Cfg.leader('lft', '<cmd>Pick lsp scope="type_definition"<cr>',                   'Type definition')
 
-  Cfg.leader('lfd', '<cmd>Pick diagnostic scope="all"<CR>',                        'Diagnostic (all)')
-  Cfg.leader('lfD', '<cmd>Pick diagnostic scope="current"<CR>',                    'Diagnostic (current)')
+  Cfg.leader('lfd', '<cmd>Pick diagnostic scope="all"<cr>',                        'Diagnostic (all)')
+  Cfg.leader('lfD', '<cmd>Pick diagnostic scope="current"<cr>',                    'Diagnostic (current)')
 
-  Cfg.leader('lar', '<cmd>lua vim.lsp.buf.rename()<CR>',                           'Rename')
-  Cfg.leader('las', '<cmd>lua vim.lsp.buf.code_action()<CR>',                      'Code Action')
-  Cfg.leader('laf', '<cmd>lua require("conform").format({lsp_fallback=true})<CR>', 'Format')
-  Cfg.leader('laf', '<cmd>lua require("conform").format({lsp_fallback=true})<CR>', 'Format Selection')
+  Cfg.leader('lar', '<cmd>lua vim.lsp.buf.rename()<cr>',                           'Rename')
+  Cfg.leader('las', '<cmd>lua vim.lsp.buf.code_action()<cr>',                      'Code Action')
 
-  Cfg.leader('lga', '<cmd>lua Cfg.golang_test_file()<CR>',                         'Switch Go _test')
+  Cfg.leader('laf', '<cmd>lua require("conform").format()<cr>', 'Format')
+  Cfg.xeader('laf', '<cmd>lua require("conform").format()<cr>', 'Format Selection')
+
+  Cfg.leader('lga', '<cmd>lua Cfg.maps.golang_test_file()<cr>',                         'Switch Go _test')
   -- stylua: ignore end
+end)
 
-  Cfg.golang_test_file = function()
-    local file = vim.fn.expand('%')
-    if #file <= 1 then
-      vim.notify('no buffer name', vim.log.levels.ERROR)
-      return
-    end
+MiniDeps.later(function()
+  MiniDeps.add('stevearc/conform.nvim')
 
-    if string.find(file, '_test%.go$') then
-      vim.cmd('edit ' .. string.gsub(file, '_test.go', '.go'))
-    elseif string.find(file, '%.go$') then
-      vim.cmd('edit ' .. vim.fn.expand('%:r') .. '_test.go')
-    else
-      vim.notify('not a go file', vim.log.levels.ERROR)
-    end
-  end
+  local conform = require('conform')
+
+  local spec = {
+    formatters_by_ft = {
+      -- stylua: ignore start
+      go    = { 'goimports', 'gofumpt' },
+      lua   = { 'stylua' },
+      nix   = { 'alejandra' },
+      templ = { 'templ' },
+      -- stylua: ignore end
+    },
+  }
+
+  conform.setup(spec)
 end)
 
 MiniDeps.later(function()
@@ -351,8 +324,6 @@ MiniDeps.later(function()
   })
 
   lspconfig.lua_ls.setup({})
-
-  -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#clangd
 
   lspconfig.gopls.setup({
     settings = {
@@ -408,45 +379,43 @@ MiniDeps.later(function()
 end)
 
 MiniDeps.later(function()
-  MiniDeps.add('williamboman/mason.nvim')
-  require('mason').setup()
-end)
-
-MiniDeps.later(function()
-  MiniDeps.add('stevearc/conform.nvim')
-  local conform = require('conform')
-
-  conform.setup({
-    formatters_by_ft = {
-      go = { 'gofumpt', 'goimports' },
-      lua = { 'stylua' },
-      nix = { 'alejandra' },
-      sql = { 'sqlfluff' },
-      templ = { 'templ' },
-    },
-  })
-end)
-
-MiniDeps.later(function()
-  MiniDeps.add({
-    source = 'L3MON4D3/LuaSnip',
-    depends = { 'rafamadriz/friendly-snippets' },
-  })
-
-  require('luasnip.loaders.from_vscode').lazy_load()
-
-  local ls = require('luasnip')
-
-  vim.keymap.set({ 'i' }, '<C-K>', function() ls.expand() end, { silent = true })
-  vim.keymap.set({ 'i', 's' }, '<C-L>', function() ls.jump(1) end, { silent = true })
-  vim.keymap.set({ 'i', 's' }, '<C-J>', function() ls.jump(-1) end, { silent = true })
-
-  vim.keymap.set({ 'i', 's' }, '<C-E>', function()
-    if ls.choice_active() then ls.change_choice(1) end
-  end, { silent = true })
-end)
-
-MiniDeps.later(function()
   MiniDeps.add('folke/lazydev.nvim')
   require('lazydev').setup({})
 end)
+
+local H = {}
+
+Cfg.maps.golang_test_file = function()
+  local file = vim.fn.expand('%')
+  if #file <= 1 then
+    vim.notify('(cfg) no buffer name', vim.log.levels.ERROR)
+    return
+  end
+
+  if string.find(file, '_test%.go$') then
+    vim.cmd('edit ' .. string.gsub(file, '_test.go', '.go'))
+  elseif string.find(file, '%.go$') then
+    vim.cmd('edit ' .. vim.fn.expand('%:r') .. '_test.go')
+  else
+    vim.notify('(cfg) not a go file', vim.log.levels.ERROR)
+  end
+end
+
+H.stack_opts = function()
+  return {
+    filter = function(path_data) return vim.fn.isdirectory(path_data.path) == 0 end,
+    sort = MiniVisits.gen_sort.default({ recency_weight = 1 }),
+  }
+end
+
+Cfg.maps.stack_prev = function()
+  MiniVisits.iterate_paths('forward', nil, H.stack_opts())
+end
+
+Cfg.maps.stack_next = function()
+  MiniVisits.iterate_paths('backward', nil, H.stack_opts())
+end
+
+Cfg.maps.stack_recent = function()
+  MiniVisits.iterate_paths('first', nil, H.stack_opts())
+end
