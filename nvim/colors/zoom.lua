@@ -1,8 +1,8 @@
 if vim.g.colors_name ~= nil then vim.cmd('highlight clear') end
 
 require('mini.hues').setup({
-  background = '#ffffff',
-  foreground = '#111111',
+  background = '#FFFFFF',
+  foreground = '#000000',
   saturation = 'high',
   plugins = { default = false, ['echasnovski/mini.nvim'] = true },
 })

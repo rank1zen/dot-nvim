@@ -14,6 +14,8 @@ end
 
 Cfg.maps = {}
 
+Cfg.gen = {}
+
 local path_package = vim.fn.stdpath('data') .. '/site/'
 local mini_path = path_package .. 'pack/deps/start/mini.nvim'
 if not vim.loop.fs_stat(mini_path) then
@@ -38,6 +40,13 @@ MiniDeps.now(function()
   vim.o.tabstop        = 2
   vim.o.showmode       = false
   -- stylua: ignore end
+  vim.o.fillchars = table.concat(
+    { 'eob: ', 'horiz: ', 'horizdown: ', 'horizup: ', 'vert: ', 'verthoriz: ', 'vertleft: ', 'vertright: ' },
+    ','
+  )
+
+  -- vim.spelllang = 'en_ca,en_us'
+  vim.o.dictionary = vim.fn.stdpath('config') .. '/misc/dict/en.txt'
 
   vim.o.statusline = '%<%f %{getbufvar(bufnr(), "minigit_summary_string")} %h%m%r %= %-14.(%l,%c%V%) %P'
 
@@ -45,49 +54,41 @@ MiniDeps.now(function()
     extension = { templ = 'templ' },
     pattern = { ['.*/hypr/.*%.conf'] = 'hyprlang' },
   })
-end)
 
-MiniDeps.now(function()
-  local keys = {
-    ['cr'] = vim.api.nvim_replace_termcodes('<CR>', true, true, true),
-    ['ctrl-y'] = vim.api.nvim_replace_termcodes('<C-y>', true, true, true),
-    ['ctrl-y_cr'] = vim.api.nvim_replace_termcodes('<C-y><CR>', true, true, true),
-  }
-
-  _G.cr_action = function()
-    if vim.fn.pumvisible() ~= 0 then
-      local item_selected = vim.fn.complete_info()['selected'] ~= -1
-      return item_selected and keys['ctrl-y'] or keys['ctrl-y_cr']
-    else
-      return require('mini.pairs').cr()
-    end
-  end
-
-  vim.keymap.set('i', '<Tab>', [[pumvisible() ? "\<C-n>" : "\<Tab>"]], { expr = true })
-  vim.keymap.set('i', '<S-Tab>', [[pumvisible() ? "\<C-p>" : "\<S-Tab>"]], { expr = true })
-  vim.keymap.set('i', '<CR>', 'v:lua._G.cr_action()', { expr = true })
+  vim.diagnostic.config({
+    virtual_text = {},
+    float = { border = Cfg.borders, source = 'if_many' },
+    signs = false,
+  })
 end)
 
 vim.cmd('colorscheme zoom')
 
 MiniDeps.later(function() require('mini.extra').setup() end)
 
+Cfg.gen.sort = function() return MiniVisits.gen_sort.default({ recency_weight = 1 }) end
+
+Cfg.gen.filter = function()
+  return function(path_data) return vim.fn.isdirectory(path_data.path) == 0 end
+end
+
 MiniDeps.now(function()
   Cfg.leader('en', '<cmd>lua Cfg.maps.stack_next()<cr>')
   Cfg.leader('ep', '<cmd>lua Cfg.maps.stack_prev()<cr>')
   Cfg.leader('er', '<cmd>lua Cfg.maps.stack_recent()<cr>')
+  Cfg.leader('em', '<cmd>Markview splitToggle<cr>')
   -- stylua: ignore start
-  Cfg.leader('ei', '<cmd>edit $MYVIMRC<cr>',                                    'Go to init.lua')
-  Cfg.leader('eg', '<cmd>Pick grep_live<cr>',                                   'Live grep')
-  Cfg.leader('eh', '<cmd>Pick help<cr>',                                        'List help files')
-  Cfg.leader('es', '<cmd>Pick visit_paths recency_weight=1<cr>',                'List the MRU file stack')
-  Cfg.leader('ez', '<cmd>Pick visit_paths sort=MiniVisits.gen_sort.z()<cr>',    'List the Z file stack')
-  Cfg.leader('ef', '<cmd>Pick files<cr>',                                       'List directory files')
-  Cfg.leader('ed', '<cmd>lua MiniFiles.open(vim.api.nvim_buf_get_name(0))<cr>', 'Open the file explorer')
-  Cfg.leader('e.', '<cmd>Pick resume<cr>',                                      'Resume most recent picker')
-  Cfg.leader('eq', '<cmd>Pick list scope="jump"<cr>',                           'List the jumplist')
-  Cfg.leader('ew', '<cmd>Pick grep pattern="<cword>"<cr>',                      'Grep current word')
-  Cfg.leader('et', '<cmd>Pick history scope=":"<cr>',                           'List command history')
+  Cfg.leader('ei', '<cmd>edit $MYVIMRC<cr>',                                                       'Go to init.lua')
+  Cfg.leader('eg', '<cmd>Pick grep_live<cr>',                                                      'Live grep')
+  Cfg.leader('eh', '<cmd>Pick help<cr>',                                                           'List help files')
+  Cfg.leader('es', '<cmd>Pick visit_paths filter=Cfg.gen.filter() sort=Cfg.gen.sort()<cr>',            'List the MRU file stack')
+  Cfg.leader('ez', '<cmd>Pick visit_paths filter=Cfg.gen.filter() sort=MiniVisits.gen_sort.z()<cr>', 'List the Z file stack')
+  Cfg.leader('ef', '<cmd>Pick files<cr>',                                                          'List directory files')
+  Cfg.leader('ed', '<cmd>lua MiniFiles.open(vim.api.nvim_buf_get_name(0))<cr>',                    'Open the file explorer')
+  Cfg.leader('e.', '<cmd>Pick resume<cr>',                                                         'Resume most recent picker')
+  Cfg.leader('eq', '<cmd>Pick list scope="jump"<cr>',                                              'List the jumplist')
+  Cfg.leader('ew', '<cmd>Pick grep pattern="<cword>"<cr>',                                         'Grep current word')
+  Cfg.leader('et', '<cmd>Pick history scope=":"<cr>',                                              'List command history')
   -- stylua: ignore end
 end)
 
@@ -96,7 +97,7 @@ MiniDeps.later(function() require('mini.visits').setup() end)
 MiniDeps.later(function()
   local miniai, miniextra = require('mini.ai'), require('mini.extra')
 
-  local opts = {
+  local spec = {
     custom_textobjects = {
       -- stylua: ignore start
       C = miniai.gen_spec.treesitter({ a = '@class.outer',       i = '@class.inner' }),
@@ -106,11 +107,12 @@ MiniDeps.later(function()
       o = miniai.gen_spec.treesitter({ a = '@conditional.outer', i = '@conditional.inner' }),
       -- stylua: ignore end
       I = miniextra.gen_ai_spec.indent(),
+      B = miniextra.gen_ai_spec.buffer(),
       L = miniextra.gen_ai_spec.line(),
     },
   }
 
-  miniai.setup(opts)
+  miniai.setup(spec)
 end)
 
 MiniDeps.later(function()
@@ -151,26 +153,47 @@ MiniDeps.later(function()
   })
 end)
 
-MiniDeps.later(function()
-  local completion = require('mini.completion')
-
-  local opts = {
-    lsp_completion = {
-      auto_setup = false,
-      source_func = 'omnifunc',
-      process_items = function(items, base)
-        items = vim.tbl_filter(function(x) return x.kind ~= 1 and x.kind ~= 15 end, items)
-        return completion.default_process_items(items, base)
-      end,
-    },
-    window = {
-      info = { border = Cfg.borders },
-      signature = { border = Cfg.borders },
-    },
+MiniDeps.now(function()
+  local keys = {
+    ['cr'] = vim.api.nvim_replace_termcodes('<CR>', true, true, true),
+    ['ctrl-y'] = vim.api.nvim_replace_termcodes('<C-y>', true, true, true),
+    ['ctrl-y_cr'] = vim.api.nvim_replace_termcodes('<C-y><CR>', true, true, true),
   }
 
-  completion.setup(opts)
+  _G.cr_action = function()
+    if vim.fn.pumvisible() ~= 0 then
+      local item_selected = vim.fn.complete_info()['selected'] ~= -1
+      return item_selected and keys['ctrl-y_cr'] or keys['ctrl-y']
+    else
+      return require('mini.pairs').cr()
+    end
+  end
+
+  vim.keymap.set('i', '<Tab>', [[pumvisible() ? "\<C-n>" : "\<Tab>"]], { expr = true })
+  vim.keymap.set('i', '<S-Tab>', [[pumvisible() ? "\<C-p>" : "\<S-Tab>"]], { expr = true })
+  vim.keymap.set('i', '<CR>', 'v:lua._G.cr_action()', { expr = true })
 end)
+
+-- MiniDeps.later(function()
+--   local completion = require('mini.completion')
+--
+--   local spec = {
+--     lsp_completion = {
+--       auto_setup = false,
+--       source_func = 'omnifunc',
+--       process_items = function(items, base)
+--         items = vim.tbl_filter(function(x) return x.kind ~= 1 and x.kind ~= 15 end, items)
+--         return completion.default_process_items(items, base)
+--       end,
+--     },
+--     window = {
+--       info = { border = Cfg.borders },
+--       signature = { border = Cfg.borders },
+--     },
+--   }
+--
+--   completion.setup(spec)
+-- end)
 
 MiniDeps.later(function() require('mini.jump2d').setup() end)
 
@@ -190,25 +213,7 @@ MiniDeps.now(function()
 end)
 
 MiniDeps.later(function() require('mini.diff').setup() end)
-
-MiniDeps.later(function()
-  require('mini.git').setup()
-
-  local align_blame = function(au_data)
-    if au_data.data.git_subcommand ~= 'blame' then return end
-
-    -- Align blame output with source
-    local win_src = au_data.data.win_source
-    vim.wo.wrap = false
-    vim.fn.winrestview({ topline = vim.fn.line('w0', win_src) })
-    vim.api.nvim_win_set_cursor(0, { vim.fn.line('.', win_src), 0 })
-
-    -- Bind both windows so that they scroll together
-    vim.wo[win_src].scrollbind, vim.wo.scrollbind = true, true
-  end
-
-  vim.api.nvim_create_autocmd('User', { pattern = 'MiniGitCommandSplit', callback = align_blame })
-end)
+MiniDeps.later(function() require('mini.git').setup() end)
 
 MiniDeps.later(function() require('mini.pairs').setup() end)
 MiniDeps.later(function() require('mini.align').setup() end)
@@ -229,7 +234,7 @@ MiniDeps.later(function()
   MiniDeps.add('nvim-treesitter/nvim-treesitter-textobjects')
 
   require('nvim-treesitter.configs').setup({
-    ensure_installed = { },
+    ensure_installed = {},
     sync_install = false,
     auto_install = false,
     highlight = {
@@ -279,7 +284,6 @@ end)
 
 MiniDeps.later(function()
   MiniDeps.add('stevearc/conform.nvim')
-
   local conform = require('conform')
 
   local spec = {
@@ -289,6 +293,7 @@ MiniDeps.later(function()
       lua   = { 'stylua' },
       nix   = { 'alejandra' },
       templ = { 'templ' },
+      c     = { 'clang-format' },
       -- stylua: ignore end
     },
   }
@@ -299,83 +304,52 @@ end)
 MiniDeps.later(function()
   MiniDeps.add('neovim/nvim-lspconfig')
 
-  vim.diagnostic.config({
-    virtual_text = {},
-    float = { border = Cfg.borders, source = 'if_many' },
-    signs = false,
-  })
-
   local lspconfig = require('lspconfig')
-
-  require('lspconfig.ui.windows').default_opts({ border = Cfg.borders })
-
-  local default_config = {
-    handlers = {
-      ['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, { border = Cfg.borders }),
-      ['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = Cfg.borders }),
-    },
-  }
-
-  lspconfig.util.default_config = vim.tbl_extend('force', lspconfig.util.default_config, default_config)
 
   vim.api.nvim_create_autocmd('LspAttach', {
     group = vim.api.nvim_create_augroup('UserLspConfig', {}),
     callback = function(ev) vim.bo[ev.buf].omnifunc = 'v:lua.MiniCompletion.completefunc_lsp' end,
   })
 
-  lspconfig.lua_ls.setup({})
-
-  lspconfig.gopls.setup({
-    settings = {
-      gopls = {
-        gofumpt = true,
-        codelenses = {
-          gc_details = false,
-          generate = true,
-          regenerate_cgo = true,
-          run_govulncheck = true,
-          test = true,
-          tidy = true,
-          upgrade_dependency = true,
-          vendor = true,
-        },
-        hints = {
-          assignVariableTypes = true,
-          compositeLiteralFields = true,
-          compositeLiteralTypes = true,
-          constantValues = true,
-          functionTypeParameters = true,
-          parameterNames = true,
-          rangeVariableTypes = true,
-        },
-        analyses = {
-          fieldalignment = true,
-          nilness = true,
-          unusedparams = true,
-          unusedwrite = true,
-          useany = true,
-        },
-        usePlaceholders = true,
-        completeUnimported = true,
-        staticcheck = true,
-        directoryFilters = { '-.git', '-.vscode', '-.idea', '-.vscode-test', '-node_modules' },
-        semanticTokens = true,
-      },
-    },
-  })
-
-  lspconfig.templ.setup({})
-
-  lspconfig.tailwindcss.setup({
-    filetypes = { 'templ', 'astro', 'javascript', 'typescript', 'react' },
-    init_options = { userLanguages = { templ = 'html' } },
-  })
-
-  lspconfig.pyright.setup({})
-
   lspconfig.ccls.setup({})
-
+  lspconfig.gopls.setup({})
+  lspconfig.lua_ls.setup({})
+  lspconfig.pyright.setup({})
+  lspconfig.templ.setup({})
   lspconfig.texlab.setup({})
+end)
+
+MiniDeps.now(function()
+  MiniDeps.add({ source = 'OXY2DEV/markview.nvim', checkout = 'e2c3e56' })
+
+  local spec = {
+    --split_conf = { split = 'above', height = 10 },
+    block_quotes = {},
+    callbacks = {},
+    checkboxes = {},
+    code_blocks = {},
+    escaped = {},
+    footnotes = {},
+    horizontal_rules = {},
+    html = {},
+    inline_codes = {},
+    latex = {
+      block = { text = { 'LaTex ', 'Special' } },
+    },
+    list_items = {},
+    links = {},
+    tables = {},
+    headings = {
+      heading_1 = { style = 'simple', hl = 'MarkviewHeading1' },
+      heading_2 = { style = 'simple', hl = 'MarkviewHeading2' },
+      heading_3 = { style = 'simple', hl = 'MarkviewHeading3' },
+      heading_4 = { style = 'simple', hl = 'MarkviewHeading4' },
+      heading_5 = { style = 'simple', hl = 'MarkviewHeading5' },
+      heading_6 = { style = 'simple', hl = 'MarkviewHeading6' },
+    },
+  }
+
+  require('markview').setup(spec)
 end)
 
 MiniDeps.later(function()
@@ -408,14 +382,8 @@ H.stack_opts = function()
   }
 end
 
-Cfg.maps.stack_prev = function()
-  MiniVisits.iterate_paths('forward', nil, H.stack_opts())
-end
+Cfg.maps.stack_prev = function() MiniVisits.iterate_paths('forward', nil, H.stack_opts()) end
 
-Cfg.maps.stack_next = function()
-  MiniVisits.iterate_paths('backward', nil, H.stack_opts())
-end
+Cfg.maps.stack_next = function() MiniVisits.iterate_paths('backward', nil, H.stack_opts()) end
 
-Cfg.maps.stack_recent = function()
-  MiniVisits.iterate_paths('first', nil, H.stack_opts())
-end
+Cfg.maps.stack_recent = function() MiniVisits.iterate_paths('first', nil, H.stack_opts()) end

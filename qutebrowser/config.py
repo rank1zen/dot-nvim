@@ -9,26 +9,34 @@ config.load_autoconfig(False)
 
 config.source('colors/zoom.py')
 
-config.set('tabs.show', 'never')
-config.set('tabs.select_on_remove', 'last-used')
+config.set('fonts.default_family', 'BigBlueTermPlusNerdFont')
+config.set('fonts.default_size', '9pt')
 
-config.set('completion.open_categories', ['quickmarks', 'history'])
-config.set('completion.scrollbar.padding', 0)
-config.set('completion.scrollbar.width', 0)
-
-c.url.searchengines['br'] = 'https://www.britannica.com/search?query={}'
-c.url.searchengines['gh'] = 'https://github.com/search?q={}'
-c.url.searchengines['ji'] = 'https://jisho.org/search/{}'
-c.url.searchengines['pw'] = 'https://proofwiki.org?search={}'
-c.url.searchengines['re'] = 'https://www.reddit.com/search/?q={}'
-c.url.searchengines['wi'] = 'https://en.wikipedia.org/wiki/Special:Search/{}'
-c.url.searchengines['yt'] = 'https://www.youtube.com/results?search_query={}'
-c.url.searchengines['ms'] = 'https://math.stackexchange.com/search?q={}'
+config.set('downloads.position', 'bottom')
+config.set('downloads.open_dispatcher', 'zathura')
 
 c.input.insert_mode.auto_enter = False
 c.input.insert_mode.auto_leave = False
 
-c.scrolling.bar = 'never'
+config.set('tabs.show', 'never')
+config.set('tabs.select_on_remove', 'last-used')
+
+config.set('content.javascript.clipboard', 'access')
+config.set('completion.open_categories', ['quickmarks', 'history', 'searchengines'])
+
+c.url.searchengines['am'] = 'https://man.archlinux.org/search?q={}'
+c.url.searchengines['ar'] = 'https://archlinux.org/packages/?q={}'
+c.url.searchengines['aw'] = 'https://wiki.archlinux.org/title/Special:Search/{}'
+c.url.searchengines['br'] = 'https://www.britannica.com/search?query={}'
+c.url.searchengines['gh'] = 'https://github.com/search?q={}'
+c.url.searchengines['hn'] = 'https://hn.algolia.com/?q={}'
+c.url.searchengines['ji'] = 'https://jisho.org/search/{}'
+c.url.searchengines['ma'] = 'https://math.stackexchange.com/search?q={}'
+c.url.searchengines['nr'] = 'https://search.nixos.org/packages?query={}'
+c.url.searchengines['pw'] = 'https://proofwiki.org?search={}'
+c.url.searchengines['re'] = 'https://www.reddit.com/search/?q={}'
+c.url.searchengines['wi'] = 'https://en.wikipedia.org/wiki/Special:Search/{}'
+c.url.searchengines['yt'] = 'https://www.youtube.com/results?search_query={}'
 
 c.editor.command = ['foot', '-e', 'nvim', '{file}', '-c', 'normal {line}G{column0}l']
 
@@ -37,27 +45,8 @@ c.fileselect.folder.command = ['foot', '-e', 'zsh', '-c', 'realpath $(find . -ty
 c.fileselect.multiple_files.command = ['foot', '-e', 'zsh', '-c', 'realpath $(fzf -m) > {}']
 c.fileselect.single_file.command = ['foot', '-e', 'zsh', '-c', 'realpath $(fzf) > {}']
 
-c.fonts.default_family = "BreezeSans"
-
-c.downloads.position = 'bottom'
-c.downloads.open_dispatcher = 'zathura'
-c.downloads.location.directory = '/home/gordo/downloads'
-c.downloads.location.prompt = False
-
 config.bind('<Ctrl-o>', 'tab-focus stack-prev')
 config.bind('<Ctrl-i>', 'tab-focus stack-next')
-
-config.bind('xc', ':open https://chatgpt.com')
-config.bind('xt', ':open https://tasks.google.com')
-config.bind('xq', ':open https://q.utoronto.ca')
-config.bind('xm', ':open https://mail.utoronto.ca')
-config.bind('xg', ':open https://mail.google.com')
-
-config.bind('xC', ':open --tab https://chatgpt.com')
-config.bind('xT', ':open --tab https://tasks.google.com')
-config.bind('xQ', ':open --tab https://q.utoronto.ca')
-config.bind('xM', ':open --tab https://mail.utoronto.ca')
-config.bind('xG', ':open --tab https://mail.google.com')
 
 config.bind('ey', ':cmd-set-text :tab-focus https://www.youtube.com')
 config.bind('ec', ':cmd-set-text :tab-focus https://chatgpt.com')
@@ -67,4 +56,3 @@ config.bind('et', ':cmd-set-text :tab-focus https://calendar.google.com')
 config.bind('zl', 'spawn --userscript qute-pass -n -d bemenu -U secret -u "username: (.+)"')
 config.bind("zul", 'spawn --userscript qute-pass -n -d bemenu -U secret -u "username: (.+)" --username-only')
 config.bind("zpl", "spawn --userscript qute-pass -n -d bemenu --password-only")
-
